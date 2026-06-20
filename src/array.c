@@ -31,6 +31,8 @@ array_t* array_create(size_t elem_size, size_t cap, error_t* err) {
     arr->cap = cap;
     arr->elem_size = elem_size;
 
+    error_create(err, ERROR_OK, "No error found.");
+
     return arr;
 }
 
