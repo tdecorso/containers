@@ -44,7 +44,7 @@ typedef struct {
  * @param cap Initial capacity (number of elements) of the array.
  * @param err Optional output error information. If non-NULL and the call fails,
  *            it will contain details about the failure.
- * @return a pointer to the new heap-allocated array. NULL on failure.
+ * @return A pointer to the new heap-allocated array. NULL on failure.
  * @ingroup array
  */
 array_t* array_create(size_t elem_size, size_t cap, error_t* err);
@@ -52,9 +52,46 @@ array_t* array_create(size_t elem_size, size_t cap, error_t* err);
 /**
  * @brief Destroys the array and frees its resources.
  * It is safe to use on NULL pointers.
- * @param arr the array to destroy.
+ * @param arr The array to destroy.
  * @ingroup array
  */
 void array_destroy(array_t* arr);
+
+/**
+ * @brief Access specified element with bounds checking.
+ *
+ * An empty array is not considered an error if the input index is zero, it just returns NULL.
+ *
+ * @param arr The array.
+ * @param index Index of element to access.
+ * @param err Optional error output information. If non-NULL and the call fails,
+ *            it will contain details about the failure.
+ * @return A pointer to the element, NULL on failure.
+ * @ingroup array
+ */
+void* array_at(array_t* arr, size_t index, error_t* err);
+
+/**
+ * @brief Access the first element of the array.
+ *
+ * An empty array is not considered an error, it just returns NULL.
+ *
+ * @param arr The array.
+ * @param err Optional error output information. If non-NULL and the call fails,
+ *            it will contain details about the failure.
+ * @return A pointer to the element, NULL on failure.
+ * @ingroup array
+ */
+void* array_front(array_t* arr, error_t* err);
+
+/**
+ * @brief Adds an element to the end of the array.
+ * @param arr The array.
+ * @param data The item to push into the array.
+ * @param err Optional error output information. If non-NULL and the call fails,
+ *            it will contain details about the failure.
+ * @ingroup array
+ */
+void array_push_back(array_t* arr, void* data, error_t* err);
 
 #endif // H_CONTAINERS
