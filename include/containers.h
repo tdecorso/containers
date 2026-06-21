@@ -40,8 +40,8 @@ typedef struct {
 
 /**
  * @brief Heap-allocates a new array.
- * @param elem_size Size in bytes of the elements of the array.
- * @param cap Initial capacity (number of elements) of the array.
+ * @param elem_size Size in bytes of the elements of the array. Must be > 0.
+ * @param cap Initial capacity (number of elements) of the array. Must be > 0.
  * @param err Optional output error information. If non-NULL and the call fails,
  *            it will contain details about the failure.
  * @return A pointer to the new heap-allocated array. NULL on failure.
@@ -51,8 +51,7 @@ array_t* array_create(size_t elem_size, size_t cap, error_t* err);
 
 /**
  * @brief Destroys the array and frees its resources.
- * It is safe to use on NULL pointers.
- * @param arr The array to destroy.
+ * @param arr The array to destroy. It can be NULL.
  * @ingroup array
  */
 void array_destroy(array_t* arr);
@@ -62,11 +61,11 @@ void array_destroy(array_t* arr);
  *
  * An empty array is not considered an error if the input index is zero, it just returns NULL.
  *
- * @param arr The array.
- * @param index Index of element to access.
+ * @param arr The array. Must be not NULL.
+ * @param index Index of element to access. Index 0 is valid againts empty arrays.
  * @param err Optional error output information. If non-NULL and the call fails,
  *            it will contain details about the failure.
- * @return A pointer to the element, NULL on failure.
+ * @return A pointer to the element, NULL on failure (or empty array if given index is 0).
  * @ingroup array
  */
 void* array_at(array_t* arr, size_t index, error_t* err);
@@ -74,20 +73,18 @@ void* array_at(array_t* arr, size_t index, error_t* err);
 /**
  * @brief Access the first element of the array.
  *
- * An empty array is not considered an error, it just returns NULL.
- *
- * @param arr The array.
+ * @param arr The array. Must be not NULL.
  * @param err Optional error output information. If non-NULL and the call fails,
  *            it will contain details about the failure.
- * @return A pointer to the element, NULL on failure.
+ * @return A pointer to the element, NULL on failure (or empty array).
  * @ingroup array
  */
 void* array_front(array_t* arr, error_t* err);
 
 /**
  * @brief Adds an element to the end of the array.
- * @param arr The array.
- * @param data The item to push into the array.
+ * @param arr The array. Must be not NULL.
+ * @param data The item to push into the array. Must be not NULL.
  * @param err Optional error output information. If non-NULL and the call fails,
  *            it will contain details about the failure.
  * @ingroup array
