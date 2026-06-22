@@ -1,0 +1,24 @@
+/**
+\mainpage Containers: A type-agnostic data structures library in C
+
+\section intro Introduction
+
+This library wants to offer type-agnostic data structures in C. Lots of attention is given to 
+consistency, extensibility and robust error management. 
+
+\section current Current State
+
+Implemented:
+- Dynamic array (vector-like structure)
+
+In progress / planned:
+- Linked lists
+- Hashmaps
+- Tree structures
+- Graph structures
+
+\section note Note
+
+This project is in early development. Interfaces and internal structures
+may evolve as additional containers are introduced.
+*/
