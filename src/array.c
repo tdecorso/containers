@@ -61,6 +61,35 @@ void* array_at(array_t* arr, size_t index, error_t* err) {
     return base + arr->elem_size * index;
 }
 
+void* array_front(array_t* arr, error_t* err) {
+    if (!arr) {
+        error_create(err, ERROR_INVALID_ARGS, "You passed a NULL array.");
+        return NULL;
+    }
+
+    if (arr->count == 0) {
+        error_create(err, ERROR_OK, "No error found.");
+        return NULL;
+    }
+
+    return arr->data;
+}
+
+void* array_back(array_t* arr, error_t* err) {
+    if (!arr) {
+        error_create(err, ERROR_INVALID_ARGS, "You passed a NULL array.");
+        return NULL;
+    }
+
+    if (arr->count == 0) {
+        error_create(err, ERROR_OK, "No error found.");
+        return NULL;
+    }
+
+    uint8_t* base = arr->data;
+    return base + (arr->count - 1) * arr->elem_size;
+}
+
 void array_push_back(array_t* arr, void* data, error_t* err) {
     if (!arr) {
         error_create(err, ERROR_INVALID_ARGS, "You passed a NULL array.");
@@ -89,16 +118,3 @@ void array_push_back(array_t* arr, void* data, error_t* err) {
     error_create(err, ERROR_OK, "No error found");
 }
 
-void* array_front(array_t* arr, error_t* err) {
-    if (!arr) {
-        error_create(err, ERROR_INVALID_ARGS, "You passed a NULL array.");
-        return NULL;
-    }
-
-    if (arr->count == 0) {
-        error_create(err, ERROR_OK, "No error found.");
-        return NULL;
-    }
-
-    return arr->data;
-}

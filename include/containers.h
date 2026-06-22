@@ -34,10 +34,11 @@ typedef struct {
     size_t elem_size; ///< size in bytes of a single element of the array.
 } array_t;
 
-/**
- * @defgroup array Dynamic array
- */
+/// @defgroup array Dynamic arrays
+/// @{
 
+/// @defgroup array_allocation Allocation 
+/// @ingroup array
 /**
  * @brief Heap-allocates a new array.
  * @param elem_size Size in bytes of the elements of the array. Must be > 0.
@@ -45,16 +46,21 @@ typedef struct {
  * @param err Optional output error information. If non-NULL and the call fails,
  *            it will contain details about the failure.
  * @return A pointer to the new heap-allocated array. NULL on failure.
- * @ingroup array
+ * @ingroup array_allocation
  */
 array_t* array_create(size_t elem_size, size_t cap, error_t* err);
 
 /**
  * @brief Destroys the array and frees its resources.
  * @param arr The array to destroy. It can be NULL.
- * @ingroup array
+ * @ingroup array_allocation
  */
 void array_destroy(array_t* arr);
+
+/// @} // array_allocation
+
+/// @defgroup array_access Element access
+/// @ingroup array
 
 /**
  * @brief Access specified element with bounds checking.
@@ -66,7 +72,7 @@ void array_destroy(array_t* arr);
  * @param err Optional error output information. If non-NULL and the call fails,
  *            it will contain details about the failure.
  * @return A pointer to the element, NULL on failure (or empty array if given index is 0).
- * @ingroup array
+ * @ingroup array_access
  */
 void* array_at(array_t* arr, size_t index, error_t* err);
 
@@ -77,9 +83,25 @@ void* array_at(array_t* arr, size_t index, error_t* err);
  * @param err Optional error output information. If non-NULL and the call fails,
  *            it will contain details about the failure.
  * @return A pointer to the element, NULL on failure (or empty array).
- * @ingroup array
+ * @ingroup array_access
  */
 void* array_front(array_t* arr, error_t* err);
+
+/**
+ * @brief Access the last element of the array.
+ *
+ * @param arr The array. Must be not NULL.
+ * @param err Optional error output information. If non-NULL and the call fails,
+ *            it will contain details about the failure.
+ * @return A pointer to the element, NULL on failure (or empty array).
+ * @ingroup array_access
+ */
+void* array_back(array_t* arr, error_t* err);
+
+/// @} // array_access
+
+/// @defgroup array_modifiers Modifiers
+/// @ingroup array
 
 /**
  * @brief Adds an element to the end of the array.
@@ -87,8 +109,12 @@ void* array_front(array_t* arr, error_t* err);
  * @param data The item to push into the array. Must be not NULL.
  * @param err Optional error output information. If non-NULL and the call fails,
  *            it will contain details about the failure.
- * @ingroup array
+ * @ingroup array_modifiers
  */
 void array_push_back(array_t* arr, void* data, error_t* err);
+
+/// @} // array_modifiers
+
+/// @} // array
 
 #endif // H_CONTAINERS

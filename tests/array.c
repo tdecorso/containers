@@ -49,10 +49,6 @@ static int total  = 0;
         }                                                                  \
     } while (0)
 
-/* ---------------------------------------------------------------- */
-/* array_create / array_destroy                                     */
-/* ---------------------------------------------------------------- */
-
 int test_array_create(void) {
     error_t   err;
     array_t  *arr;
@@ -95,10 +91,6 @@ int test_array_destroy(void) {
     return 0;
 }
 
-/* ---------------------------------------------------------------- */
-/* array_at                                                         */
-/* ---------------------------------------------------------------- */
-
 int test_array_at(void) {
     error_t   err;
     array_t  *arr = array_create(sizeof(int), 4, &err);
@@ -130,10 +122,6 @@ int test_array_at(void) {
     return 0;
 }
 
-/* ---------------------------------------------------------------- */
-/* array_front                                                      */
-/* ---------------------------------------------------------------- */
-
 int test_array_front(void) {
     error_t   err;
     array_t  *arr = array_create(sizeof(int), 4, &err);
@@ -160,9 +148,31 @@ int test_array_front(void) {
     return 0;
 }
 
-/* ---------------------------------------------------------------- */
-/* array_push_back                                                  */
-/* ---------------------------------------------------------------- */
+int test_array_back(void) {
+    error_t   err;
+    array_t  *arr = array_create(sizeof(int), 4, &err);
+    int       a = 7, b = 8;
+    void     *p;
+
+    ASSERT(arr != NULL, "array_create succeeds before array_back test");
+
+    p = array_front(arr, &err);
+    ASSERT(p == NULL,            "array_back on empty array returns NULL");
+    ASSERT(err.code == ERROR_OK, "empty array is not treated as an error");
+
+    array_push_back(arr, &a, &err);
+    array_push_back(arr, &b, &err);
+
+    p = array_back(arr, &err);
+    ASSERT(p != NULL,       "array_back returns valid pointer after pushes");
+    ASSERT(*(int *)p == 8,  "array_back returns the last pushed element");
+
+    p = array_back(arr, NULL);
+    ASSERT(p != NULL, "array_back works fine with NULL err pointer");
+
+    array_destroy(arr);
+    return 0;
+}
 
 int test_array_push_back(void) {
     error_t   err;
@@ -231,6 +241,7 @@ int main(void) {
     RUN_TEST("array_destroy",                test_array_destroy);
     RUN_TEST("array_at",                     test_array_at);
     RUN_TEST("array_front",                  test_array_front);
+    RUN_TEST("array_back",                   test_array_back);
     RUN_TEST("array_push_back",              test_array_push_back);
     RUN_TEST("array_push_back_invalid_args", test_array_push_back_invalid_args);
 
