@@ -16,7 +16,7 @@ static int total  = 0;
 
 #define ASSERT(cond, msg)                                                  \
     do {                                                                   \
-        printf(C_DIM "    • %-55s" C_RESET, (msg));                        \
+        printf(C_DIM "    • %-80s" C_RESET, (msg));                        \
         if (!(cond)) {                                                     \
             printf(C_RED "✗" C_RESET C_DIM " (%s:%d)\n" C_RESET,           \
                    __FILE__, __LINE__);                                    \
@@ -174,6 +174,26 @@ int test_array_back(void) {
     return 0;
 }
 
+int test_array_capacity(void) {
+    error_t  err;
+    array_t* arr = array_create(sizeof(int), 100, &err);
+
+    ASSERT(array_is_empty(arr, NULL), "array_is_empty returns true on empty array");
+
+    size_t max_size = array_max_size(arr, NULL);
+
+    array_reserve(arr, max_size, &err);
+
+    ASSERT(err.code == ERROR_OK, "array_reserve accepts maximum size as input");
+
+    array_shrink_to_fit(arr, NULL);
+
+    ASSERT(arr->cap == 1, "array_shrink_to_fit allocates storage for 1 element if array is empty");
+
+    array_destroy(arr);
+    return 0;
+}
+
 int test_array_push_back(void) {
     error_t   err;
     array_t  *arr = array_create(sizeof(int), 2, &err);
@@ -242,6 +262,7 @@ int main(void) {
     RUN_TEST("array_at",                     test_array_at);
     RUN_TEST("array_front",                  test_array_front);
     RUN_TEST("array_back",                   test_array_back);
+    RUN_TEST("array_capacity",               test_array_capacity);
     RUN_TEST("array_push_back",              test_array_push_back);
     RUN_TEST("array_push_back_invalid_args", test_array_push_back_invalid_args);
 

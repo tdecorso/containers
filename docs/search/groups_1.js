@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['dynamic_20arrays_0',['Dynamic arrays',['../group__array.html',1,'']]]
+  ['capacity_0',['Capacity',['../group__array__capacity.html',1,'']]]
 ];

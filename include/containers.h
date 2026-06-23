@@ -3,6 +3,7 @@
 #define H_CONTAINERS
 
 #include <stdlib.h>
+#include <stdbool.h>
 
 /**
  * @brief Error codes returned by the API.
@@ -14,6 +15,7 @@ typedef enum {
     ERROR_OK,             ///< No errors detected.
     ERROR_INVALID_ARGS,   ///< One or more arguments are invalid; caller must fix input before retrying. 
     ERROR_OUT_OF_MEMORY,  ///< Memory allocation failed; operation cannot proceed, retry may succeed if memory is freed.
+    ERROR_INVALID_STATE,  ///< Internal state is corrupted; operation cannot proceed.
 } error_e;
 
 /**
@@ -99,6 +101,51 @@ void* array_front(array_t* arr, error_t* err);
 void* array_back(array_t* arr, error_t* err);
 
 /// @} // array_access
+
+/// @defgroup array_capacity Capacity
+/// @ingroup array
+
+/**
+ * @brief Checks whether the container is empty.
+ * @param arr The array. Must be not NULL.
+ * @param err Optional error output information. If non-NULL and the call fails,
+ *            it will contain details about the failure.
+ * @return True if the array is empty. False otherwise, or on failures.
+ * @ingroup array_capacity
+ */
+bool array_is_empty(array_t* arr, error_t* err);
+
+/**
+ * @brief Returns the maximum possible number of elements.
+ * @param arr The array. Must be not NULL.
+ * @param err Optional error output information. If non-NULL and the call fails,
+ *            it will contain details about the failure.
+ * @return Maximum possible number of elements for the given array. Zero on failures.
+ * @ingroup array_capacity
+ */
+size_t array_max_size(array_t* arr, error_t* err);
+
+/**
+ * @brief Reserves storage for the array.
+ * @param arr The array. Must be not NULL.
+ * @param to_reserve Capacity to reserve. It must not exceed maximum number of elements.
+ * @param err Optional error output information. If non-NULL and the call fails,
+ *            it will contain details about the failure.
+ * @ingroup array_capacity
+ */
+void array_reserve(array_t* arr, size_t to_reserve, error_t* err);
+
+/**
+ * @brief Reduces memory usage by freeing unused memory.
+ * @param arr The array. Must be not NULL.
+ * @param err Optional error output information. If non-NULL and the call fails,
+ *            it will contain details about the failure.
+ * @ingroup array_capacity
+ */
+void array_shrink_to_fit(array_t* arr, error_t* err);
+
+
+/// @} // array_capacity
 
 /// @defgroup array_modifiers Modifiers
 /// @ingroup array

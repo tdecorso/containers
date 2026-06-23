@@ -82,14 +82,17 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &lt;stdlib.h&gt;</code><br />
+<code>#include &lt;stdbool.h&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for containers.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="containers_8h__incl.png" border="0" usemap="#ainclude_2containers_8h" alt=""/></div>
 <map name="ainclude_2containers_8h" id="ainclude_2containers_8h">
-<area shape="rect" title=" " alt="" coords="5,5,159,31"/>
-<area shape="rect" title=" " alt="" coords="47,79,117,104"/>
-<area shape="poly" title=" " alt="" coords="85,31,85,65,79,65,79,31"/>
+<area shape="rect" title=" " alt="" coords="15,5,168,31"/>
+<area shape="rect" title=" " alt="" coords="5,79,76,104"/>
+<area shape="poly" title=" " alt="" coords="85,33,59,69,55,66,81,29"/>
+<area shape="rect" title=" " alt="" coords="101,79,183,104"/>
+<area shape="poly" title=" " alt="" coords="102,29,128,66,124,69,98,33"/>
 </map>
 </div>
 </div>
@@ -109,6 +112,7 @@ Enumerations</h2></td></tr>
 <tr class="memitem:a09c25ad25f326a930ae42ace60b70232" id="r_a09c25ad25f326a930ae42ace60b70232"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="containers_8h.html#a09c25ad25f326a930ae42ace60b70232">error_e</a> { <a class="el" href="containers_8h.html#a09c25ad25f326a930ae42ace60b70232aadeb5032c03491611646c1c64f7c0e0c">ERROR_OK</a>
 , <a class="el" href="containers_8h.html#a09c25ad25f326a930ae42ace60b70232a71364091159026465bd0df0db02dbbca">ERROR_INVALID_ARGS</a>
 , <a class="el" href="containers_8h.html#a09c25ad25f326a930ae42ace60b70232ac0a554045048d2fb61387cf735676f69">ERROR_OUT_OF_MEMORY</a>
+, <a class="el" href="containers_8h.html#a09c25ad25f326a930ae42ace60b70232a006ed620849d59b04c9b2ec1bb1bfa69">ERROR_INVALID_STATE</a>
  }</td></tr>
 <tr class="memdesc:a09c25ad25f326a930ae42ace60b70232"><td class="mdescLeft">&#160;</td><td class="mdescRight">Error codes returned by the API.  <a href="containers_8h.html#a09c25ad25f326a930ae42ace60b70232">More...</a><br /></td></tr>
 <tr class="separator:a09c25ad25f326a930ae42ace60b70232"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -130,6 +134,18 @@ Functions</h2></td></tr>
 <tr class="memitem:ga4575cbcb28a83e95a33d8e021c2980cf" id="r_ga4575cbcb28a83e95a33d8e021c2980cf"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__array__access.html#ga4575cbcb28a83e95a33d8e021c2980cf">array_back</a> (<a class="el" href="structarray__t.html">array_t</a> *arr, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
 <tr class="memdesc:ga4575cbcb28a83e95a33d8e021c2980cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Access the last element of the array.  <br /></td></tr>
 <tr class="separator:ga4575cbcb28a83e95a33d8e021c2980cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga28d96d3ea0ef5bccf394815f898e1b98" id="r_ga28d96d3ea0ef5bccf394815f898e1b98"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__array__capacity.html#ga28d96d3ea0ef5bccf394815f898e1b98">array_is_empty</a> (<a class="el" href="structarray__t.html">array_t</a> *arr, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
+<tr class="memdesc:ga28d96d3ea0ef5bccf394815f898e1b98"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks whether the container is empty.  <br /></td></tr>
+<tr class="separator:ga28d96d3ea0ef5bccf394815f898e1b98"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga7010fb597fe3cc3ed39ec5baaab803d5" id="r_ga7010fb597fe3cc3ed39ec5baaab803d5"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__array__capacity.html#ga7010fb597fe3cc3ed39ec5baaab803d5">array_max_size</a> (<a class="el" href="structarray__t.html">array_t</a> *arr, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
+<tr class="memdesc:ga7010fb597fe3cc3ed39ec5baaab803d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the maximum possible number of elements.  <br /></td></tr>
+<tr class="separator:ga7010fb597fe3cc3ed39ec5baaab803d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga908d8f3f6e2fc483e5ea4475067970e9" id="r_ga908d8f3f6e2fc483e5ea4475067970e9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__array__capacity.html#ga908d8f3f6e2fc483e5ea4475067970e9">array_reserve</a> (<a class="el" href="structarray__t.html">array_t</a> *arr, size_t to_reserve, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
+<tr class="memdesc:ga908d8f3f6e2fc483e5ea4475067970e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reserves storage for the array.  <br /></td></tr>
+<tr class="separator:ga908d8f3f6e2fc483e5ea4475067970e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga9267ec6d1c029e2eab86dbe2622647cf" id="r_ga9267ec6d1c029e2eab86dbe2622647cf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__array__capacity.html#ga9267ec6d1c029e2eab86dbe2622647cf">array_shrink_to_fit</a> (<a class="el" href="structarray__t.html">array_t</a> *arr, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
+<tr class="memdesc:ga9267ec6d1c029e2eab86dbe2622647cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reduces memory usage by freeing unused memory.  <br /></td></tr>
+<tr class="separator:ga9267ec6d1c029e2eab86dbe2622647cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga3c64f080e3b37e11cfbf6e7c5d8ba4bf" id="r_ga3c64f080e3b37e11cfbf6e7c5d8ba4bf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__array__modifiers.html#ga3c64f080e3b37e11cfbf6e7c5d8ba4bf">array_push_back</a> (<a class="el" href="structarray__t.html">array_t</a> *arr, void *data, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
 <tr class="memdesc:ga3c64f080e3b37e11cfbf6e7c5d8ba4bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds an element to the end of the array.  <br /></td></tr>
 <tr class="separator:ga3c64f080e3b37e11cfbf6e7c5d8ba4bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -155,6 +171,8 @@ Functions</h2></td></tr>
 <tr><td class="fieldname"><a id="a09c25ad25f326a930ae42ace60b70232a71364091159026465bd0df0db02dbbca" name="a09c25ad25f326a930ae42ace60b70232a71364091159026465bd0df0db02dbbca"></a>ERROR_INVALID_ARGS&#160;</td><td class="fielddoc"><p>One or more arguments are invalid; caller must fix input before retrying. </p>
 </td></tr>
 <tr><td class="fieldname"><a id="a09c25ad25f326a930ae42ace60b70232ac0a554045048d2fb61387cf735676f69" name="a09c25ad25f326a930ae42ace60b70232ac0a554045048d2fb61387cf735676f69"></a>ERROR_OUT_OF_MEMORY&#160;</td><td class="fielddoc"><p>Memory allocation failed; operation cannot proceed, retry may succeed if memory is freed. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a09c25ad25f326a930ae42ace60b70232a006ed620849d59b04c9b2ec1bb1bfa69" name="a09c25ad25f326a930ae42ace60b70232a006ed620849d59b04c9b2ec1bb1bfa69"></a>ERROR_INVALID_STATE&#160;</td><td class="fielddoc"><p>Internal state is corrupted; operation cannot proceed. </p>
 </td></tr>
 </table>
 

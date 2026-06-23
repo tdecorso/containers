@@ -1,6 +1,9 @@
 #include "containers.h"
 #include <string.h>
 #include <stdint.h>
+#include <limits.h>
+
+#define ARRAY_MAX_SIZE INT_MAX
 
 static void error_create(error_t* err, error_e code, const char* msg) {
     if (!err) return;
@@ -13,6 +16,10 @@ static void error_create(error_t* err, error_e code, const char* msg) {
 array_t* array_create(size_t elem_size, size_t cap, error_t* err) {
     if (!elem_size || !cap) {
         error_create(err, ERROR_INVALID_ARGS, "Element size or capacity cannot be zero.");
+        return NULL;
+    }
+    if (cap * elem_size > ARRAY_MAX_SIZE) {
+        error_create(err, ERROR_INVALID_ARGS, "Requested capacity exceeds maximum size.");
         return NULL;
     }
     array_t* arr = malloc(sizeof(array_t));
@@ -67,8 +74,9 @@ void* array_front(array_t* arr, error_t* err) {
         return NULL;
     }
 
+    error_create(err, ERROR_OK, "No error found.");
+
     if (arr->count == 0) {
-        error_create(err, ERROR_OK, "No error found.");
         return NULL;
     }
 
@@ -81,13 +89,94 @@ void* array_back(array_t* arr, error_t* err) {
         return NULL;
     }
 
+    error_create(err, ERROR_OK, "No error found.");
+
     if (arr->count == 0) {
-        error_create(err, ERROR_OK, "No error found.");
         return NULL;
     }
 
     uint8_t* base = arr->data;
     return base + (arr->count - 1) * arr->elem_size;
+}
+
+bool array_is_empty(array_t* arr, error_t* err) {
+    if (!arr) {
+        error_create(err, ERROR_INVALID_ARGS, "You passed a NULL array.");
+        return false;
+    }
+
+    error_create(err, ERROR_OK, "No error found.");
+    return arr->count == 0;
+}
+
+size_t array_max_size(array_t* arr, error_t* err) {
+    if (!arr) {
+        error_create(err, ERROR_INVALID_ARGS, "You passed a NULL array.");
+        return 0;
+    }
+
+    if (arr->elem_size == 0) {
+        error_create(err, ERROR_INVALID_STATE, "The array element size is 0.");
+        return 0;
+    }
+
+    error_create(err, ERROR_OK, "No error found.");
+    return ARRAY_MAX_SIZE / arr->elem_size;
+}
+
+void array_reserve(array_t* arr, size_t to_reserve, error_t* err) {
+    if (!arr) {
+        error_create(err, ERROR_INVALID_ARGS, "You passed a NULL array.");
+        return;
+    }
+    if (to_reserve == 0) {
+        error_create(err, ERROR_INVALID_ARGS, "Storage to reserve must be greater than zero.");
+        return;
+    }
+    if (arr->elem_size == 0) {
+        error_create(err, ERROR_INVALID_STATE, "The array element size is 0.");
+        return;
+    }
+    if (arr->cap == 0) {
+        error_create(err, ERROR_INVALID_STATE, "The array capacity is 0.");
+        return;
+    }
+
+    if (to_reserve * arr->elem_size > ARRAY_MAX_SIZE) {
+        error_create(err, ERROR_INVALID_ARGS, "Requested storage exceeds maximum size.");
+        return;
+    }
+
+    void* data = realloc(arr->data, to_reserve * arr->elem_size);
+    if (!data) {
+        error_create(err, ERROR_OUT_OF_MEMORY, "Array reallocation failed.");
+        return;
+    }
+
+    arr->data = data;
+    arr->cap = to_reserve;
+
+    error_create(err, ERROR_OK, "No error found.");
+}
+
+void array_shrink_to_fit(array_t* arr, error_t* err) {
+    if (!arr) {
+        error_create(err, ERROR_INVALID_ARGS, "You passed a NULL array.");
+        return;
+    }
+
+    if (arr->cap > arr->count) {
+        size_t new_cap = arr->count > 0 ? arr->count : 1;
+        void* data = realloc(arr->data, new_cap * arr->elem_size);
+        if (!data) {
+            error_create(err, ERROR_OUT_OF_MEMORY, "Array reallocation failed.");
+            return;
+        }
+        arr->cap = new_cap;
+        arr->data = data;
+    }
+
+    error_create(err, ERROR_OK, "No error found.");
 }
 
 void array_push_back(array_t* arr, void* data, error_t* err) {
@@ -102,6 +191,10 @@ void array_push_back(array_t* arr, void* data, error_t* err) {
     }
 
     if (arr->count == arr->cap) {
+        if (arr->cap >= (ARRAY_MAX_SIZE / 2) * arr->elem_size) {
+            error_create(err, ERROR_OUT_OF_MEMORY, "Array memory exceeds maximum space.");
+            return;
+        }
         size_t new_cap = arr->cap * 2;
         void* data = realloc(arr->data, arr->elem_size * new_cap);
         if (!data) {
