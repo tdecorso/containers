@@ -235,6 +235,126 @@ int test_array_push_back(void) {
     return 0;
 }
 
+int test_array_insert(void) {
+    error_t   err;
+    array_t  *arr = array_create(sizeof(int), 4, &err);
+    int       value;
+    void     *p;
+
+    ASSERT(arr != NULL, "array_create succeeds before array_insert test");
+
+    /* ---- invalid args ---- */
+
+    err.code = ERROR_OK;
+    array_insert(NULL, 0, &value, &err);
+    ASSERT(err.code == ERROR_INVALID_ARGS, "insert on NULL array sets invalid args error");
+
+    err.code = ERROR_OK;
+    array_insert(arr, 0, NULL, &err);
+    ASSERT(err.code == ERROR_INVALID_ARGS, "insert with NULL item sets invalid args error");
+
+    /* ---- insert into populated region: shifts right ---- */
+
+    value = 10;
+    array_insert(arr, 0, &value, &err);
+    ASSERT(err.code == ERROR_OK, "insert at index 0 into empty array succeeds");
+    ASSERT(arr->count == 1,      "count is 1 after first insert");
+
+    p = array_at(arr, 0, &err);
+    ASSERT(p != NULL,       "element at index 0 is accessible");
+    ASSERT(*(int *)p == 10, "element at index 0 has correct value");
+
+    value = 20;
+    array_insert(arr, 0, &value, &err);
+    ASSERT(err.code == ERROR_OK, "insert at index 0 shifts existing elements right");
+    ASSERT(arr->count == 2,      "count is 2 after second insert");
+
+    p = array_at(arr, 0, &err);
+    ASSERT(*(int *)p == 20, "newly inserted element sits at index 0");
+    p = array_at(arr, 1, &err);
+    ASSERT(*(int *)p == 10, "original element shifted to index 1");
+
+    value = 15;
+    array_insert(arr, 1, &value, &err);
+    ASSERT(err.code == ERROR_OK, "insert at index 1 shifts tail right");
+    ASSERT(arr->count == 3,      "count is 3 after mid insert");
+
+    p = array_at(arr, 0, &err);
+    ASSERT(*(int *)p == 20, "element at index 0 unchanged after mid insert");
+    p = array_at(arr, 1, &err);
+    ASSERT(*(int *)p == 15, "newly inserted element sits at index 1");
+    p = array_at(arr, 2, &err);
+    ASSERT(*(int *)p == 10, "tail element shifted to index 2");
+
+    /* ---- insert within capacity but past count: direct placement ---- */
+
+    /* arr->cap is 4, arr->count is 3, so index 3 is within cap but == count,
+       which routes through the shift path. Use a fresh array for clarity.   */
+    array_destroy(arr);
+    arr = array_create(sizeof(int), 8, &err);
+    ASSERT(arr != NULL, "array_create succeeds for within-cap test");
+
+    value = 1;
+    array_insert(arr, 0, &value, &err);   /* arr = [1], count = 1, cap = 8 */
+
+    value = 99;
+    array_insert(arr, 5, &value, &err);   /* within cap(8), past count(1) */
+    ASSERT(err.code == ERROR_OK, "insert within cap but past count succeeds");
+    ASSERT(arr->count == 2,      "count increments by one for direct placement");
+
+    p = array_at(arr, 5, &err);
+    ASSERT(p != NULL,         "element at directly placed index is accessible");
+    ASSERT(*(int *)p == 99,   "element at directly placed index has correct value");
+
+    p = array_at(arr, 0, &err);
+    ASSERT(*(int *)p == 1,    "earlier element unaffected by direct placement");
+
+    /* ---- insert past capacity triggers growth ---- */
+
+    value = 55;
+    array_insert(arr, 99, &value, &err);
+    ASSERT(err.code == ERROR_OK, "insert past capacity succeeds");
+    ASSERT(arr->cap >= 100,      "capacity grows to at least index + 1");
+    ASSERT(arr->count == 3,      "count increments after growth insert");
+
+    p = array_at(arr, 99, &err);
+    ASSERT(p != NULL,       "element at grown index is accessible");
+    ASSERT(*(int *)p == 55, "element at grown index has correct value");
+
+    /* ---- shift insert triggers realloc when count == cap ---- */
+
+    array_destroy(arr);
+    arr = array_create(sizeof(int), 2, &err);
+    ASSERT(arr != NULL, "array_create succeeds for count==cap shift test");
+
+    value = 1; array_insert(arr, 0, &value, &err);
+    value = 2; array_insert(arr, 1, &value, &err);
+    ASSERT(arr->count == 2, "array is full before shift-growth test");
+    ASSERT(arr->cap   == 2, "capacity is exactly 2 before shift-growth test");
+
+    value = 9;
+    array_insert(arr, 0, &value, &err);   /* must realloc before shifting */
+    ASSERT(err.code == ERROR_OK, "insert at index 0 when count==cap succeeds");
+    ASSERT(arr->cap >= 3,        "capacity grew to accommodate shift");
+    ASSERT(arr->count == 3,      "count is 3 after shift-growth insert");
+
+    p = array_at(arr, 0, &err);
+    ASSERT(*(int *)p == 9, "inserted element is at index 0 after shift-growth");
+    p = array_at(arr, 1, &err);
+    ASSERT(*(int *)p == 1, "first original element shifted to index 1");
+    p = array_at(arr, 2, &err);
+    ASSERT(*(int *)p == 2, "second original element shifted to index 2");
+
+    /* ---- NULL err pointer is safe ---- */
+
+    value = 77;
+    array_insert(arr, 0, &value, NULL);
+    ASSERT(1, "insert works fine with NULL err pointer");
+
+    array_destroy(arr);
+    return 0;
+}
+
 int test_array_push_back_invalid_args(void) {
     error_t   err;
     array_t  *arr = array_create(sizeof(int), 4, &err);
@@ -265,6 +385,7 @@ int main(void) {
     RUN_TEST("array_capacity",               test_array_capacity);
     RUN_TEST("array_push_back",              test_array_push_back);
     RUN_TEST("array_push_back_invalid_args", test_array_push_back_invalid_args);
+    RUN_TEST("array_insert",                 test_array_insert);
 
     SUMMARY();
     return failed ? 1 : 0;

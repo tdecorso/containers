@@ -70,7 +70,7 @@ void array_destroy(array_t* arr);
  * An empty array is not considered an error if the input index is zero, it just returns NULL.
  *
  * @param arr The array. Must be not NULL.
- * @param index Index of element to access. Index 0 is valid againts empty arrays.
+ * @param index Index of element to access. Index 0 is valid againts empty arrays. It must be smaller than the capacity size.
  * @param err Optional error output information. If non-NULL and the call fails,
  *            it will contain details about the failure.
  * @return A pointer to the element, NULL on failure (or empty array if given index is 0).
@@ -149,6 +149,26 @@ void array_shrink_to_fit(array_t* arr, error_t* err);
 
 /// @defgroup array_modifiers Modifiers
 /// @ingroup array
+
+/**
+ * @brief Clears the contents of the array.
+ * @param arr The array. Must be not NULL.
+ * @param err Optional error output information. If non-NULL and the call fails,
+ *            it will contain details about the failure.
+ * @ingroup array_modifiers
+ */
+void array_clear(array_t* arr, error_t* err);
+
+/**
+ * @brief Inserts an element into the array.
+ * @param arr The array. Must be not NULL.
+ * @param index Position to insert the element in. If greater than the capacity, the array grows up to the given index.
+ * @param item Item's memory to insert in the array. Must be not NULL.
+ * @param err Optional error output information. If non-NULL and the call fails,
+ *            it will contain details about the failure.
+ * @ingroup array_modifiers
+ */
+void array_insert(array_t* arr, size_t index, void* item, error_t* err);
 
 /**
  * @brief Adds an element to the end of the array.

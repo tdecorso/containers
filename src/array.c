@@ -58,8 +58,8 @@ void* array_at(array_t* arr, size_t index, error_t* err) {
 
     if (index == 0) return array_front(arr, err);
 
-    if (index >= arr->count) {
-        error_create(err, ERROR_INVALID_ARGS, "The index is greater than the array size.");
+    if (index >= arr->cap) {
+        error_create(err, ERROR_INVALID_ARGS, "The index is greater than the array capacity.");
         return NULL;
     }
 
@@ -211,3 +211,67 @@ void array_push_back(array_t* arr, void* data, error_t* err) {
     error_create(err, ERROR_OK, "No error found");
 }
 
+void array_clear(array_t* arr, error_t* err) {
+    if (!arr) {
+        error_create(err, ERROR_INVALID_ARGS, "You passed a NULL array.");
+        return;
+    }
+
+    memset(arr->data, 0, arr->elem_size * arr->cap);
+    arr->count = 0;
+    error_create(err, ERROR_OK, "No error found.");
+}
+
+void array_insert(array_t* arr, size_t index, void* item, error_t* err) {
+    if (!arr) {
+        error_create(err, ERROR_INVALID_ARGS, "You passed a NULL array.");
+        return;
+    }
+    if (!item) {
+        error_create(err, ERROR_INVALID_ARGS, "You passed a NULL item to insert.");
+        return;
+    }
+
+    uint8_t* base;
+
+    if (index >= arr->cap) {
+        void* data = realloc(arr->data, (index + 1) * arr->elem_size);
+        if (!data) {
+            error_create(err, ERROR_OUT_OF_MEMORY, "Could not allocate memory for the array.");
+            return;
+        }
+        arr->data = data;
+        arr->cap  = index + 1;
+        base = arr->data;
+        memcpy(base + index * arr->elem_size, item, arr->elem_size);
+        arr->count++;
+        error_create(err, ERROR_OK, "No error found.");
+        return;
+    }
+
+    if (index > arr->count) {
+        base = arr->data;
+        memcpy(base + index * arr->elem_size, item, arr->elem_size);
+        arr->count++;
+        error_create(err, ERROR_OK, "No error found.");
+        return;
+    }
+
+    if (arr->count == arr->cap) {
+        void* data = realloc(arr->data, (arr->cap * 2) * arr->elem_size);
+        if (!data) {
+            error_create(err, ERROR_OUT_OF_MEMORY, "Could not allocate memory for the array.");
+            return;
+        }
+        arr->data = data;
+        arr->cap *= 2;
+    }
+
+    base = arr->data;
+    memmove(base + (index + 1) * arr->elem_size,
+            base + index * arr->elem_size,
+            (arr->count - index) * arr->elem_size);
+    memcpy(base + index * arr->elem_size, item, arr->elem_size);
+    arr->count++;
+    error_create(err, ERROR_OK, "No error found.");
+}

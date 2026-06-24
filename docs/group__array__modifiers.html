@@ -87,12 +87,106 @@ Collaboration diagram for Modifiers:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:ga0510dbc43eff402546211158b746d2d1" id="r_ga0510dbc43eff402546211158b746d2d1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__array__modifiers.html#ga0510dbc43eff402546211158b746d2d1">array_clear</a> (<a class="el" href="structarray__t.html">array_t</a> *arr, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
+<tr class="memdesc:ga0510dbc43eff402546211158b746d2d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clears the contents of the array.  <br /></td></tr>
+<tr class="separator:ga0510dbc43eff402546211158b746d2d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga674c95cb0b3df91c591c8faba959b430" id="r_ga674c95cb0b3df91c591c8faba959b430"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__array__modifiers.html#ga674c95cb0b3df91c591c8faba959b430">array_insert</a> (<a class="el" href="structarray__t.html">array_t</a> *arr, size_t index, void *item, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
+<tr class="memdesc:ga674c95cb0b3df91c591c8faba959b430"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inserts an element into the array.  <br /></td></tr>
+<tr class="separator:ga674c95cb0b3df91c591c8faba959b430"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga3c64f080e3b37e11cfbf6e7c5d8ba4bf" id="r_ga3c64f080e3b37e11cfbf6e7c5d8ba4bf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__array__modifiers.html#ga3c64f080e3b37e11cfbf6e7c5d8ba4bf">array_push_back</a> (<a class="el" href="structarray__t.html">array_t</a> *arr, void *data, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
 <tr class="memdesc:ga3c64f080e3b37e11cfbf6e7c5d8ba4bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds an element to the end of the array.  <br /></td></tr>
 <tr class="separator:ga3c64f080e3b37e11cfbf6e7c5d8ba4bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <h2 class="groupheader">Function Documentation</h2>
+<a id="ga0510dbc43eff402546211158b746d2d1" name="ga0510dbc43eff402546211158b746d2d1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga0510dbc43eff402546211158b746d2d1">&#9670;&#160;</a></span>array_clear()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void array_clear </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structarray__t.html">array_t</a> *&#160;</td>
+          <td class="paramname"><em>arr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structerror__t.html">error_t</a> *&#160;</td>
+          <td class="paramname"><em>err</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Clears the contents of the array. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">arr</td><td>The array. Must be not NULL. </td></tr>
+    <tr><td class="paramname">err</td><td>Optional error output information. If non-NULL and the call fails, it will contain details about the failure. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ga674c95cb0b3df91c591c8faba959b430" name="ga674c95cb0b3df91c591c8faba959b430"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga674c95cb0b3df91c591c8faba959b430">&#9670;&#160;</a></span>array_insert()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void array_insert </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structarray__t.html">array_t</a> *&#160;</td>
+          <td class="paramname"><em>arr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>item</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structerror__t.html">error_t</a> *&#160;</td>
+          <td class="paramname"><em>err</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Inserts an element into the array. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">arr</td><td>The array. Must be not NULL. </td></tr>
+    <tr><td class="paramname">index</td><td>Position to insert the element in. If greater than the capacity, the array grows up to the given index. </td></tr>
+    <tr><td class="paramname">item</td><td>Item's memory to insert in the array. Must be not NULL. </td></tr>
+    <tr><td class="paramname">err</td><td>Optional error output information. If non-NULL and the call fails, it will contain details about the failure. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="ga3c64f080e3b37e11cfbf6e7c5d8ba4bf" name="ga3c64f080e3b37e11cfbf6e7c5d8ba4bf"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ga3c64f080e3b37e11cfbf6e7c5d8ba4bf">&#9670;&#160;</a></span>array_push_back()</h2>
 
