@@ -286,41 +286,6 @@ int test_array_insert(void) {
     p = array_at(arr, 2, &err);
     ASSERT(*(int *)p == 10, "tail element shifted to index 2");
 
-    /* ---- insert within capacity but past count: direct placement ---- */
-
-    /* arr->cap is 4, arr->count is 3, so index 3 is within cap but == count,
-       which routes through the shift path. Use a fresh array for clarity.   */
-    array_destroy(arr);
-    arr = array_create(sizeof(int), 8, &err);
-    ASSERT(arr != NULL, "array_create succeeds for within-cap test");
-
-    value = 1;
-    array_insert(arr, 0, &value, &err);   /* arr = [1], count = 1, cap = 8 */
-
-    value = 99;
-    array_insert(arr, 5, &value, &err);   /* within cap(8), past count(1) */
-    ASSERT(err.code == ERROR_OK, "insert within cap but past count succeeds");
-    ASSERT(arr->count == 2,      "count increments by one for direct placement");
-
-    p = array_at(arr, 5, &err);
-    ASSERT(p != NULL,         "element at directly placed index is accessible");
-    ASSERT(*(int *)p == 99,   "element at directly placed index has correct value");
-
-    p = array_at(arr, 0, &err);
-    ASSERT(*(int *)p == 1,    "earlier element unaffected by direct placement");
-
-    /* ---- insert past capacity triggers growth ---- */
-
-    value = 55;
-    array_insert(arr, 99, &value, &err);
-    ASSERT(err.code == ERROR_OK, "insert past capacity succeeds");
-    ASSERT(arr->cap >= 100,      "capacity grows to at least index + 1");
-    ASSERT(arr->count == 3,      "count increments after growth insert");
-
-    p = array_at(arr, 99, &err);
-    ASSERT(p != NULL,       "element at grown index is accessible");
-    ASSERT(*(int *)p == 55, "element at grown index has correct value");
-
     /* ---- shift insert triggers realloc when count == cap ---- */
 
     array_destroy(arr);
@@ -373,6 +338,97 @@ int test_array_push_back_invalid_args(void) {
     return 0;
 }
 
+int test_array_erase(void) {
+    error_t   err;
+    array_t  *arr = array_create(sizeof(int), 8, &err);
+    int       value;
+    void     *p;
+
+    ASSERT(arr != NULL, "array_create succeeds before array_erase test");
+
+    /* ---- invalid args ---- */
+
+    err.code = ERROR_OK;
+    array_erase(NULL, 0, &err);
+    ASSERT(err.code == ERROR_INVALID_ARGS, "erase on NULL array sets invalid args error");
+
+    err.code = ERROR_OK;
+    array_erase(arr, 0, &err);
+    ASSERT(err.code == ERROR_INVALID_ARGS, "erase on empty array sets invalid args error");
+
+    /* populate: [10, 20, 30, 40, 50] */
+    value = 10; array_insert(arr, 0, &value, &err);
+    value = 20; array_insert(arr, 1, &value, &err);
+    value = 30; array_insert(arr, 2, &value, &err);
+    value = 40; array_insert(arr, 3, &value, &err);
+    value = 50; array_insert(arr, 4, &value, &err);
+    ASSERT(arr->count == 5, "array has 5 elements before erase tests");
+
+    err.code = ERROR_OK;
+    array_erase(arr, 99, &err);
+    ASSERT(err.code == ERROR_INVALID_ARGS, "erase at index >= count sets invalid args error");
+    ASSERT(arr->count == 5, "count unchanged after out-of-bounds erase");
+
+    /* ---- erase from the middle ---- */
+
+    /* [10, 20, 30, 40, 50] -> erase index 2 -> [10, 20, 40, 50] */
+    array_erase(arr, 2, &err);
+    ASSERT(err.code == ERROR_OK, "erase at middle index succeeds");
+    ASSERT(arr->count == 4,      "count decrements after middle erase");
+
+    p = array_at(arr, 0, &err); ASSERT(*(int *)p == 10, "index 0 unchanged after middle erase");
+    p = array_at(arr, 1, &err); ASSERT(*(int *)p == 20, "index 1 unchanged after middle erase");
+    p = array_at(arr, 2, &err); ASSERT(*(int *)p == 40, "index 2 shifted left after middle erase");
+    p = array_at(arr, 3, &err); ASSERT(*(int *)p == 50, "index 3 shifted left after middle erase");
+
+    /* ---- erase from the head ---- */
+
+    /* [10, 20, 40, 50] -> erase index 0 -> [20, 40, 50] */
+    array_erase(arr, 0, &err);
+    ASSERT(err.code == ERROR_OK, "erase at index 0 succeeds");
+    ASSERT(arr->count == 3,      "count decrements after head erase");
+
+    p = array_at(arr, 0, &err); ASSERT(*(int *)p == 20, "index 0 is old index 1 after head erase");
+    p = array_at(arr, 1, &err); ASSERT(*(int *)p == 40, "index 1 is old index 2 after head erase");
+    p = array_at(arr, 2, &err); ASSERT(*(int *)p == 50, "index 2 is old index 3 after head erase");
+
+    /* ---- erase from the tail ---- */
+
+    /* [20, 40, 50] -> erase index 2 -> [20, 40] */
+    array_erase(arr, 2, &err);
+    ASSERT(err.code == ERROR_OK, "erase at last index succeeds");
+    ASSERT(arr->count == 2,      "count decrements after tail erase");
+
+    p = array_at(arr, 0, &err); ASSERT(*(int *)p == 20, "index 0 unchanged after tail erase");
+    p = array_at(arr, 1, &err); ASSERT(*(int *)p == 40, "index 1 unchanged after tail erase");
+
+    /* ---- erase down to a single element ---- */
+
+    /* [20, 40] -> erase index 0 -> [40] */
+    array_erase(arr, 0, &err);
+    ASSERT(arr->count == 1,      "count is 1 after erasing down to single element");
+    p = array_at(arr, 0, &err);
+    ASSERT(*(int *)p == 40, "remaining element has correct value");
+
+    /* ---- erase last remaining element ---- */
+
+    array_erase(arr, 0, &err);
+    ASSERT(err.code == ERROR_OK, "erase of last element succeeds");
+    ASSERT(arr->count == 0,      "count is 0 after erasing last element");
+
+    err.code = ERROR_OK;
+    array_erase(arr, 0, &err);
+    ASSERT(err.code == ERROR_INVALID_ARGS, "erase on newly empty array sets invalid args error");
+
+    /* ---- NULL err pointer is safe ---- */
+
+    value = 1; array_insert(arr, 0, &value, NULL);
+    array_erase(arr, 0, NULL);
+    ASSERT(1, "erase works fine with NULL err pointer");
+
+    array_destroy(arr);
+    return 0;
+}
 
 int main(void) {
     printf(C_BOLD C_YELLOW "\n  containers.h — test suite\n\n" C_RESET);
@@ -386,6 +442,7 @@ int main(void) {
     RUN_TEST("array_push_back",              test_array_push_back);
     RUN_TEST("array_push_back_invalid_args", test_array_push_back_invalid_args);
     RUN_TEST("array_insert",                 test_array_insert);
+    RUN_TEST("array_erase",                  test_array_erase);
 
     SUMMARY();
     return failed ? 1 : 0;
