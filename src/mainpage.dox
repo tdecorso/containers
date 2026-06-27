@@ -3,19 +3,8 @@
 
 \section intro Introduction
 
-This library wants to offer type-agnostic data structures in C. Lots of attention is given to 
-consistency, extensibility and robust error management. 
-
-\section current Current State
-
-Implemented:
-- Dynamic array (vector-like structure)
-
-In progress / planned:
-- Linked lists
-- Hashmaps
-- Tree structures
-- Graph structures
+This library offers type-agnostic data structures in C. Mainly an instructional exercise, not to be intended
+as a state-of-the-art implementation.
 
 \section note Note
 

@@ -76,6 +76,7 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Data Structures</a> &#124;
+<a href="#typedef-members">Typedefs</a> &#124;
 <a href="#enum-members">Enumerations</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle"><div class="title">containers.h File Reference</div></div>
@@ -95,6 +96,16 @@ Include dependency graph for containers.h:</div>
 <area shape="poly" title=" " alt="" coords="102,29,128,66,124,69,98,33"/>
 </map>
 </div>
+</div><div class="textblock"><div class="dynheader">
+This graph shows which files directly or indirectly include this file:</div>
+<div class="dyncontent">
+<div class="center"><img src="containers_8h__dep__incl.png" border="0" usemap="#ainclude_2containers_8hdep" alt=""/></div>
+<map name="ainclude_2containers_8hdep" id="ainclude_2containers_8hdep">
+<area shape="rect" title=" " alt="" coords="5,5,159,31"/>
+<area shape="rect" href="list_8h_source.html" title=" " alt="" coords="43,79,121,104"/>
+<area shape="poly" title=" " alt="" coords="85,44,85,79,79,79,79,44"/>
+</map>
+</div>
 </div>
 <p><a href="containers_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -106,6 +117,15 @@ Data Structures</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structarray__t.html">array_t</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generic dynamic array.  <a href="structarray__t.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlist__t.html">list_t</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generic linked list.  <a href="structlist__t.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:ga865bd3b3cd44b1d8f1d63746748fa807" id="r_ga865bd3b3cd44b1d8f1d63746748fa807"><td class="memItemLeft" align="right" valign="top">
+typedef struct list_node&#160;</td><td class="memItemRight" valign="bottom"><b>list_node_t</b></td></tr>
+<tr class="separator:ga865bd3b3cd44b1d8f1d63746748fa807"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
 Enumerations</h2></td></tr>
@@ -152,12 +172,36 @@ Functions</h2></td></tr>
 <tr class="memitem:gadb4645f9070be26295bf7ab514b8fbe4" id="r_gadb4645f9070be26295bf7ab514b8fbe4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__array__modifiers.html#gadb4645f9070be26295bf7ab514b8fbe4">array_insert</a> (<a class="el" href="structarray__t.html">array_t</a> *arr, size_t index, const void *item, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
 <tr class="memdesc:gadb4645f9070be26295bf7ab514b8fbe4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inserts an element into the array.  <br /></td></tr>
 <tr class="separator:gadb4645f9070be26295bf7ab514b8fbe4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga80c7db09db51219962d21817eb544f46" id="r_ga80c7db09db51219962d21817eb544f46"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__array__modifiers.html#ga80c7db09db51219962d21817eb544f46">array_push_back</a> (<a class="el" href="structarray__t.html">array_t</a> *arr, const void *data, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
-<tr class="memdesc:ga80c7db09db51219962d21817eb544f46"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds an element to the end of the array.  <br /></td></tr>
-<tr class="separator:ga80c7db09db51219962d21817eb544f46"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga81fafea435225ae19cd67b175e9c225e" id="r_ga81fafea435225ae19cd67b175e9c225e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__array__modifiers.html#ga81fafea435225ae19cd67b175e9c225e">array_push_back</a> (<a class="el" href="structarray__t.html">array_t</a> *arr, const void *item, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
+<tr class="memdesc:ga81fafea435225ae19cd67b175e9c225e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds an element to the end of the array.  <br /></td></tr>
+<tr class="separator:ga81fafea435225ae19cd67b175e9c225e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gacc5ae5f819afb24e5b153220d1914b37" id="r_gacc5ae5f819afb24e5b153220d1914b37"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__array__modifiers.html#gacc5ae5f819afb24e5b153220d1914b37">array_erase</a> (<a class="el" href="structarray__t.html">array_t</a> *arr, size_t index, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
 <tr class="memdesc:gacc5ae5f819afb24e5b153220d1914b37"><td class="mdescLeft">&#160;</td><td class="mdescRight">Erases an element from the array.  <br /></td></tr>
 <tr class="separator:gacc5ae5f819afb24e5b153220d1914b37"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga1ae693cf981ec248a299fda2384ad157" id="r_ga1ae693cf981ec248a299fda2384ad157"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structlist__t.html">list_t</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__list__allocation.html#ga1ae693cf981ec248a299fda2384ad157">list_create</a> (size_t elem_size, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
+<tr class="memdesc:ga1ae693cf981ec248a299fda2384ad157"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new linked list.  <br /></td></tr>
+<tr class="separator:ga1ae693cf981ec248a299fda2384ad157"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaf04149a6092f6c1960ffe1556fa0e612" id="r_gaf04149a6092f6c1960ffe1556fa0e612"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__list__allocation.html#gaf04149a6092f6c1960ffe1556fa0e612">list_destroy</a> (<a class="el" href="structlist__t.html">list_t</a> *list)</td></tr>
+<tr class="memdesc:gaf04149a6092f6c1960ffe1556fa0e612"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys the list and frees its resources.  <br /></td></tr>
+<tr class="separator:gaf04149a6092f6c1960ffe1556fa0e612"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gad3b02926f520e90f062c6742943e096d" id="r_gad3b02926f520e90f062c6742943e096d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__list__capacity.html#gad3b02926f520e90f062c6742943e096d">list_is_empty</a> (<a class="el" href="structlist__t.html">list_t</a> *list, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
+<tr class="memdesc:gad3b02926f520e90f062c6742943e096d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks whether the container is empty.  <br /></td></tr>
+<tr class="separator:gad3b02926f520e90f062c6742943e096d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga2de385d0e3e9a040f595b105364677c9" id="r_ga2de385d0e3e9a040f595b105364677c9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__list__modifiers.html#ga2de385d0e3e9a040f595b105364677c9">list_clear</a> (<a class="el" href="structlist__t.html">list_t</a> *list, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
+<tr class="memdesc:ga2de385d0e3e9a040f595b105364677c9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clears the contents of the list.  <br /></td></tr>
+<tr class="separator:ga2de385d0e3e9a040f595b105364677c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga66db47cef836d0d391f55e1fc1feb006" id="r_ga66db47cef836d0d391f55e1fc1feb006"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__list__modifiers.html#ga66db47cef836d0d391f55e1fc1feb006">list_push_back</a> (<a class="el" href="structlist__t.html">list_t</a> *list, const void *item, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
+<tr class="memdesc:ga66db47cef836d0d391f55e1fc1feb006"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds an element to the end of the list.  <br /></td></tr>
+<tr class="separator:ga66db47cef836d0d391f55e1fc1feb006"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga7b99bc05383773c5259b7fb8e837ccb7" id="r_ga7b99bc05383773c5259b7fb8e837ccb7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__list__modifiers.html#ga7b99bc05383773c5259b7fb8e837ccb7">list_push_front</a> (<a class="el" href="structlist__t.html">list_t</a> *list, const void *item, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
+<tr class="memdesc:ga7b99bc05383773c5259b7fb8e837ccb7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds an element to the start of the list.  <br /></td></tr>
+<tr class="separator:ga7b99bc05383773c5259b7fb8e837ccb7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga1a21622204a324d10a6ef7872a8ed4ca" id="r_ga1a21622204a324d10a6ef7872a8ed4ca"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__list__modifiers.html#ga1a21622204a324d10a6ef7872a8ed4ca">list_pop_back</a> (<a class="el" href="structlist__t.html">list_t</a> *list, void *item_out, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
+<tr class="memdesc:ga1a21622204a324d10a6ef7872a8ed4ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes the node at the end of the list.  <br /></td></tr>
+<tr class="separator:ga1a21622204a324d10a6ef7872a8ed4ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga149415476738f3b6f8d8c03c954f2676" id="r_ga149415476738f3b6f8d8c03c954f2676"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__list__modifiers.html#ga149415476738f3b6f8d8c03c954f2676">list_pop_front</a> (<a class="el" href="structlist__t.html">list_t</a> *list, void *item_out, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
+<tr class="memdesc:ga149415476738f3b6f8d8c03c954f2676"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes the node at the start of the list.  <br /></td></tr>
+<tr class="separator:ga149415476738f3b6f8d8c03c954f2676"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Enumeration Type Documentation</h2>
 <a id="a09c25ad25f326a930ae42ace60b70232" name="a09c25ad25f326a930ae42ace60b70232"></a>

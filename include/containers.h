@@ -26,6 +26,9 @@ typedef struct {
     char msg[256]; ///< Verbose message from the error.
 } error_t;
 
+/// @defgroup array Dynamic arrays
+/// @{
+
 /**
  * @brief Generic dynamic array.
  */
@@ -35,9 +38,6 @@ typedef struct {
     size_t count; ///< current number of elements in the array.
     size_t elem_size; ///< size in bytes of a single element of the array.
 } array_t;
-
-/// @defgroup array Dynamic arrays
-/// @{
 
 /// @defgroup array_allocation Allocation 
 /// @ingroup array
@@ -171,12 +171,12 @@ void array_insert(array_t* arr, size_t index, const void* item, error_t* err);
 /**
  * @brief Adds an element to the end of the array.
  * @param arr The array. Must be not NULL.
- * @param data The item to push into the array. Must be not NULL.
+ * @param item The item to push into the array. Must be not NULL.
  * @param err Optional error output information. If non-NULL and the call fails,
  *            it will contain details about the failure.
  * @ingroup array_modifiers
  */
-void array_push_back(array_t* arr, const void* data, error_t* err);
+void array_push_back(array_t* arr, const void* item, error_t* err);
 
 /**
  * @brief Erases an element from the array.
@@ -192,4 +192,112 @@ void array_erase(array_t* arr, size_t index, error_t* err);
 
 /// @} // array
 
+/// @defgroup list Linked lists
+/// @{
+
+// Forward declaration
+typedef struct list_node list_node_t;
+
+/**
+ * @brief Generic linked list.
+ */
+typedef struct list {
+    list_node_t* root; ///< pointer to the root node.
+    list_node_t* tail; ///< pointer to the tail node.
+    size_t count;      ///< current number of nodes in the list.
+    size_t elem_size;  ///< bytes size of the data referenced by the nodes of the list.
+} list_t;
+
+/// @defgroup list_allocation Allocation
+/// @ingroup list
+
+/**
+ * @brief Creates a new linked list.
+ * @param elem_size Size of the data referenced by the nodes of the list. Must be > 0.
+ * @param err Optional error output information. If non-NULL and the call fails,
+ *            it will contain details about the failure.
+ * @return pointer to the newly created list. NULL on failure.
+ * @ingroup list_allocation
+ */
+list_t* list_create(size_t elem_size, error_t* err);
+
+/**
+ * @brief Destroys the list and frees its resources.
+ * @param list The list to destroy. It can be NULL.
+ * @ingroup list_allocation
+ */
+void list_destroy(list_t* list);
+
+/// @} // list_allocation
+
+/// @defgroup list_capacity Capacity
+/// @ingroup list
+
+/**
+ * @brief Checks whether the container is empty.
+ * @param list The list. Must be not NULL.
+ * @param err Optional error output information. If non-NULL and the call fails,
+ *            it will contain details about the failure.
+ * @return True if the list is empty. False otherwise, or on failures.
+ * @ingroup list_capacity
+ */
+bool list_is_empty(list_t* list, error_t* err);
+
+/// @} // list_capacity
+
+/// @defgroup list_modifiers Modifiers
+/// @ingroup list
+
+/**
+ * @brief Clears the contents of the list.
+ * @param list The list. Must be not NULL.
+ * @param err Optional error output information. If non-NULL and the call fails,
+ *            it will contain details about the failure.
+ * @ingroup list_modifiers
+ */
+void list_clear(list_t* list, error_t* err);
+
+/**
+ * @brief Adds an element to the end of the list.
+ * @param list The list. Must be not NULL.
+ * @param item The item to push into the list. Must be not NULL.
+ * @param err Optional error output information. If non-NULL and the call fails,
+ *            it will contain details about the failure.
+ * @ingroup list_modifiers
+ */
+void list_push_back(list_t* list, const void* item, error_t* err);
+
+/**
+ * @brief Adds an element to the start of the list.
+ * @param list The list. Must be not NULL.
+ * @param item The item to push into the list. Must be not NULL.
+ * @param err Optional error output information. If non-NULL and the call fails,
+ *            it will contain details about the failure.
+ * @ingroup list_modifiers
+ */
+void list_push_front(list_t* list, const void* item, error_t* err);
+
+/**
+ * @brief Removes the node at the end of the list.
+ * @param list The list. Must be not NULL.
+ * @param err Optional error output information. If non-NULL and the call fails,
+ *            it will contain details about the failure.
+ * @param item_out If non-NULL, the removed node's data gets copied here.
+ * @ingroup list_modifiers
+ */
+void list_pop_back(list_t* list, void* item_out, error_t* err);
+
+/**
+ * @brief Removes the node at the start of the list.
+ * @param list The list. Must be not NULL.
+ * @param err Optional error output information. If non-NULL and the call fails,
+ *            it will contain details about the failure.
+ * @param item_out If non-NULL, the removed node's data gets copied here.
+ * @ingroup list_modifiers
+ */
+void list_pop_front(list_t* list, void* item_out, error_t* err);
+
+/// @} // list_modifiers
+    
+/// @} // list
 #endif // H_CONTAINERS
