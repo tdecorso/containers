@@ -132,11 +132,10 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Access specified element with bounds checking. </p>
-<p>An empty array is not considered an error if the input index is zero, it just returns NULL.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">arr</td><td>The array. Must be not NULL. </td></tr>
-    <tr><td class="paramname">index</td><td>Index of element to access. Index 0 is valid againts empty arrays. It must be smaller than the capacity size. </td></tr>
+    <tr><td class="paramname">arr</td><td>The array. Must be not NULL and not empty. </td></tr>
+    <tr><td class="paramname">index</td><td>Index of element to access. It must be &lt; count. </td></tr>
     <tr><td class="paramname">err</td><td>Optional error output information. If non-NULL and the call fails, it will contain details about the failure. </td></tr>
   </table>
   </dd>
