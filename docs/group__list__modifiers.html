@@ -102,6 +102,15 @@ Functions</h2></td></tr>
 <tr class="memitem:ga149415476738f3b6f8d8c03c954f2676" id="r_ga149415476738f3b6f8d8c03c954f2676"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__list__modifiers.html#ga149415476738f3b6f8d8c03c954f2676">list_pop_front</a> (<a class="el" href="structlist__t.html">list_t</a> *list, void *item_out, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
 <tr class="memdesc:ga149415476738f3b6f8d8c03c954f2676"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes the node at the start of the list.  <br /></td></tr>
 <tr class="separator:ga149415476738f3b6f8d8c03c954f2676"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga4199fbe505de42728622771c8f61ce53" id="r_ga4199fbe505de42728622771c8f61ce53"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__list__modifiers.html#ga4199fbe505de42728622771c8f61ce53">list_insert_before</a> (<a class="el" href="structlist__t.html">list_t</a> *list, <a class="el" href="structlist__node__t.html">list_node_t</a> *pos, const void *item, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
+<tr class="memdesc:ga4199fbe505de42728622771c8f61ce53"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inserts a new element before the specified position.  <br /></td></tr>
+<tr class="separator:ga4199fbe505de42728622771c8f61ce53"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga237d4844595a8911bc63d4cf17f3f613" id="r_ga237d4844595a8911bc63d4cf17f3f613"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__list__modifiers.html#ga237d4844595a8911bc63d4cf17f3f613">list_insert_after</a> (<a class="el" href="structlist__t.html">list_t</a> *list, <a class="el" href="structlist__node__t.html">list_node_t</a> *pos, const void *item, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
+<tr class="memdesc:ga237d4844595a8911bc63d4cf17f3f613"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inserts a new element after the specified position.  <br /></td></tr>
+<tr class="separator:ga237d4844595a8911bc63d4cf17f3f613"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga5aaee8cb2cfffe053e7ef4067b05e975" id="r_ga5aaee8cb2cfffe053e7ef4067b05e975"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__list__modifiers.html#ga5aaee8cb2cfffe053e7ef4067b05e975">list_erase</a> (<a class="el" href="structlist__t.html">list_t</a> *list, <a class="el" href="structlist__node__t.html">list_node_t</a> *node, void *item_out, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
+<tr class="memdesc:ga5aaee8cb2cfffe053e7ef4067b05e975"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes a node from the list.  <br /></td></tr>
+<tr class="separator:ga5aaee8cb2cfffe053e7ef4067b05e975"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <h2 class="groupheader">Function Documentation</h2>
@@ -139,6 +148,175 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="ga5aaee8cb2cfffe053e7ef4067b05e975" name="ga5aaee8cb2cfffe053e7ef4067b05e975"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga5aaee8cb2cfffe053e7ef4067b05e975">&#9670;&#160;</a></span>list_erase()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void list_erase </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structlist__t.html">list_t</a> *&#160;</td>
+          <td class="paramname"><em>list</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structlist__node__t.html">list_node_t</a> *&#160;</td>
+          <td class="paramname"><em>node</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>item_out</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structerror__t.html">error_t</a> *&#160;</td>
+          <td class="paramname"><em>err</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Removes a node from the list. </p>
+<p>The node is detached from the list and its memory is freed.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">list</td><td>The list. Must be not NULL. </td></tr>
+    <tr><td class="paramname">node</td><td>Node to remove. Must be a valid node belonging to <code>list</code>. </td></tr>
+    <tr><td class="paramname">item_out</td><td>Optional output buffer. If non-NULL, the removed element's data is copied into it before the node is freed. Must be large enough to hold <code>elem_size</code> bytes. </td></tr>
+    <tr><td class="paramname">err</td><td>Optional error output information. If non-NULL and the call fails, it will contain details about the failure.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>Note</dt><dd>Complexity: O(1) </dd>
+<dd>
+After this call, <code>node</code> becomes invalid and must not be used. </dd>
+<dd>
+Invalid <code>node</code> (not belonging to <code>list</code>) results in undefined behavior. </dd></dl>
+
+</div>
+</div>
+<a id="ga237d4844595a8911bc63d4cf17f3f613" name="ga237d4844595a8911bc63d4cf17f3f613"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga237d4844595a8911bc63d4cf17f3f613">&#9670;&#160;</a></span>list_insert_after()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void list_insert_after </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structlist__t.html">list_t</a> *&#160;</td>
+          <td class="paramname"><em>list</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structlist__node__t.html">list_node_t</a> *&#160;</td>
+          <td class="paramname"><em>pos</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const void *&#160;</td>
+          <td class="paramname"><em>item</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structerror__t.html">error_t</a> *&#160;</td>
+          <td class="paramname"><em>err</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Inserts a new element after the specified position. </p>
+<p>The new node is inserted immediately after <code>pos</code>.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">list</td><td>The list. Must be not NULL. </td></tr>
+    <tr><td class="paramname">pos</td><td>Iterator (node) indicating the insertion position. Must be a valid node in the list or NULL. If NULL, the element is inserted at the front of the list. </td></tr>
+    <tr><td class="paramname">item</td><td>Pointer to the data to insert. Must be not NULL. The data is copied using <code>elem_size</code>. </td></tr>
+    <tr><td class="paramname">err</td><td>Optional error output information. If non-NULL and the call fails, it will contain details about the failure.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>Note</dt><dd>Complexity: O(1) if inserting at known node. </dd>
+<dd>
+If <code>pos</code> is NULL, insertion happens at the front of the list. </dd>
+<dd>
+Invalid <code>pos</code> (not belonging to <code>list</code>) results in undefined behavior. </dd></dl>
+
+</div>
+</div>
+<a id="ga4199fbe505de42728622771c8f61ce53" name="ga4199fbe505de42728622771c8f61ce53"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga4199fbe505de42728622771c8f61ce53">&#9670;&#160;</a></span>list_insert_before()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void list_insert_before </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structlist__t.html">list_t</a> *&#160;</td>
+          <td class="paramname"><em>list</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structlist__node__t.html">list_node_t</a> *&#160;</td>
+          <td class="paramname"><em>pos</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const void *&#160;</td>
+          <td class="paramname"><em>item</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structerror__t.html">error_t</a> *&#160;</td>
+          <td class="paramname"><em>err</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Inserts a new element before the specified position. </p>
+<p>The new node is inserted immediately before <code>pos</code>.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">list</td><td>The list. Must be not NULL. </td></tr>
+    <tr><td class="paramname">pos</td><td>Iterator (node) indicating the insertion position. Must be either a valid node in the list or NULL. If NULL, the element is inserted at the end of the list. </td></tr>
+    <tr><td class="paramname">item</td><td>Pointer to the data to insert. Must be not NULL. The data is copied using <code>elem_size</code>. </td></tr>
+    <tr><td class="paramname">err</td><td>Optional error output information. If non-NULL and the call fails, it will contain details about the failure.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>Note</dt><dd>Complexity: O(1) if inserting at known node. </dd>
+<dd>
+Invalid <code>pos</code> (not belonging to <code>list</code>) results in undefined behavior. </dd></dl>
 
 </div>
 </div>

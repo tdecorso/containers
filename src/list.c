@@ -215,3 +215,121 @@ void list_pop_front(list_t* list, void* item_out, error_t* err) {
     list->count--;
     error_create(err, ERROR_OK, "No error found.");
 }
+
+list_node_t* list_begin(list_t* list, error_t* err) {
+    if (!list) {
+        error_create(err, ERROR_INVALID_ARGS, "You passed a NULL list.");
+        return NULL;
+    }
+    error_create(err, ERROR_OK, "No error found.");
+    return list->root;
+}
+
+list_node_t* list_end(list_t* list, error_t* err) {
+    if (!list) {
+        error_create(err, ERROR_INVALID_ARGS, "You passed a NULL list.");
+        return NULL;
+    }
+    error_create(err, ERROR_OK, "No error found.");
+    return list->tail ? list->tail->next : NULL;
+}
+
+list_node_t* list_next(list_node_t* node, error_t* err) {
+    if (!node) {
+        error_create(err, ERROR_INVALID_ARGS, "You passed a NULL node.");
+        return NULL;
+    }
+    error_create(err, ERROR_OK, "No error found.");
+    return node->next;
+}
+
+list_node_t* list_prev(list_node_t* node, error_t* err) {
+    if (!node) {
+        error_create(err, ERROR_INVALID_ARGS, "You passed a NULL node.");
+        return NULL;
+    }
+    error_create(err, ERROR_OK, "No error found.");
+    return node->prev;
+}
+
+void list_insert_before(list_t* list, list_node_t* pos, const void* item, error_t* err) {
+    if (!list) {
+        error_create(err, ERROR_INVALID_ARGS, "You passed a NULL list.");
+        return;
+    }
+    if (!item) {
+        error_create(err, ERROR_INVALID_ARGS, "You passed a NULL item.");
+        return;
+    }
+    if (!pos) return list_push_back(list, item, err);
+
+    list_node_t* node = list_node_create(list->elem_size, err);
+    if (err && err->code != ERROR_OK) return;
+    memcpy(node->data, item, list->elem_size);
+
+    node->next = pos;
+    node->prev = pos->prev;
+    if (node->prev) node->prev->next = node;
+    else list->root = node;
+    pos->prev = node;
+
+    list->count++;
+    error_create(err, ERROR_OK, "No error found.");
+}
+
+void list_insert_after(list_t* list, list_node_t* pos, const void* item, error_t* err) {
+    if (!list) {
+        error_create(err, ERROR_INVALID_ARGS, "You passed a NULL list.");
+        return;
+    }
+    if (!item) {
+        error_create(err, ERROR_INVALID_ARGS, "You passed a NULL item.");
+        return;
+    }
+
+    if (!pos) return list_push_front(list, item, err);
+
+    list_node_t* node = list_node_create(list->elem_size, err);
+    if (err && err->code != ERROR_OK) return;
+    memcpy(node->data, item, list->elem_size);
+
+    node->prev = pos;
+    node->next = pos->next;
+    if (node->next) node->next->prev = node;
+    else list->tail = node;
+    pos->next = node;
+
+    list->count++;
+    error_create(err, ERROR_OK, "No error found.");
+}
+
+void list_erase(list_t* list, list_node_t* node, void* item_out, error_t* err) {
+    if (!list) {
+        error_create(err, ERROR_INVALID_ARGS, "You passed a NULL list.");
+        return;
+    }
+    if (!node) {
+        error_create(err, ERROR_INVALID_ARGS, "You passed a NULL node.");
+        return;
+    }
+    if (node->prev) node->prev->next = node->next;
+    else list->root = node->next;
+    if (node->next) node->next->prev = node->prev;
+    else list->tail = node->prev;
+    if (item_out) {
+        memcpy(item_out, node->data, list->elem_size);
+    }
+    list_node_destroy(node);
+    list->count--;
+    error_create(err, ERROR_OK, "No error found.");
+}
+
+void* list_node_data(list_node_t* node, error_t* err) {
+    if (!node) {
+        error_create(err, ERROR_INVALID_ARGS, "You passed a NULL node.");
+        return NULL;
+    }
+
+    error_create(err, ERROR_OK, "No error found.");
+    return node->data;
+}

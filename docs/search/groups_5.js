@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['modifiers_0',['modifiers',['../group__array__modifiers.html',1,'Modifiers'],['../group__list__modifiers.html',1,'Modifiers']]]
+  ['linked_20lists_0',['Linked lists',['../group__list.html',1,'']]],
+  ['lists_1',['Linked lists',['../group__list.html',1,'']]]
 ];

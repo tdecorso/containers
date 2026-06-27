@@ -205,7 +205,7 @@ typedef struct list {
     list_node_t* root; ///< pointer to the root node.
     list_node_t* tail; ///< pointer to the tail node.
     size_t count;      ///< current number of nodes in the list.
-    size_t elem_size;  ///< bytes size of the data referenced by the nodes of the list.
+    size_t elem_size;  ///< Size in bytes of each element stored in the list.
 } list_t;
 
 /// @defgroup list_allocation Allocation
@@ -297,7 +297,146 @@ void list_pop_back(list_t* list, void* item_out, error_t* err);
  */
 void list_pop_front(list_t* list, void* item_out, error_t* err);
 
+/**
+ * @brief Inserts a new element before the specified position.
+ *
+ * The new node is inserted immediately before `pos`.
+ *
+ * @param list The list. Must be not NULL.
+ * @param pos Iterator (node) indicating the insertion position.
+ *            Must be either a valid node in the list or NULL.
+ *            If NULL, the element is inserted at the end of the list.
+ * @param item Pointer to the data to insert. Must be not NULL.
+ *             The data is copied using `elem_size`.
+ * @param err Optional error output information. If non-NULL and the call fails,
+ *            it will contain details about the failure.
+ *
+ * @note Complexity: O(1) if inserting at known node.
+ * @note Invalid `pos` (not belonging to `list`) results in undefined behavior.
+ * @ingroup list_modifiers
+ */
+void list_insert_before(list_t* list, list_node_t* pos, const void* item, error_t* err);
+
+/**
+ * @brief Inserts a new element after the specified position.
+ *
+ * The new node is inserted immediately after `pos`.
+ *
+ * @param list The list. Must be not NULL.
+ * @param pos Iterator (node) indicating the insertion position.
+ *            Must be a valid node in the list or NULL.
+ *            If NULL, the element is inserted at the front of the list.
+ * @param item Pointer to the data to insert. Must be not NULL.
+ *             The data is copied using `elem_size`.
+ * @param err Optional error output information. If non-NULL and the call fails,
+ *            it will contain details about the failure.
+ *
+ * @note Complexity: O(1) if inserting at known node.
+ * @note If `pos` is NULL, insertion happens at the front of the list.
+ * @note Invalid `pos` (not belonging to `list`) results in undefined behavior.
+ * @ingroup list_modifiers
+ */
+void list_insert_after(list_t* list, list_node_t* pos, const void* item, error_t* err);
+
+/**
+ * @brief Removes a node from the list.
+ *
+ * The node is detached from the list and its memory is freed.
+ *
+ * @param list The list. Must be not NULL.
+ * @param node Node to remove. Must be a valid node belonging to `list`.
+ * @param item_out Optional output buffer. If non-NULL, the removed element's
+ *                 data is copied into it before the node is freed.
+ *                 Must be large enough to hold `elem_size` bytes.
+ * @param err Optional error output information. If non-NULL and the call fails,
+ *            it will contain details about the failure.
+ *
+ * @note Complexity: O(1)
+ * @note After this call, `node` becomes invalid and must not be used.
+ * @note Invalid `node` (not belonging to `list`) results in undefined behavior.
+ * @ingroup list_modifiers
+ */
+void list_erase(list_t* list, list_node_t* node, void* item_out, error_t* err);
+
 /// @} // list_modifiers
+
+/// @defgroup list_iteration Iteration
+/// @ingroup list
+
+/**
+ * @brief Returns an iterator to the first node of the list.
+ *
+ * @param list The list to iterate. Must be not NULL.
+ * @param err Optional error output information. If non-NULL and the call fails,
+ *            it will contain details about the failure.
+ *
+ * @return Pointer to the first node in the list, or NULL if the list is empty
+ *         or on failure.
+ *
+ * @note This function does not modify the list.
+ * @ingroup list_iteration
+ */
+list_node_t* list_begin(list_t* list, error_t* err);
+
+/**
+ * @brief Returns the end iterator for the list.
+ *
+ * The end iterator represents a position past the last element and is
+ * used as a termination condition during iteration.
+ *
+ * @param list The list. Must be not NULL.
+ * @param err Optional error output information. If non-NULL and the call fails,
+ *            it will contain details about the failure.
+ *
+ * @return Always returns NULL (end sentinel). Provided for API symmetry and
+ *         future extensibility.
+ *
+ * @note This function does not modify the list.
+ * @ingroup list_iteration
+ */
+list_node_t* list_end(list_t* list, error_t* err);
+
+/**
+ * @brief Returns the next node in the list.
+ *
+ * @param node Current node. Must be a valid node belonging to a list and not NULL.
+ * @param err Optional error output information. If non-NULL and the call fails,
+ *            it will contain details about the failure.
+ *
+ * @return Pointer to the next node, or NULL if the end of the list is reached
+ *         or on failure.
+ *
+ * @note This function does not modify the list.
+ * @ingroup list_iteration
+ */
+list_node_t* list_next(list_node_t* node, error_t* err);
+
+/**
+ * @brief Returns the previous node in the list.
+ *
+ * @param node Current node. Must be a valid node belonging to a list and not NULL.
+ * @param err Optional error output information. If non-NULL and the call fails,
+ *            it will contain details about the failure.
+ *
+ * @return Pointer to the previous node, or NULL if the beginning of the list is
+ *         reached or on failure.
+ *
+ * @note This function does not modify the list.
+ * @ingroup list_iteration
+ */
+list_node_t* list_prev(list_node_t* node, error_t* err);
+
+/**
+ * @brief Returns a pointer to the data stored in a node.
+ * @param node The node. Must be not NULL.
+ * @param err Optional error output information. If non-NULL and the call fails,
+ *            it will contain details about the failure.
+ * @return Pointer to the node's data, or NULL on failure.
+ * @ingroup list_iteration
+ */
+void* list_node_data(list_node_t* node, error_t* err);
+
+/// @} // list_iteration
     
 /// @} // list
 #endif // H_CONTAINERS
