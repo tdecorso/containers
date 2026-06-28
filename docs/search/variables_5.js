@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['root_0',['root',['../structlist__t.html#a7865d29bdb67c88cc63adcf7a8f77c80',1,'list_t']]]
+  ['msg_0',['msg',['../structerror__t.html#a29982a1d33c55d7c436f8e4b93c023d6',1,'error_t']]]
 ];

@@ -1,4 +1,13 @@
 var searchData=
 [
-  ['structures_20library_20in_20c_0',['Containers: A type-agnostic data structures library in C',['../index.html',1,'']]]
+  ['stack_0',['Stack',['../group__stack.html',1,'']]],
+  ['stack_5fcreate_1',['stack_create',['../group__stack__allocation.html#ga078967757aa4794745b41db88d1824ce',1,'stack_create(size_t elem_size, error_t *err):&#160;stack.c'],['../group__stack__allocation.html#ga078967757aa4794745b41db88d1824ce',1,'stack_create(size_t elem_size, error_t *err):&#160;stack.c']]],
+  ['stack_5fdestroy_2',['stack_destroy',['../group__stack__allocation.html#ga7cebbef117f3ce4f2ecba755cdb5b9a0',1,'stack_destroy(stack_t *stack):&#160;stack.c'],['../group__stack__allocation.html#ga7cebbef117f3ce4f2ecba755cdb5b9a0',1,'stack_destroy(stack_t *stack):&#160;stack.c']]],
+  ['stack_5fis_5fempty_3',['stack_is_empty',['../group__stack__capacity.html#ga51bc82506884a163200e87c8e39cc801',1,'stack_is_empty(stack_t *stack, error_t *err):&#160;stack.c'],['../group__stack__capacity.html#ga51bc82506884a163200e87c8e39cc801',1,'stack_is_empty(stack_t *stack, error_t *err):&#160;stack.c']]],
+  ['stack_5fpop_4',['stack_pop',['../group__stack__modifiers.html#gae7f8681047a52211da4c2fcd739aa2a2',1,'stack_pop(stack_t *stack, void *item_out, error_t *err):&#160;stack.c'],['../group__stack__modifiers.html#gae7f8681047a52211da4c2fcd739aa2a2',1,'stack_pop(stack_t *stack, void *item_out, error_t *err):&#160;stack.c']]],
+  ['stack_5fpush_5',['stack_push',['../group__stack__modifiers.html#ga8f321ec8d852b855c812c73c7e8586c7',1,'stack_push(stack_t *stack, const void *item, error_t *err):&#160;stack.c'],['../group__stack__modifiers.html#ga8f321ec8d852b855c812c73c7e8586c7',1,'stack_push(stack_t *stack, const void *item, error_t *err):&#160;stack.c']]],
+  ['stack_5fsize_6',['stack_size',['../group__stack__capacity.html#ga3e29ed21f1d0b893b6a87072eecf1d61',1,'stack_size(stack_t *stack, error_t *err):&#160;stack.c'],['../group__stack__capacity.html#ga3e29ed21f1d0b893b6a87072eecf1d61',1,'stack_size(stack_t *stack, error_t *err):&#160;stack.c']]],
+  ['stack_5ft_7',['stack_t',['../structstack__t.html',1,'']]],
+  ['stack_5ftop_8',['stack_top',['../group__stack__access.html#ga8af3882031d613b6c6ab8738e27b4055',1,'stack_top(stack_t *stack, error_t *err):&#160;stack.c'],['../group__stack__access.html#ga8af3882031d613b6c6ab8738e27b4055',1,'stack_top(stack_t *stack, error_t *err):&#160;stack.c']]],
+  ['structures_20library_20in_20c_9',['Containers: A type-agnostic data structures library in C',['../index.html',1,'']]]
 ];

@@ -430,6 +430,121 @@ int test_array_erase(void) {
     return 0;
 }
 
+int test_array_pop_back(void) {
+    error_t   err;
+    array_t  *arr = array_create(sizeof(int), 8, &err);
+    int       a = 10, b = 20, c = 30, out;
+
+    ASSERT(arr != NULL, "array_create succeeds before array_pop_back test");
+
+    /* invalid args */
+    err.code = ERROR_OK;
+    array_pop_back(NULL, &out, &err);
+    ASSERT(err.code == ERROR_INVALID_ARGS, "pop_back on NULL array sets invalid args error");
+
+    /* pop on empty array */
+    err.code = ERROR_OK;
+    array_pop_back(arr, &out, &err);
+    ASSERT(err.code == ERROR_INVALID_ARGS, "pop_back on empty array sets invalid args error");
+
+    /* populate: [10, 20, 30] */
+    array_push_back(arr, &a, &err);
+    array_push_back(arr, &b, &err);
+    array_push_back(arr, &c, &err);
+
+    /* pop with item_out */
+    array_pop_back(arr, &out, &err);
+    ASSERT(err.code == ERROR_OK, "pop_back succeeds on populated array");
+    ASSERT(out == 30,            "pop_back returns last element");
+    ASSERT(arr->count == 2,      "count decrements after pop_back");
+
+    array_pop_back(arr, &out, &err);
+    ASSERT(out == 20,       "pop_back returns new last element");
+    ASSERT(arr->count == 1, "count is 1 after second pop_back");
+
+    /* remaining element is untouched */
+    void *p = array_at(arr, 0, &err);
+    ASSERT(*(int *)p == 10, "remaining element at index 0 is correct after pop_backs");
+
+    /* pop last element with NULL item_out */
+    array_pop_back(arr, NULL, &err);
+    ASSERT(err.code == ERROR_OK, "pop_back with NULL item_out succeeds");
+    ASSERT(arr->count == 0,      "count is 0 after popping last element");
+
+    /* pop on newly empty array */
+    err.code = ERROR_OK;
+    array_pop_back(arr, &out, &err);
+    ASSERT(err.code == ERROR_INVALID_ARGS, "pop_back on newly empty array sets invalid args error");
+
+    /* NULL err pointer */
+    array_push_back(arr, &a, NULL);
+    array_pop_back(arr, &out, NULL);
+    ASSERT(1, "pop_back works fine with NULL err pointer");
+
+    array_destroy(arr);
+    return 0;
+}
+
+int test_array_pop_front(void) {
+    error_t   err;
+    array_t  *arr = array_create(sizeof(int), 8, &err);
+    int       a = 10, b = 20, c = 30, out;
+
+    ASSERT(arr != NULL, "array_create succeeds before array_pop_front test");
+
+    /* invalid args */
+    err.code = ERROR_OK;
+    array_pop_front(NULL, &out, &err);
+    ASSERT(err.code == ERROR_INVALID_ARGS, "pop_front on NULL array sets invalid args error");
+
+    /* pop on empty array */
+    err.code = ERROR_OK;
+    array_pop_front(arr, &out, &err);
+    ASSERT(err.code == ERROR_INVALID_ARGS, "pop_front on empty array sets invalid args error");
+
+    /* populate: [10, 20, 30] */
+    array_push_back(arr, &a, &err);
+    array_push_back(arr, &b, &err);
+    array_push_back(arr, &c, &err);
+
+    /* pop with item_out */
+    array_pop_front(arr, &out, &err);
+    ASSERT(err.code == ERROR_OK, "pop_front succeeds on populated array");
+    ASSERT(out == 10,            "pop_front returns first element");
+    ASSERT(arr->count == 2,      "count decrements after pop_front");
+
+    /* verify remaining elements shifted left correctly */
+    void *p = array_at(arr, 0, &err);
+    ASSERT(*(int *)p == 20, "index 0 shifted left correctly after pop_front");
+    p = array_at(arr, 1, &err);
+    ASSERT(*(int *)p == 30, "index 1 shifted left correctly after pop_front");
+
+    array_pop_front(arr, &out, &err);
+    ASSERT(out == 20,       "pop_front returns new first element");
+    ASSERT(arr->count == 1, "count is 1 after second pop_front");
+
+    p = array_at(arr, 0, &err);
+    ASSERT(*(int *)p == 30, "last remaining element is correct after two pop_fronts");
+
+    /* pop last element with NULL item_out */
+    array_pop_front(arr, NULL, &err);
+    ASSERT(err.code == ERROR_OK, "pop_front with NULL item_out succeeds");
+    ASSERT(arr->count == 0,      "count is 0 after popping last element");
+
+    /* pop on newly empty array */
+    err.code = ERROR_OK;
+    array_pop_front(arr, &out, &err);
+    ASSERT(err.code == ERROR_INVALID_ARGS, "pop_front on newly empty array sets invalid args error");
+
+    /* NULL err pointer */
+    array_push_back(arr, &a, NULL);
+    array_pop_front(arr, &out, NULL);
+    ASSERT(1, "pop_front works fine with NULL err pointer");
+
+    array_destroy(arr);
+    return 0;
+}
+
 int main(void) {
     printf(C_BOLD C_YELLOW "\n  containers.h — test suite\n\n" C_RESET);
 
@@ -443,6 +558,8 @@ int main(void) {
     RUN_TEST("array_push_back_invalid_args", test_array_push_back_invalid_args);
     RUN_TEST("array_insert",                 test_array_insert);
     RUN_TEST("array_erase",                  test_array_erase);
+    RUN_TEST("array_pop_back",               test_array_pop_back);
+    RUN_TEST("array_pop_front",              test_array_pop_front);
 
     SUMMARY();
     return failed ? 1 : 0;

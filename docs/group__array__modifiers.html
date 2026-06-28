@@ -96,6 +96,12 @@ Functions</h2></td></tr>
 <tr class="memitem:ga81fafea435225ae19cd67b175e9c225e" id="r_ga81fafea435225ae19cd67b175e9c225e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__array__modifiers.html#ga81fafea435225ae19cd67b175e9c225e">array_push_back</a> (<a class="el" href="structarray__t.html">array_t</a> *arr, const void *item, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
 <tr class="memdesc:ga81fafea435225ae19cd67b175e9c225e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds an element to the end of the array.  <br /></td></tr>
 <tr class="separator:ga81fafea435225ae19cd67b175e9c225e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga981a0ed2628b9b776322adffea79d789" id="r_ga981a0ed2628b9b776322adffea79d789"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__array__modifiers.html#ga981a0ed2628b9b776322adffea79d789">array_pop_back</a> (<a class="el" href="structarray__t.html">array_t</a> *arr, void *item_out, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
+<tr class="memdesc:ga981a0ed2628b9b776322adffea79d789"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes element from the end of the array.  <br /></td></tr>
+<tr class="separator:ga981a0ed2628b9b776322adffea79d789"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga97f0cf6ebf23d98e98e760f324e1ab16" id="r_ga97f0cf6ebf23d98e98e760f324e1ab16"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__array__modifiers.html#ga97f0cf6ebf23d98e98e760f324e1ab16">array_pop_front</a> (<a class="el" href="structarray__t.html">array_t</a> *arr, void *item_out, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
+<tr class="memdesc:ga97f0cf6ebf23d98e98e760f324e1ab16"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes element from the start of the array.  <br /></td></tr>
+<tr class="separator:ga97f0cf6ebf23d98e98e760f324e1ab16"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gacc5ae5f819afb24e5b153220d1914b37" id="r_gacc5ae5f819afb24e5b153220d1914b37"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__array__modifiers.html#gacc5ae5f819afb24e5b153220d1914b37">array_erase</a> (<a class="el" href="structarray__t.html">array_t</a> *arr, size_t index, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
 <tr class="memdesc:gacc5ae5f819afb24e5b153220d1914b37"><td class="mdescLeft">&#160;</td><td class="mdescRight">Erases an element from the array.  <br /></td></tr>
 <tr class="separator:gacc5ae5f819afb24e5b153220d1914b37"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -227,6 +233,94 @@ Functions</h2></td></tr>
     <tr><td class="paramname">arr</td><td>The array. Must be not NULL. </td></tr>
     <tr><td class="paramname">index</td><td>Position to insert the element in. It must be &lt;= count. </td></tr>
     <tr><td class="paramname">item</td><td>Item's memory to insert in the array. Must be not NULL. </td></tr>
+    <tr><td class="paramname">err</td><td>Optional error output information. If non-NULL and the call fails, it will contain details about the failure. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ga981a0ed2628b9b776322adffea79d789" name="ga981a0ed2628b9b776322adffea79d789"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga981a0ed2628b9b776322adffea79d789">&#9670;&#160;</a></span>array_pop_back()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void array_pop_back </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structarray__t.html">array_t</a> *&#160;</td>
+          <td class="paramname"><em>arr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>item_out</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structerror__t.html">error_t</a> *&#160;</td>
+          <td class="paramname"><em>err</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Removes element from the end of the array. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">arr</td><td>The array. Must be not NULL. </td></tr>
+    <tr><td class="paramname">item_out</td><td>If non-NULL, the removed data gets copied here. </td></tr>
+    <tr><td class="paramname">err</td><td>Optional error output information. If non-NULL and the call fails, it will contain details about the failure. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ga97f0cf6ebf23d98e98e760f324e1ab16" name="ga97f0cf6ebf23d98e98e760f324e1ab16"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga97f0cf6ebf23d98e98e760f324e1ab16">&#9670;&#160;</a></span>array_pop_front()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void array_pop_front </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structarray__t.html">array_t</a> *&#160;</td>
+          <td class="paramname"><em>arr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>item_out</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structerror__t.html">error_t</a> *&#160;</td>
+          <td class="paramname"><em>err</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Removes element from the start of the array. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">arr</td><td>The array. Must be not NULL. </td></tr>
+    <tr><td class="paramname">item_out</td><td>If non-NULL, the removed data gets copied here. </td></tr>
     <tr><td class="paramname">err</td><td>Optional error output information. If non-NULL and the call fails, it will contain details about the failure. </td></tr>
   </table>
   </dd>

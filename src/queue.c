@@ -22,9 +22,12 @@ queue_t* queue_create(size_t elem_size, error_t* err) {
     }
 
     q->list = list_create(elem_size, err);
+    if (err && err->code != ERROR_OK) {
+        free(q);
+        return NULL;
+    }
     if (q->list == NULL) {
         free(q);
-        if (err) return NULL;
         error_create(err, ERROR_OUT_OF_MEMORY, "Memory allocation failed.");
         return NULL;
     }

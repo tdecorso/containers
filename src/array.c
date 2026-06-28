@@ -277,3 +277,50 @@ void array_erase(array_t* arr, size_t index, error_t* err) {
     arr->count--;
     error_create(err, ERROR_OK, "No error found.");
 }
+
+void array_pop_back(array_t* arr, void* item_out, error_t* err) {
+    if (!arr) {
+        error_create(err, ERROR_INVALID_ARGS, "You passed a NULL array.");
+        return;
+    }
+    if (arr->count == 0) {
+        error_create(err, ERROR_INVALID_ARGS, "You passed an empty array.");
+        return;
+    }
+    size_t index = arr->count - 1;
+    void* src = (char*)arr->data + (index * arr->elem_size);
+    if (item_out) {
+        memcpy(item_out, src, arr->elem_size);
+    }
+    arr->count--;
+    error_create(err, ERROR_OK, "No error found.");
+}
+
+void array_pop_front(array_t* arr, void* item_out, error_t* err) {
+    if (!arr) {
+        error_create(err, ERROR_INVALID_ARGS, "You passed a NULL array.");
+        return;
+    }
+
+    if (arr->count == 0) {
+        error_create(err, ERROR_INVALID_ARGS, "You passed an empty array.");
+        return;
+    }
+
+    void* first = arr->data;
+
+    if (item_out) {
+        memcpy(item_out, first, arr->elem_size);
+    }
+
+    size_t bytes_to_move = (arr->count - 1) * arr->elem_size;
+
+    if (bytes_to_move > 0) {
+        memmove(first,
+                (char*)arr->data + arr->elem_size,
+                bytes_to_move);
+    }
+
+    arr->count--;
+    error_create(err, ERROR_OK, "No error found.");
+}

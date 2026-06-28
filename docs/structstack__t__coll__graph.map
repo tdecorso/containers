@@ -1,0 +1,5 @@
+<map id="stack_t" name="stack_t">
+<area shape="rect" id="Node000001" title="Generic stack." alt="" coords="5,93,75,119"/>
+<area shape="rect" id="Node000002" href="$structarray__t.html" title="Generic dynamic array." alt="" coords="6,5,74,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="43,45,43,93,37,93,37,45"/>
+</map>

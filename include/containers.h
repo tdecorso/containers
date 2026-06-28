@@ -179,6 +179,26 @@ void array_insert(array_t* arr, size_t index, const void* item, error_t* err);
 void array_push_back(array_t* arr, const void* item, error_t* err);
 
 /**
+ * @brief Removes element from the end of the array.
+ * @param arr The array. Must be not NULL.
+ * @param item_out If non-NULL, the removed data gets copied here.
+ * @param err Optional error output information. If non-NULL and the call fails,
+ *            it will contain details about the failure.
+ * @ingroup array_modifiers
+ */
+void array_pop_back(array_t* arr, void* item_out, error_t* err);
+
+/**
+ * @brief Removes element from the start of the array.
+ * @param arr The array. Must be not NULL.
+ * @param item_out If non-NULL, the removed data gets copied here.
+ * @param err Optional error output information. If non-NULL and the call fails,
+ *            it will contain details about the failure.
+ * @ingroup array_modifiers
+ */
+void array_pop_front(array_t* arr, void* item_out, error_t* err);
+
+/**
  * @brief Erases an element from the array.
  * @param arr The array. Must be not NULL.
  * @param index The index of the element to erase. It must be < count.
@@ -280,9 +300,9 @@ void list_push_front(list_t* list, const void* item, error_t* err);
 /**
  * @brief Removes the node at the end of the list.
  * @param list The list. Must be not NULL.
+ * @param item_out If non-NULL, the removed node's data gets copied here.
  * @param err Optional error output information. If non-NULL and the call fails,
  *            it will contain details about the failure.
- * @param item_out If non-NULL, the removed node's data gets copied here.
  * @ingroup list_modifiers
  */
 void list_pop_back(list_t* list, void* item_out, error_t* err);
@@ -448,7 +468,7 @@ void* list_node_data(list_node_t* node, error_t* err);
  * @ingroup queue
  */
 typedef struct {
-    list_t* list; ///< Internal container.
+    list_t* list; ///< internal container.
 } queue_t;
 
 /// @defgroup queue_allocation Allocation
@@ -565,4 +585,133 @@ void queue_pop(queue_t* queue, void* item_out, error_t* err);
 /// @} // queue_modifiers
 /// @} // queue
 
+/// @defgroup stack Stack
+/// @{
+
+/**
+ * @brief Generic stack.
+ * @ingroup stack
+ */
+typedef struct {
+    array_t* arr; ///< internal container.
+} stack_t;
+
+/// @defgroup stack_allocation Allocation
+/// @ingroup stack
+/// @{
+
+/**
+ * @brief Creates a new stack.
+ *
+ * @param elem_size Size in bytes of the elements stored in the stack.
+ *                  Must be greater than zero.
+ * @param err Optional error output information. If non-NULL and the call fails,
+ *            it will contain details about the failure.
+ *
+ * @return Pointer to the newly created stack. NULL on failure.
+ *
+ * @ingroup stack_allocation
+ */
+stack_t* stack_create(size_t elem_size, error_t* err);
+
+/**
+ * @brief Destroys the stack and frees its resources.
+ *
+ * @param stack The stack to destroy. It can be NULL.
+ *
+ * @ingroup stack_allocation
+ */
+void stack_destroy(stack_t* stack);
+
+/// @} // stack_allocation
+
+/// @defgroup stack_capacity Capacity
+/// @ingroup stack
+/// @{
+
+/**
+ * @brief Checks whether the stack is empty.
+ *
+ * @param stack The stack. Must be not NULL.
+ * @param err Optional error output information. If non-NULL and the call fails,
+ *            it will contain details about the failure.
+ *
+ * @return True if the stack is empty. False otherwise, or on failure.
+ *
+ * @ingroup stack_capacity
+ */
+bool stack_is_empty(stack_t* stack, error_t* err);
+
+/**
+ * @brief Returns the number of elements currently stored in the stack.
+ *
+ * @param stack The stack. Must be not NULL.
+ * @param err Optional error output information. If non-NULL and the call fails,
+ *            it will contain details about the failure.
+ *
+ * @return The number of elements in the stack. Zero on failure.
+ *
+ * @ingroup stack_capacity
+ */
+size_t stack_size(stack_t* stack, error_t* err);
+
+/// @} // stack_capacity
+
+/// @defgroup stack_access Element access
+/// @ingroup stack
+/// @{
+
+/**
+ * @brief Returns a pointer to the element at the top of the stack.
+ *
+ * @param stack The stack. Must be not NULL.
+ * @param err Optional error output information. If non-NULL and the call fails,
+ *            it will contain details about the failure.
+ *
+ * @return Pointer to the top element, or NULL if the stack is empty or on
+ *         failure.
+ *
+ * @note The returned pointer remains valid until the top element is removed or
+ *       the stack is modified in a way that invalidates it.
+ *
+ * @ingroup stack_access
+ */
+void* stack_top(stack_t* stack, error_t* err);
+
+/// @} // stack_access
+
+/// @defgroup stack_modifiers Modifiers
+/// @ingroup stack
+/// @{
+
+/**
+ * @brief Pushes an element onto the top of the stack.
+ *
+ * @param stack The stack. Must be not NULL.
+ * @param item Pointer to the element to push. Must be not NULL.
+ *             The element is copied into the stack.
+ * @param err Optional error output information. If non-NULL and the call fails,
+ *            it will contain details about the failure.
+ *
+ * @ingroup stack_modifiers
+ */
+void stack_push(stack_t* stack, const void* item, error_t* err);
+
+/**
+ * @brief Removes the element at the top of the stack.
+ *
+ * @param stack The stack. Must be not NULL.
+ * @param item_out Optional output buffer. If non-NULL, the removed element is
+ *                 copied here before being removed. The buffer must be large
+ *                 enough to hold `elem_size` bytes.
+ * @param err Optional error output information. If non-NULL and the call fails,
+ *            it will contain details about the failure.
+ *
+ * @ingroup stack_modifiers
+ */
+void stack_pop(stack_t* stack, void* item_out, error_t* err);
+
+/// @} // stack_modifiers
+
+/// @} // stack
 #endif // H_CONTAINERS

@@ -123,6 +123,9 @@ Data Structures</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structqueue__t.html">queue_t</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generic queue.  <a href="structqueue__t.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstack__t.html">stack_t</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generic stack.  <a href="structstack__t.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
 Typedefs</h2></td></tr>
@@ -178,6 +181,12 @@ Functions</h2></td></tr>
 <tr class="memitem:ga81fafea435225ae19cd67b175e9c225e" id="r_ga81fafea435225ae19cd67b175e9c225e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__array__modifiers.html#ga81fafea435225ae19cd67b175e9c225e">array_push_back</a> (<a class="el" href="structarray__t.html">array_t</a> *arr, const void *item, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
 <tr class="memdesc:ga81fafea435225ae19cd67b175e9c225e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds an element to the end of the array.  <br /></td></tr>
 <tr class="separator:ga81fafea435225ae19cd67b175e9c225e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga981a0ed2628b9b776322adffea79d789" id="r_ga981a0ed2628b9b776322adffea79d789"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__array__modifiers.html#ga981a0ed2628b9b776322adffea79d789">array_pop_back</a> (<a class="el" href="structarray__t.html">array_t</a> *arr, void *item_out, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
+<tr class="memdesc:ga981a0ed2628b9b776322adffea79d789"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes element from the end of the array.  <br /></td></tr>
+<tr class="separator:ga981a0ed2628b9b776322adffea79d789"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga97f0cf6ebf23d98e98e760f324e1ab16" id="r_ga97f0cf6ebf23d98e98e760f324e1ab16"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__array__modifiers.html#ga97f0cf6ebf23d98e98e760f324e1ab16">array_pop_front</a> (<a class="el" href="structarray__t.html">array_t</a> *arr, void *item_out, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
+<tr class="memdesc:ga97f0cf6ebf23d98e98e760f324e1ab16"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes element from the start of the array.  <br /></td></tr>
+<tr class="separator:ga97f0cf6ebf23d98e98e760f324e1ab16"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gacc5ae5f819afb24e5b153220d1914b37" id="r_gacc5ae5f819afb24e5b153220d1914b37"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__array__modifiers.html#gacc5ae5f819afb24e5b153220d1914b37">array_erase</a> (<a class="el" href="structarray__t.html">array_t</a> *arr, size_t index, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
 <tr class="memdesc:gacc5ae5f819afb24e5b153220d1914b37"><td class="mdescLeft">&#160;</td><td class="mdescRight">Erases an element from the array.  <br /></td></tr>
 <tr class="separator:gacc5ae5f819afb24e5b153220d1914b37"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -253,6 +262,27 @@ Functions</h2></td></tr>
 <tr class="memitem:ga547ba274b4c51c121de365177b771bb7" id="r_ga547ba274b4c51c121de365177b771bb7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__queue__modifiers.html#ga547ba274b4c51c121de365177b771bb7">queue_pop</a> (<a class="el" href="structqueue__t.html">queue_t</a> *queue, void *item_out, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
 <tr class="memdesc:ga547ba274b4c51c121de365177b771bb7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes the element at the front of the queue.  <br /></td></tr>
 <tr class="separator:ga547ba274b4c51c121de365177b771bb7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga078967757aa4794745b41db88d1824ce" id="r_ga078967757aa4794745b41db88d1824ce"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structstack__t.html">stack_t</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__stack__allocation.html#ga078967757aa4794745b41db88d1824ce">stack_create</a> (size_t elem_size, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
+<tr class="memdesc:ga078967757aa4794745b41db88d1824ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new stack.  <br /></td></tr>
+<tr class="separator:ga078967757aa4794745b41db88d1824ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga7cebbef117f3ce4f2ecba755cdb5b9a0" id="r_ga7cebbef117f3ce4f2ecba755cdb5b9a0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__stack__allocation.html#ga7cebbef117f3ce4f2ecba755cdb5b9a0">stack_destroy</a> (<a class="el" href="structstack__t.html">stack_t</a> *stack)</td></tr>
+<tr class="memdesc:ga7cebbef117f3ce4f2ecba755cdb5b9a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys the stack and frees its resources.  <br /></td></tr>
+<tr class="separator:ga7cebbef117f3ce4f2ecba755cdb5b9a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga51bc82506884a163200e87c8e39cc801" id="r_ga51bc82506884a163200e87c8e39cc801"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__stack__capacity.html#ga51bc82506884a163200e87c8e39cc801">stack_is_empty</a> (<a class="el" href="structstack__t.html">stack_t</a> *stack, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
+<tr class="memdesc:ga51bc82506884a163200e87c8e39cc801"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks whether the stack is empty.  <br /></td></tr>
+<tr class="separator:ga51bc82506884a163200e87c8e39cc801"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga3e29ed21f1d0b893b6a87072eecf1d61" id="r_ga3e29ed21f1d0b893b6a87072eecf1d61"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__stack__capacity.html#ga3e29ed21f1d0b893b6a87072eecf1d61">stack_size</a> (<a class="el" href="structstack__t.html">stack_t</a> *stack, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
+<tr class="memdesc:ga3e29ed21f1d0b893b6a87072eecf1d61"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of elements currently stored in the stack.  <br /></td></tr>
+<tr class="separator:ga3e29ed21f1d0b893b6a87072eecf1d61"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga8af3882031d613b6c6ab8738e27b4055" id="r_ga8af3882031d613b6c6ab8738e27b4055"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__stack__access.html#ga8af3882031d613b6c6ab8738e27b4055">stack_top</a> (<a class="el" href="structstack__t.html">stack_t</a> *stack, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
+<tr class="memdesc:ga8af3882031d613b6c6ab8738e27b4055"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a pointer to the element at the top of the stack.  <br /></td></tr>
+<tr class="separator:ga8af3882031d613b6c6ab8738e27b4055"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga8f321ec8d852b855c812c73c7e8586c7" id="r_ga8f321ec8d852b855c812c73c7e8586c7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__stack__modifiers.html#ga8f321ec8d852b855c812c73c7e8586c7">stack_push</a> (<a class="el" href="structstack__t.html">stack_t</a> *stack, const void *item, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
+<tr class="memdesc:ga8f321ec8d852b855c812c73c7e8586c7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pushes an element onto the top of the stack.  <br /></td></tr>
+<tr class="separator:ga8f321ec8d852b855c812c73c7e8586c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gae7f8681047a52211da4c2fcd739aa2a2" id="r_gae7f8681047a52211da4c2fcd739aa2a2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__stack__modifiers.html#gae7f8681047a52211da4c2fcd739aa2a2">stack_pop</a> (<a class="el" href="structstack__t.html">stack_t</a> *stack, void *item_out, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
+<tr class="memdesc:gae7f8681047a52211da4c2fcd739aa2a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes the element at the top of the stack.  <br /></td></tr>
+<tr class="separator:gae7f8681047a52211da4c2fcd739aa2a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Enumeration Type Documentation</h2>
 <a id="a09c25ad25f326a930ae42ace60b70232" name="a09c25ad25f326a930ae42ace60b70232"></a>

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['capacity_0',['capacity',['../group__array__capacity.html',1,'Capacity'],['../group__list__capacity.html',1,'Capacity'],['../group__queue__capacity.html',1,'Capacity']]]
+  ['capacity_0',['capacity',['../group__array__capacity.html',1,'Capacity'],['../group__list__capacity.html',1,'Capacity'],['../group__queue__capacity.html',1,'Capacity'],['../group__stack__capacity.html',1,'Capacity']]]
 ];
