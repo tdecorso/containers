@@ -6,10 +6,12 @@ set(CMAKE_BUILD_TYPE Debug)
 
 include_directories(include)
 
-add_library(containers src/array.c src/list.c)
+add_library(containers src/array.c src/list.c src/queue.c)
 
-add_executable(test_array tests/test_array.c)
-add_executable(test_list  tests/test_list.c)
+add_executable(test_array  tests/test_array.c)
+add_executable(test_list   tests/test_list.c)
+add_executable(test_queue  tests/test_queue.c)
 
-target_link_libraries(test_array PRIVATE containers)
-target_link_libraries(test_list  PRIVATE containers)
+target_link_libraries(test_array  PRIVATE containers)
+target_link_libraries(test_list   PRIVATE containers)
+target_link_libraries(test_queue  PRIVATE containers)

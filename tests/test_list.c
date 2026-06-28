@@ -681,6 +681,7 @@ int test_list_iteration(void) {
 }
 
 int main(void) {
+    printf(C_BOLD C_YELLOW "\n  containers.h — test suite\n\n" C_RESET);
 
     RUN_TEST("list_create",      test_list_create);
     RUN_TEST("list_destroy",     test_list_destroy);

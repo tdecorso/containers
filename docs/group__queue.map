@@ -1,0 +1,7 @@
+<map id="Queues" name="Queues">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,80,76,105"/>
+<area shape="rect" id="Node000004" href="$group__queue__access.html" title=" " alt="" coords="124,5,248,31"/>
+<area shape="rect" id="Node000002" href="$group__queue__allocation.html" title=" " alt="" coords="143,55,229,80"/>
+<area shape="rect" id="Node000003" href="$group__queue__capacity.html" title=" " alt="" coords="147,104,225,129"/>
+<area shape="rect" id="Node000005" href="$group__queue__modifiers.html" title=" " alt="" coords="145,153,227,179"/>
+</map>

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['element_20access_0',['Element access',['../group__array__access.html',1,'']]]
+  ['element_20access_0',['element access',['../group__array__access.html',1,'Element access'],['../group__queue__access.html',1,'Element access']]]
 ];

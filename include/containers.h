@@ -439,4 +439,130 @@ void* list_node_data(list_node_t* node, error_t* err);
 /// @} // list_iteration
     
 /// @} // list
+
+///@defgroup queue Queues
+///@ {
+
+/**
+ * @brief Generic queue.
+ * @ingroup queue
+ */
+typedef struct {
+    list_t* list; ///< Internal container.
+} queue_t;
+
+/// @defgroup queue_allocation Allocation
+/// @ingroup queue
+/// @{
+
+/**
+ * @brief Creates a new queue.
+ * @param elem_size Size in bytes of the elements stored in the queue.
+ *                  Must be greater than zero.
+ * @param err Optional error output information. If non-NULL and the call fails,
+ *            it will contain details about the failure.
+ * @return Pointer to the newly created queue. NULL on failure.
+ * @ingroup queue_allocation
+ */
+queue_t* queue_create(size_t elem_size, error_t* err);
+
+/**
+ * @brief Destroys the queue and frees its resources.
+ * @param queue The queue to destroy. It can be NULL.
+ * @ingroup queue_allocation
+ */
+void queue_destroy(queue_t* queue);
+
+/// @} // queue_allocation
+
+/// @defgroup queue_capacity Capacity
+/// @ingroup queue
+/// @{
+
+/**
+ * @brief Checks whether the queue is empty.
+ * @param queue The queue. Must be not NULL.
+ * @param err Optional error output information. If non-NULL and the call fails,
+ *            it will contain details about the failure.
+ * @return True if the queue is empty. False otherwise, or on failure.
+ * @ingroup queue_capacity
+ */
+bool queue_is_empty(queue_t* queue, error_t* err);
+
+/**
+ * @brief Returns the number of elements in the queue.
+ * @param queue The queue. Must be not NULL.
+ * @param err Optional error output information. If non-NULL and the call fails,
+ *            it will contain details about the failure.
+ * @return Current number of elements in the queue. Zero on failures.
+ * @ingroup queue_capacity
+ */
+size_t queue_size(queue_t* queue, error_t* err);
+
+/// @} // queue_capacity
+
+/// @defgroup queue_access Element access
+/// @ingroup queue
+/// @{
+
+/**
+ * @brief Returns a pointer to the element at the front of the queue.
+ * @param queue The queue. Must be not NULL.
+ * @param err Optional error output information. If non-NULL and the call fails,
+ *            it will contain details about the failure.
+ * @return Pointer to the front element, or NULL if the queue is empty or on
+ *         failure.
+ * @note The returned pointer remains valid until the element is removed or the
+ *       queue is modified in a way that invalidates it.
+ * @ingroup queue_access
+ */
+void* queue_front(queue_t* queue, error_t* err);
+
+/**
+ * @brief Returns a pointer to the element at the back of the queue.
+ * @param queue The queue. Must be not NULL.
+ * @param err Optional error output information. If non-NULL and the call fails,
+ *            it will contain details about the failure.
+ * @return Pointer to the back element, or NULL if the queue is empty or on
+ *         failure.
+ * @note The returned pointer remains valid until the element is removed or the
+ *       queue is modified in a way that invalidates it.
+ * @ingroup queue_access
+ */
+void* queue_back(queue_t* queue, error_t* err);
+
+/// @} // queue_access
+
+/// @defgroup queue_modifiers Modifiers
+/// @ingroup queue
+/// @{
+
+/**
+ * @brief Inserts an element at the back of the queue.
+ *
+ * @param queue The queue. Must be not NULL.
+ * @param item Pointer to the element to insert. Must be not NULL.
+ *             The element is copied into the queue.
+ * @param err Optional error output information. If non-NULL and the call fails,
+ *            it will contain details about the failure.
+ * @ingroup queue_modifiers
+ */
+void queue_push(queue_t* queue, const void* item, error_t* err);
+
+/**
+ * @brief Removes the element at the front of the queue.
+ *
+ * @param queue The queue. Must be not NULL.
+ * @param item_out Optional output buffer. If non-NULL, the removed element is
+ *                 copied here before being removed. The buffer must be large
+ *                 enough to hold `elem_size` bytes.
+ * @param err Optional error output information. If non-NULL and the call fails,
+ *            it will contain details about the failure.
+ * @ingroup queue_modifiers
+ */
+void queue_pop(queue_t* queue, void* item_out, error_t* err);
+
+/// @} // queue_modifiers
+/// @} // queue
+
 #endif // H_CONTAINERS
