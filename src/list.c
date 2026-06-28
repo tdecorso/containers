@@ -111,6 +111,10 @@ void list_push_back(list_t* list, const void* item, error_t* err) {
 
         list_node_t* node = list_node_create(list->elem_size, err);
         if (err && err->code != ERROR_OK) return;
+        if (!node) {
+            error_create(err, ERROR_OUT_OF_MEMORY, "Node creation failed.");
+            return;
+        }
         memcpy(node->data, item, list->elem_size);
 
         list->root = node;
@@ -122,6 +126,10 @@ void list_push_back(list_t* list, const void* item, error_t* err) {
 
     list_node_t* node = list_node_create(list->elem_size, err);
     if (err && err->code != ERROR_OK) return;
+    if (!node) {
+        error_create(err, ERROR_OUT_OF_MEMORY, "Node creation failed.");
+        return;
+    }
     memcpy(node->data, item, list->elem_size);
 
     node->prev = list->tail;
@@ -150,6 +158,10 @@ void list_push_front(list_t* list, const void* item, error_t* err) {
 
         list_node_t* node = list_node_create(list->elem_size, err);
         if (err && err->code != ERROR_OK) return;
+        if (!node) {
+            error_create(err, ERROR_OUT_OF_MEMORY, "Node creation failed.");
+            return;
+        }
         memcpy(node->data, item, list->elem_size);
 
         list->root = node;
@@ -162,6 +174,10 @@ void list_push_front(list_t* list, const void* item, error_t* err) {
 
     list_node_t* node = list_node_create(list->elem_size, err);
     if (err && err->code != ERROR_OK) return;
+    if (!node) {
+        error_create(err, ERROR_OUT_OF_MEMORY, "Node creation failed.");
+        return;
+    }
     memcpy(node->data, item, list->elem_size);
 
     node->next = list->root;
@@ -265,6 +281,10 @@ void list_insert_before(list_t* list, list_node_t* pos, const void* item, error_
 
     list_node_t* node = list_node_create(list->elem_size, err);
     if (err && err->code != ERROR_OK) return;
+    if (!node) {
+        error_create(err, ERROR_OUT_OF_MEMORY, "Node creation failed.");
+        return;
+    }
     memcpy(node->data, item, list->elem_size);
 
     node->next = pos;
@@ -291,6 +311,10 @@ void list_insert_after(list_t* list, list_node_t* pos, const void* item, error_t
 
     list_node_t* node = list_node_create(list->elem_size, err);
     if (err && err->code != ERROR_OK) return;
+    if (!node) {
+        error_create(err, ERROR_OUT_OF_MEMORY, "Node creation failed.");
+        return;
+    }
     memcpy(node->data, item, list->elem_size);
 
     node->prev = pos;
