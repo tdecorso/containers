@@ -1,5 +1,5 @@
 <map id="Linked lists" name="Linked lists">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,80,100,105"/>
+<area shape="rect" id="Node000001" title="Doubly&#45;linked list with O(1) insertion and removal at any node." alt="" coords="5,80,100,105"/>
 <area shape="rect" id="Node000002" href="$group__list__allocation.html" title=" " alt="" coords="148,5,235,31"/>
 <area shape="rect" id="Node000003" href="$group__list__capacity.html" title=" " alt="" coords="152,55,231,80"/>
 <area shape="rect" id="Node000005" href="$group__list__iteration.html" title=" " alt="" coords="153,104,230,129"/>

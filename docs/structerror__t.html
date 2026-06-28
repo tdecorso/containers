@@ -76,7 +76,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>Generic error you can use to understand why something is failing.  
+<p>Carries error information out of a failing API call.  
  <a href="structerror__t.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="containers_8h_source.html">containers.h</a>&gt;</code></p>
@@ -84,15 +84,16 @@ $(function() {
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Data Fields</h2></td></tr>
 <tr class="memitem:ac8a0b7b6f854e572da0df6ba77565ff3" id="r_ac8a0b7b6f854e572da0df6ba77565ff3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="containers_8h.html#a09c25ad25f326a930ae42ace60b70232">error_e</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structerror__t.html#ac8a0b7b6f854e572da0df6ba77565ff3">code</a></td></tr>
-<tr class="memdesc:ac8a0b7b6f854e572da0df6ba77565ff3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Type of error.  <br /></td></tr>
+<tr class="memdesc:ac8a0b7b6f854e572da0df6ba77565ff3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Identifies the failure category.  <br /></td></tr>
 <tr class="separator:ac8a0b7b6f854e572da0df6ba77565ff3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a29982a1d33c55d7c436f8e4b93c023d6" id="r_a29982a1d33c55d7c436f8e4b93c023d6"><td class="memItemLeft" align="right" valign="top"><a id="a29982a1d33c55d7c436f8e4b93c023d6" name="a29982a1d33c55d7c436f8e4b93c023d6"></a>
 char&#160;</td><td class="memItemRight" valign="bottom"><b>msg</b> [256]</td></tr>
-<tr class="memdesc:a29982a1d33c55d7c436f8e4b93c023d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Verbose message from the error. <br /></td></tr>
+<tr class="memdesc:a29982a1d33c55d7c436f8e4b93c023d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Human-readable description of the failure. <br /></td></tr>
 <tr class="separator:a29982a1d33c55d7c436f8e4b93c023d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Generic error you can use to understand why something is failing. </p>
+<div class="textblock"><p>Carries error information out of a failing API call. </p>
+<p>Pass a pointer to a stack-allocated <code><a class="el" href="structerror__t.html" title="Carries error information out of a failing API call.">error_t</a></code> to any API function. On failure the function fills both fields. On success <code>code</code> is set to <code>ERROR_OK</code>. Passing NULL is always safe. </p>
 </div><h2 class="groupheader">Field Documentation</h2>
 <a id="ac8a0b7b6f854e572da0df6ba77565ff3" name="ac8a0b7b6f854e572da0df6ba77565ff3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac8a0b7b6f854e572da0df6ba77565ff3">&#9670;&#160;</a></span>code</h2>
@@ -106,7 +107,7 @@ char&#160;</td><td class="memItemRight" valign="bottom"><b>msg</b> [256]</td></t
       </table>
 </div><div class="memdoc">
 
-<p>Type of error. </p>
+<p>Identifies the failure category. </p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="containers_8h.html#a09c25ad25f326a930ae42ace60b70232" title="Error codes returned by the API.">error_e</a> </dd></dl>
 
 </div>

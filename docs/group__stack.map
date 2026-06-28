@@ -1,7 +1,7 @@
-<map id="Stack" name="Stack">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,80,64,105"/>
-<area shape="rect" id="Node000004" href="$group__stack__access.html" title=" " alt="" coords="112,5,236,31"/>
-<area shape="rect" id="Node000002" href="$group__stack__allocation.html" title=" " alt="" coords="131,55,217,80"/>
-<area shape="rect" id="Node000003" href="$group__stack__capacity.html" title=" " alt="" coords="135,104,213,129"/>
-<area shape="rect" id="Node000005" href="$group__stack__modifiers.html" title=" " alt="" coords="133,153,215,179"/>
+<map id="Stacks" name="Stacks">
+<area shape="rect" id="Node000001" title="LIFO stack backed by a dynamic array." alt="" coords="5,80,71,105"/>
+<area shape="rect" id="Node000004" href="$group__stack__access.html" title=" " alt="" coords="119,5,243,31"/>
+<area shape="rect" id="Node000002" href="$group__stack__allocation.html" title=" " alt="" coords="137,55,224,80"/>
+<area shape="rect" id="Node000003" href="$group__stack__capacity.html" title=" " alt="" coords="141,104,220,129"/>
+<area shape="rect" id="Node000005" href="$group__stack__modifiers.html" title=" " alt="" coords="139,153,222,179"/>
 </map>

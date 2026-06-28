@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['structures_20library_20in_20c_0',['Containers: A type-agnostic data structures library in C',['../index.html',1,'']]]
+  ['in_20c_0',['containers.h — A generic data structures library in C',['../index.html',1,'']]]
 ];

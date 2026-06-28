@@ -80,7 +80,7 @@ Collaboration diagram for Capacity:</div>
 <div class="dyncontent">
 <div class="center"><img src="group__array__capacity.png" border="0" usemap="#agroup____array____capacity" alt=""/></div>
 <map name="agroup____array____capacity" id="agroup____array____capacity">
-<area shape="rect" href="group__array.html" title=" " alt="" coords="5,5,131,31"/>
+<area shape="rect" href="group__array.html" title="Resizable contiguous buffer with O(1) random access." alt="" coords="5,5,131,31"/>
 <area shape="rect" title=" " alt="" coords="179,5,257,31"/>
 </map>
 </div>
@@ -88,16 +88,16 @@ Collaboration diagram for Capacity:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:ga28d96d3ea0ef5bccf394815f898e1b98" id="r_ga28d96d3ea0ef5bccf394815f898e1b98"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__array__capacity.html#ga28d96d3ea0ef5bccf394815f898e1b98">array_is_empty</a> (<a class="el" href="structarray__t.html">array_t</a> *arr, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
-<tr class="memdesc:ga28d96d3ea0ef5bccf394815f898e1b98"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks whether the container is empty.  <br /></td></tr>
+<tr class="memdesc:ga28d96d3ea0ef5bccf394815f898e1b98"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the array contains no elements.  <br /></td></tr>
 <tr class="separator:ga28d96d3ea0ef5bccf394815f898e1b98"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga7010fb597fe3cc3ed39ec5baaab803d5" id="r_ga7010fb597fe3cc3ed39ec5baaab803d5"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__array__capacity.html#ga7010fb597fe3cc3ed39ec5baaab803d5">array_max_size</a> (<a class="el" href="structarray__t.html">array_t</a> *arr, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
-<tr class="memdesc:ga7010fb597fe3cc3ed39ec5baaab803d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the maximum possible number of elements.  <br /></td></tr>
+<tr class="memdesc:ga7010fb597fe3cc3ed39ec5baaab803d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the theoretical maximum number of elements the array could ever hold, based on <code>elem_size</code> and <code>SIZE_MAX</code>.  <br /></td></tr>
 <tr class="separator:ga7010fb597fe3cc3ed39ec5baaab803d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga908d8f3f6e2fc483e5ea4475067970e9" id="r_ga908d8f3f6e2fc483e5ea4475067970e9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__array__capacity.html#ga908d8f3f6e2fc483e5ea4475067970e9">array_reserve</a> (<a class="el" href="structarray__t.html">array_t</a> *arr, size_t to_reserve, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
-<tr class="memdesc:ga908d8f3f6e2fc483e5ea4475067970e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reserves storage for the array.  <br /></td></tr>
+<tr class="memdesc:ga908d8f3f6e2fc483e5ea4475067970e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ensures the array has capacity for at least <code>to_reserve</code> elements.  <br /></td></tr>
 <tr class="separator:ga908d8f3f6e2fc483e5ea4475067970e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga9267ec6d1c029e2eab86dbe2622647cf" id="r_ga9267ec6d1c029e2eab86dbe2622647cf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__array__capacity.html#ga9267ec6d1c029e2eab86dbe2622647cf">array_shrink_to_fit</a> (<a class="el" href="structarray__t.html">array_t</a> *arr, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
-<tr class="memdesc:ga9267ec6d1c029e2eab86dbe2622647cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reduces memory usage by freeing unused memory.  <br /></td></tr>
+<tr class="memdesc:ga9267ec6d1c029e2eab86dbe2622647cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reduces allocated memory to fit the current element count.  <br /></td></tr>
 <tr class="separator:ga9267ec6d1c029e2eab86dbe2622647cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -128,15 +128,15 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Checks whether the container is empty. </p>
+<p>Returns true if the array contains no elements. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">arr</td><td>The array. Must be not NULL. </td></tr>
-    <tr><td class="paramname">err</td><td>Optional error output information. If non-NULL and the call fails, it will contain details about the failure. </td></tr>
+    <tr><td class="paramname">arr</td><td>The array. Must not be NULL. </td></tr>
+    <tr><td class="paramname">err</td><td>Optional error output. Populated on failure. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>True if the array is empty. False otherwise, or on failures. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>true if <code>count == 0</code>, false otherwise or on failure. </dd></dl>
 
 </div>
 </div>
@@ -166,15 +166,15 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Returns the maximum possible number of elements. </p>
+<p>Returns the theoretical maximum number of elements the array could ever hold, based on <code>elem_size</code> and <code>SIZE_MAX</code>. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">arr</td><td>The array. Must be not NULL. </td></tr>
-    <tr><td class="paramname">err</td><td>Optional error output information. If non-NULL and the call fails, it will contain details about the failure. </td></tr>
+    <tr><td class="paramname">arr</td><td>The array. Must not be NULL. </td></tr>
+    <tr><td class="paramname">err</td><td>Optional error output. Populated on failure. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Maximum possible number of elements for the given array. Zero on failures. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Maximum element count, or 0 on failure. </dd></dl>
 
 </div>
 </div>
@@ -210,12 +210,13 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Reserves storage for the array. </p>
+<p>Ensures the array has capacity for at least <code>to_reserve</code> elements. </p>
+<p>If the current capacity already meets or exceeds <code>to_reserve</code>, this function does nothing. Otherwise the internal buffer is reallocated.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">arr</td><td>The array. Must be not NULL. </td></tr>
-    <tr><td class="paramname">to_reserve</td><td>Capacity to reserve. It must not exceed maximum number of elements. </td></tr>
-    <tr><td class="paramname">err</td><td>Optional error output information. If non-NULL and the call fails, it will contain details about the failure. </td></tr>
+    <tr><td class="paramname">arr</td><td>The array. Must not be NULL. </td></tr>
+    <tr><td class="paramname">to_reserve</td><td>Minimum capacity to guarantee. Must not exceed the value returned by <code>array_max_size</code>. </td></tr>
+    <tr><td class="paramname">err</td><td>Optional error output. Populated on failure. </td></tr>
   </table>
   </dd>
 </dl>
@@ -248,11 +249,12 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Reduces memory usage by freeing unused memory. </p>
+<p>Reduces allocated memory to fit the current element count. </p>
+<p>Reallocates the internal buffer so that <code>cap == count</code>. If the array is empty the buffer may be freed entirely.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">arr</td><td>The array. Must be not NULL. </td></tr>
-    <tr><td class="paramname">err</td><td>Optional error output information. If non-NULL and the call fails, it will contain details about the failure. </td></tr>
+    <tr><td class="paramname">arr</td><td>The array. Must not be NULL. </td></tr>
+    <tr><td class="paramname">err</td><td>Optional error output. Populated on failure. </td></tr>
   </table>
   </dd>
 </dl>

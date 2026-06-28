@@ -72,7 +72,7 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#func-members">Functions</a>  </div>
-  <div class="headertitle"><div class="title">Allocation<div class="ingroups"><a class="el" href="group__stack.html">Stack</a></div></div></div>
+  <div class="headertitle"><div class="title">Allocation<div class="ingroups"><a class="el" href="group__stack.html">Stacks</a></div></div></div>
 </div><!--header-->
 <div class="contents">
 <div class="dynheader">
@@ -80,18 +80,18 @@ Collaboration diagram for Allocation:</div>
 <div class="dyncontent">
 <div class="center"><img src="group__stack__allocation.png" border="0" usemap="#agroup____stack____allocation" alt=""/></div>
 <map name="agroup____stack____allocation" id="agroup____stack____allocation">
-<area shape="rect" href="group__stack.html" title=" " alt="" coords="5,5,64,31"/>
-<area shape="rect" title=" " alt="" coords="112,5,199,31"/>
+<area shape="rect" href="group__stack.html" title="LIFO stack backed by a dynamic array." alt="" coords="5,5,71,31"/>
+<area shape="rect" title=" " alt="" coords="119,5,205,31"/>
 </map>
 </div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:ga078967757aa4794745b41db88d1824ce" id="r_ga078967757aa4794745b41db88d1824ce"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structstack__t.html">stack_t</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__stack__allocation.html#ga078967757aa4794745b41db88d1824ce">stack_create</a> (size_t elem_size, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
-<tr class="memdesc:ga078967757aa4794745b41db88d1824ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new stack.  <br /></td></tr>
+<tr class="memdesc:ga078967757aa4794745b41db88d1824ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new empty stack.  <br /></td></tr>
 <tr class="separator:ga078967757aa4794745b41db88d1824ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga7cebbef117f3ce4f2ecba755cdb5b9a0" id="r_ga7cebbef117f3ce4f2ecba755cdb5b9a0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__stack__allocation.html#ga7cebbef117f3ce4f2ecba755cdb5b9a0">stack_destroy</a> (<a class="el" href="structstack__t.html">stack_t</a> *stack)</td></tr>
-<tr class="memdesc:ga7cebbef117f3ce4f2ecba755cdb5b9a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys the stack and frees its resources.  <br /></td></tr>
+<tr class="memdesc:ga7cebbef117f3ce4f2ecba755cdb5b9a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys the stack and frees all associated memory.  <br /></td></tr>
 <tr class="separator:ga7cebbef117f3ce4f2ecba755cdb5b9a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -122,15 +122,15 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Creates a new stack. </p>
+<p>Creates a new empty stack. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">elem_size</td><td>Size in bytes of the elements stored in the stack. Must be greater than zero. </td></tr>
-    <tr><td class="paramname">err</td><td>Optional error output information. If non-NULL and the call fails, it will contain details about the failure.</td></tr>
+    <tr><td class="paramname">elem_size</td><td>Size in bytes of each element. Must be &gt; 0. </td></tr>
+    <tr><td class="paramname">err</td><td>Optional error output. Populated on failure. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Pointer to the newly created stack. NULL on failure. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Pointer to the new stack, or NULL on failure. </dd></dl>
 
 </div>
 </div>
@@ -150,10 +150,10 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Destroys the stack and frees its resources. </p>
+<p>Destroys the stack and frees all associated memory. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">stack</td><td>The stack to destroy. It can be NULL. </td></tr>
+    <tr><td class="paramname">stack</td><td>The stack to destroy. NULL is safe and does nothing. </td></tr>
   </table>
   </dd>
 </dl>

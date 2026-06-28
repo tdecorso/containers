@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['modifiers_0',['modifiers',['../group__array__modifiers.html',1,'Modifiers'],['../group__list__modifiers.html',1,'Modifiers'],['../group__queue__modifiers.html',1,'Modifiers'],['../group__stack__modifiers.html',1,'Modifiers']]]
+  ['hash_20and_20comparator_20functions_0',['Built-in hash and comparator functions',['../group__hash__functions.html',1,'']]],
+  ['hash_20maps_1',['Hash maps',['../group__map.html',1,'']]]
 ];

@@ -80,7 +80,7 @@ Collaboration diagram for Modifiers:</div>
 <div class="dyncontent">
 <div class="center"><img src="group__array__modifiers.png" border="0" usemap="#agroup____array____modifiers" alt=""/></div>
 <map name="agroup____array____modifiers" id="agroup____array____modifiers">
-<area shape="rect" href="group__array.html" title=" " alt="" coords="5,5,131,31"/>
+<area shape="rect" href="group__array.html" title="Resizable contiguous buffer with O(1) random access." alt="" coords="5,5,131,31"/>
 <area shape="rect" title=" " alt="" coords="179,5,261,31"/>
 </map>
 </div>
@@ -88,22 +88,22 @@ Collaboration diagram for Modifiers:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:ga0510dbc43eff402546211158b746d2d1" id="r_ga0510dbc43eff402546211158b746d2d1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__array__modifiers.html#ga0510dbc43eff402546211158b746d2d1">array_clear</a> (<a class="el" href="structarray__t.html">array_t</a> *arr, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
-<tr class="memdesc:ga0510dbc43eff402546211158b746d2d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clears the contents of the array.  <br /></td></tr>
+<tr class="memdesc:ga0510dbc43eff402546211158b746d2d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes all elements from the array without freeing the buffer.  <br /></td></tr>
 <tr class="separator:ga0510dbc43eff402546211158b746d2d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gadb4645f9070be26295bf7ab514b8fbe4" id="r_gadb4645f9070be26295bf7ab514b8fbe4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__array__modifiers.html#gadb4645f9070be26295bf7ab514b8fbe4">array_insert</a> (<a class="el" href="structarray__t.html">array_t</a> *arr, size_t index, const void *item, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
-<tr class="memdesc:gadb4645f9070be26295bf7ab514b8fbe4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inserts an element into the array.  <br /></td></tr>
+<tr class="memdesc:gadb4645f9070be26295bf7ab514b8fbe4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inserts an element at the given index, shifting subsequent elements one position to the right.  <br /></td></tr>
 <tr class="separator:gadb4645f9070be26295bf7ab514b8fbe4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga81fafea435225ae19cd67b175e9c225e" id="r_ga81fafea435225ae19cd67b175e9c225e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__array__modifiers.html#ga81fafea435225ae19cd67b175e9c225e">array_push_back</a> (<a class="el" href="structarray__t.html">array_t</a> *arr, const void *item, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
-<tr class="memdesc:ga81fafea435225ae19cd67b175e9c225e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds an element to the end of the array.  <br /></td></tr>
+<tr class="memdesc:ga81fafea435225ae19cd67b175e9c225e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Appends an element to the end of the array.  <br /></td></tr>
 <tr class="separator:ga81fafea435225ae19cd67b175e9c225e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga981a0ed2628b9b776322adffea79d789" id="r_ga981a0ed2628b9b776322adffea79d789"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__array__modifiers.html#ga981a0ed2628b9b776322adffea79d789">array_pop_back</a> (<a class="el" href="structarray__t.html">array_t</a> *arr, void *item_out, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
-<tr class="memdesc:ga981a0ed2628b9b776322adffea79d789"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes element from the end of the array.  <br /></td></tr>
+<tr class="memdesc:ga981a0ed2628b9b776322adffea79d789"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes the last element from the array.  <br /></td></tr>
 <tr class="separator:ga981a0ed2628b9b776322adffea79d789"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga97f0cf6ebf23d98e98e760f324e1ab16" id="r_ga97f0cf6ebf23d98e98e760f324e1ab16"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__array__modifiers.html#ga97f0cf6ebf23d98e98e760f324e1ab16">array_pop_front</a> (<a class="el" href="structarray__t.html">array_t</a> *arr, void *item_out, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
-<tr class="memdesc:ga97f0cf6ebf23d98e98e760f324e1ab16"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes element from the start of the array.  <br /></td></tr>
+<tr class="memdesc:ga97f0cf6ebf23d98e98e760f324e1ab16"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes the first element from the array, shifting all subsequent elements one position to the left.  <br /></td></tr>
 <tr class="separator:ga97f0cf6ebf23d98e98e760f324e1ab16"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gacc5ae5f819afb24e5b153220d1914b37" id="r_gacc5ae5f819afb24e5b153220d1914b37"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__array__modifiers.html#gacc5ae5f819afb24e5b153220d1914b37">array_erase</a> (<a class="el" href="structarray__t.html">array_t</a> *arr, size_t index, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
-<tr class="memdesc:gacc5ae5f819afb24e5b153220d1914b37"><td class="mdescLeft">&#160;</td><td class="mdescRight">Erases an element from the array.  <br /></td></tr>
+<tr class="memdesc:gacc5ae5f819afb24e5b153220d1914b37"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes the element at the given index, shifting subsequent elements one position to the left.  <br /></td></tr>
 <tr class="separator:gacc5ae5f819afb24e5b153220d1914b37"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -134,11 +134,12 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Clears the contents of the array. </p>
+<p>Removes all elements from the array without freeing the buffer. </p>
+<p>After this call <code>count == 0</code> and <code>cap</code> is unchanged.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">arr</td><td>The array. Must be not NULL. </td></tr>
-    <tr><td class="paramname">err</td><td>Optional error output information. If non-NULL and the call fails, it will contain details about the failure. </td></tr>
+    <tr><td class="paramname">arr</td><td>The array. Must not be NULL. </td></tr>
+    <tr><td class="paramname">err</td><td>Optional error output. Populated on failure. </td></tr>
   </table>
   </dd>
 </dl>
@@ -177,12 +178,12 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Erases an element from the array. </p>
+<p>Removes the element at the given index, shifting subsequent elements one position to the left. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">arr</td><td>The array. Must be not NULL. </td></tr>
-    <tr><td class="paramname">index</td><td>The index of the element to erase. It must be &lt; count. </td></tr>
-    <tr><td class="paramname">err</td><td>Optional error output information. If non-NULL and the call fails, it will contain details about the failure. </td></tr>
+    <tr><td class="paramname">arr</td><td>The array. Must not be NULL. </td></tr>
+    <tr><td class="paramname">index</td><td>Index of the element to remove. Must be &lt; count. </td></tr>
+    <tr><td class="paramname">err</td><td>Optional error output. Populated on failure. Sets <code>ERROR_INVALID_ARGS</code> if index &gt;= count. </td></tr>
   </table>
   </dd>
 </dl>
@@ -227,13 +228,14 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Inserts an element into the array. </p>
+<p>Inserts an element at the given index, shifting subsequent elements one position to the right. </p>
+<p>If <code>index == count</code> the element is appended (equivalent to <code>array_push_back</code>). The array grows automatically if needed.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">arr</td><td>The array. Must be not NULL. </td></tr>
-    <tr><td class="paramname">index</td><td>Position to insert the element in. It must be &lt;= count. </td></tr>
-    <tr><td class="paramname">item</td><td>Item's memory to insert in the array. Must be not NULL. </td></tr>
-    <tr><td class="paramname">err</td><td>Optional error output information. If non-NULL and the call fails, it will contain details about the failure. </td></tr>
+    <tr><td class="paramname">arr</td><td>The array. Must not be NULL. </td></tr>
+    <tr><td class="paramname">index</td><td>Insertion position. Must be &lt;= count. </td></tr>
+    <tr><td class="paramname">item</td><td>Pointer to the data to copy in. Must not be NULL. </td></tr>
+    <tr><td class="paramname">err</td><td>Optional error output. Populated on failure. </td></tr>
   </table>
   </dd>
 </dl>
@@ -272,12 +274,12 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Removes element from the end of the array. </p>
+<p>Removes the last element from the array. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">arr</td><td>The array. Must be not NULL. </td></tr>
-    <tr><td class="paramname">item_out</td><td>If non-NULL, the removed data gets copied here. </td></tr>
-    <tr><td class="paramname">err</td><td>Optional error output information. If non-NULL and the call fails, it will contain details about the failure. </td></tr>
+    <tr><td class="paramname">arr</td><td>The array. Must not be NULL. </td></tr>
+    <tr><td class="paramname">item_out</td><td>Optional output buffer. If non-NULL, the removed element is copied here before removal. Must be large enough to hold <code>elem_size</code> bytes. </td></tr>
+    <tr><td class="paramname">err</td><td>Optional error output. Populated on failure. Sets <code>ERROR_INVALID_ARGS</code> if the array is empty. </td></tr>
   </table>
   </dd>
 </dl>
@@ -316,12 +318,12 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Removes element from the start of the array. </p>
+<p>Removes the first element from the array, shifting all subsequent elements one position to the left. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">arr</td><td>The array. Must be not NULL. </td></tr>
-    <tr><td class="paramname">item_out</td><td>If non-NULL, the removed data gets copied here. </td></tr>
-    <tr><td class="paramname">err</td><td>Optional error output information. If non-NULL and the call fails, it will contain details about the failure. </td></tr>
+    <tr><td class="paramname">arr</td><td>The array. Must not be NULL. </td></tr>
+    <tr><td class="paramname">item_out</td><td>Optional output buffer. If non-NULL, the removed element is copied here before removal. Must be large enough to hold <code>elem_size</code> bytes. </td></tr>
+    <tr><td class="paramname">err</td><td>Optional error output. Populated on failure. Sets <code>ERROR_INVALID_ARGS</code> if the array is empty. </td></tr>
   </table>
   </dd>
 </dl>
@@ -360,12 +362,13 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Adds an element to the end of the array. </p>
+<p>Appends an element to the end of the array. </p>
+<p>The array grows automatically if <code>count == cap</code>.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">arr</td><td>The array. Must be not NULL. </td></tr>
-    <tr><td class="paramname">item</td><td>The item to push into the array. Must be not NULL. </td></tr>
-    <tr><td class="paramname">err</td><td>Optional error output information. If non-NULL and the call fails, it will contain details about the failure. </td></tr>
+    <tr><td class="paramname">arr</td><td>The array. Must not be NULL. </td></tr>
+    <tr><td class="paramname">item</td><td>Pointer to the data to copy in. Must not be NULL. </td></tr>
+    <tr><td class="paramname">err</td><td>Optional error output. Populated on failure. </td></tr>
   </table>
   </dd>
 </dl>

@@ -80,7 +80,7 @@ Collaboration diagram for Allocation:</div>
 <div class="dyncontent">
 <div class="center"><img src="group__array__allocation.png" border="0" usemap="#agroup____array____allocation" alt=""/></div>
 <map name="agroup____array____allocation" id="agroup____array____allocation">
-<area shape="rect" href="group__array.html" title=" " alt="" coords="5,5,131,31"/>
+<area shape="rect" href="group__array.html" title="Resizable contiguous buffer with O(1) random access." alt="" coords="5,5,131,31"/>
 <area shape="rect" title=" " alt="" coords="179,5,265,31"/>
 </map>
 </div>
@@ -88,10 +88,10 @@ Collaboration diagram for Allocation:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:gafb3a66eb9e9fe75d61f73f254b36d457" id="r_gafb3a66eb9e9fe75d61f73f254b36d457"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structarray__t.html">array_t</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__array__allocation.html#gafb3a66eb9e9fe75d61f73f254b36d457">array_create</a> (size_t elem_size, size_t cap, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
-<tr class="memdesc:gafb3a66eb9e9fe75d61f73f254b36d457"><td class="mdescLeft">&#160;</td><td class="mdescRight">Heap-allocates a new array.  <br /></td></tr>
+<tr class="memdesc:gafb3a66eb9e9fe75d61f73f254b36d457"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new heap-allocated dynamic array.  <br /></td></tr>
 <tr class="separator:gafb3a66eb9e9fe75d61f73f254b36d457"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gab43549424b9a1a7e6c0abccb4a93ff31" id="r_gab43549424b9a1a7e6c0abccb4a93ff31"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__array__allocation.html#gab43549424b9a1a7e6c0abccb4a93ff31">array_destroy</a> (<a class="el" href="structarray__t.html">array_t</a> *arr)</td></tr>
-<tr class="memdesc:gab43549424b9a1a7e6c0abccb4a93ff31"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys the array and frees its resources.  <br /></td></tr>
+<tr class="memdesc:gab43549424b9a1a7e6c0abccb4a93ff31"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys the array and frees all associated memory.  <br /></td></tr>
 <tr class="separator:gab43549424b9a1a7e6c0abccb4a93ff31"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -128,16 +128,16 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Heap-allocates a new array. </p>
+<p>Creates a new heap-allocated dynamic array. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">elem_size</td><td>Size in bytes of the elements of the array. Must be &gt; 0. </td></tr>
-    <tr><td class="paramname">cap</td><td>Initial capacity (number of elements) of the array. Must be &gt; 0. </td></tr>
-    <tr><td class="paramname">err</td><td>Optional output error information. If non-NULL and the call fails, it will contain details about the failure. </td></tr>
+    <tr><td class="paramname">elem_size</td><td>Size in bytes of each element. Must be &gt; 0. </td></tr>
+    <tr><td class="paramname">cap</td><td>Initial capacity in number of elements. Must be &gt; 0. </td></tr>
+    <tr><td class="paramname">err</td><td>Optional error output. Populated on failure. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>A pointer to the new heap-allocated array. NULL on failure. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Pointer to the new array, or NULL on failure. </dd></dl>
 
 </div>
 </div>
@@ -157,10 +157,10 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Destroys the array and frees its resources. </p>
+<p>Destroys the array and frees all associated memory. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">arr</td><td>The array to destroy. It can be NULL. </td></tr>
+    <tr><td class="paramname">arr</td><td>The array to destroy. NULL is safe and does nothing. </td></tr>
   </table>
   </dd>
 </dl>

@@ -80,7 +80,7 @@ Collaboration diagram for Allocation:</div>
 <div class="dyncontent">
 <div class="center"><img src="group__queue__allocation.png" border="0" usemap="#agroup____queue____allocation" alt=""/></div>
 <map name="agroup____queue____allocation" id="agroup____queue____allocation">
-<area shape="rect" href="group__queue.html" title=" " alt="" coords="5,5,76,31"/>
+<area shape="rect" href="group__queue.html" title="FIFO queue backed by a linked list." alt="" coords="5,5,76,31"/>
 <area shape="rect" title=" " alt="" coords="124,5,211,31"/>
 </map>
 </div>
@@ -88,10 +88,10 @@ Collaboration diagram for Allocation:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:ga4835694fde9dac575cb4bcd1b34ead9d" id="r_ga4835694fde9dac575cb4bcd1b34ead9d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structqueue__t.html">queue_t</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__queue__allocation.html#ga4835694fde9dac575cb4bcd1b34ead9d">queue_create</a> (size_t elem_size, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
-<tr class="memdesc:ga4835694fde9dac575cb4bcd1b34ead9d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new queue.  <br /></td></tr>
+<tr class="memdesc:ga4835694fde9dac575cb4bcd1b34ead9d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new empty queue.  <br /></td></tr>
 <tr class="separator:ga4835694fde9dac575cb4bcd1b34ead9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga2c338cc8e04fa3efad3a9b5148791ce4" id="r_ga2c338cc8e04fa3efad3a9b5148791ce4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__queue__allocation.html#ga2c338cc8e04fa3efad3a9b5148791ce4">queue_destroy</a> (<a class="el" href="structqueue__t.html">queue_t</a> *queue)</td></tr>
-<tr class="memdesc:ga2c338cc8e04fa3efad3a9b5148791ce4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys the queue and frees its resources.  <br /></td></tr>
+<tr class="memdesc:ga2c338cc8e04fa3efad3a9b5148791ce4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys the queue and frees all associated memory.  <br /></td></tr>
 <tr class="separator:ga2c338cc8e04fa3efad3a9b5148791ce4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -122,15 +122,15 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Creates a new queue. </p>
+<p>Creates a new empty queue. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">elem_size</td><td>Size in bytes of the elements stored in the queue. Must be greater than zero. </td></tr>
-    <tr><td class="paramname">err</td><td>Optional error output information. If non-NULL and the call fails, it will contain details about the failure. </td></tr>
+    <tr><td class="paramname">elem_size</td><td>Size in bytes of each element. Must be &gt; 0. </td></tr>
+    <tr><td class="paramname">err</td><td>Optional error output. Populated on failure. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Pointer to the newly created queue. NULL on failure. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Pointer to the new queue, or NULL on failure. </dd></dl>
 
 </div>
 </div>
@@ -150,10 +150,10 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Destroys the queue and frees its resources. </p>
+<p>Destroys the queue and frees all associated memory. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">queue</td><td>The queue to destroy. It can be NULL. </td></tr>
+    <tr><td class="paramname">queue</td><td>The queue to destroy. NULL is safe and does nothing. </td></tr>
   </table>
   </dd>
 </dl>

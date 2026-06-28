@@ -80,7 +80,7 @@ Collaboration diagram for Allocation:</div>
 <div class="dyncontent">
 <div class="center"><img src="group__list__allocation.png" border="0" usemap="#agroup____list____allocation" alt=""/></div>
 <map name="agroup____list____allocation" id="agroup____list____allocation">
-<area shape="rect" href="group__list.html" title=" " alt="" coords="5,5,100,31"/>
+<area shape="rect" href="group__list.html" title="Doubly&#45;linked list with O(1) insertion and removal at any node." alt="" coords="5,5,100,31"/>
 <area shape="rect" title=" " alt="" coords="148,5,235,31"/>
 </map>
 </div>
@@ -88,10 +88,10 @@ Collaboration diagram for Allocation:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:ga1ae693cf981ec248a299fda2384ad157" id="r_ga1ae693cf981ec248a299fda2384ad157"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structlist__t.html">list_t</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__list__allocation.html#ga1ae693cf981ec248a299fda2384ad157">list_create</a> (size_t elem_size, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
-<tr class="memdesc:ga1ae693cf981ec248a299fda2384ad157"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new linked list.  <br /></td></tr>
+<tr class="memdesc:ga1ae693cf981ec248a299fda2384ad157"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new empty linked list.  <br /></td></tr>
 <tr class="separator:ga1ae693cf981ec248a299fda2384ad157"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gaf04149a6092f6c1960ffe1556fa0e612" id="r_gaf04149a6092f6c1960ffe1556fa0e612"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__list__allocation.html#gaf04149a6092f6c1960ffe1556fa0e612">list_destroy</a> (<a class="el" href="structlist__t.html">list_t</a> *list)</td></tr>
-<tr class="memdesc:gaf04149a6092f6c1960ffe1556fa0e612"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys the list and frees its resources.  <br /></td></tr>
+<tr class="memdesc:gaf04149a6092f6c1960ffe1556fa0e612"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys the list and frees all nodes and associated memory.  <br /></td></tr>
 <tr class="separator:gaf04149a6092f6c1960ffe1556fa0e612"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -122,15 +122,15 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Creates a new linked list. </p>
+<p>Creates a new empty linked list. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">elem_size</td><td>Size of the data referenced by the nodes of the list. Must be &gt; 0. </td></tr>
-    <tr><td class="paramname">err</td><td>Optional error output information. If non-NULL and the call fails, it will contain details about the failure. </td></tr>
+    <tr><td class="paramname">elem_size</td><td>Size in bytes of each element. Must be &gt; 0. </td></tr>
+    <tr><td class="paramname">err</td><td>Optional error output. Populated on failure. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>pointer to the newly created list. NULL on failure. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Pointer to the new list, or NULL on failure. </dd></dl>
 
 </div>
 </div>
@@ -150,10 +150,10 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Destroys the list and frees its resources. </p>
+<p>Destroys the list and frees all nodes and associated memory. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">list</td><td>The list to destroy. It can be NULL. </td></tr>
+    <tr><td class="paramname">list</td><td>The list to destroy. NULL is safe and does nothing. </td></tr>
   </table>
   </dd>
 </dl>

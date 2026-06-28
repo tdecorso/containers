@@ -80,7 +80,7 @@ Collaboration diagram for Iteration:</div>
 <div class="dyncontent">
 <div class="center"><img src="group__list__iteration.png" border="0" usemap="#agroup____list____iteration" alt=""/></div>
 <map name="agroup____list____iteration" id="agroup____list____iteration">
-<area shape="rect" href="group__list.html" title=" " alt="" coords="5,5,100,31"/>
+<area shape="rect" href="group__list.html" title="Doubly&#45;linked list with O(1) insertion and removal at any node." alt="" coords="5,5,100,31"/>
 <area shape="rect" title=" " alt="" coords="148,5,225,31"/>
 </map>
 </div>
@@ -88,19 +88,19 @@ Collaboration diagram for Iteration:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:gad6a359fc22185fee80aed04bc818bd92" id="r_gad6a359fc22185fee80aed04bc818bd92"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structlist__node__t.html">list_node_t</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__list__iteration.html#gad6a359fc22185fee80aed04bc818bd92">list_begin</a> (<a class="el" href="structlist__t.html">list_t</a> *list, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
-<tr class="memdesc:gad6a359fc22185fee80aed04bc818bd92"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns an iterator to the first node of the list.  <br /></td></tr>
+<tr class="memdesc:gad6a359fc22185fee80aed04bc818bd92"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the first node of the list (begin iterator).  <br /></td></tr>
 <tr class="separator:gad6a359fc22185fee80aed04bc818bd92"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga00dfa6d6eef17026ad6261b11fa207c7" id="r_ga00dfa6d6eef17026ad6261b11fa207c7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structlist__node__t.html">list_node_t</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__list__iteration.html#ga00dfa6d6eef17026ad6261b11fa207c7">list_end</a> (<a class="el" href="structlist__t.html">list_t</a> *list, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
-<tr class="memdesc:ga00dfa6d6eef17026ad6261b11fa207c7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the end iterator for the list.  <br /></td></tr>
+<tr class="memdesc:ga00dfa6d6eef17026ad6261b11fa207c7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the past-the-end sentinel (end iterator).  <br /></td></tr>
 <tr class="separator:ga00dfa6d6eef17026ad6261b11fa207c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga4264f62c82206d3109155fe7bc4ecd74" id="r_ga4264f62c82206d3109155fe7bc4ecd74"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structlist__node__t.html">list_node_t</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__list__iteration.html#ga4264f62c82206d3109155fe7bc4ecd74">list_next</a> (<a class="el" href="structlist__node__t.html">list_node_t</a> *node, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
-<tr class="memdesc:ga4264f62c82206d3109155fe7bc4ecd74"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the next node in the list.  <br /></td></tr>
+<tr class="memdesc:ga4264f62c82206d3109155fe7bc4ecd74"><td class="mdescLeft">&#160;</td><td class="mdescRight">Advances to the next node.  <br /></td></tr>
 <tr class="separator:ga4264f62c82206d3109155fe7bc4ecd74"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga08fa1b53f7231bd2b0bd6371a6e77ff0" id="r_ga08fa1b53f7231bd2b0bd6371a6e77ff0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structlist__node__t.html">list_node_t</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__list__iteration.html#ga08fa1b53f7231bd2b0bd6371a6e77ff0">list_prev</a> (<a class="el" href="structlist__node__t.html">list_node_t</a> *node, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
-<tr class="memdesc:ga08fa1b53f7231bd2b0bd6371a6e77ff0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the previous node in the list.  <br /></td></tr>
+<tr class="memdesc:ga08fa1b53f7231bd2b0bd6371a6e77ff0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retreats to the previous node.  <br /></td></tr>
 <tr class="separator:ga08fa1b53f7231bd2b0bd6371a6e77ff0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga1bf561f9c071b0a31a429900d955553c" id="r_ga1bf561f9c071b0a31a429900d955553c"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__list__iteration.html#ga1bf561f9c071b0a31a429900d955553c">list_node_data</a> (<a class="el" href="structlist__node__t.html">list_node_t</a> *node, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
-<tr class="memdesc:ga1bf561f9c071b0a31a429900d955553c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a pointer to the data stored in a node.  <br /></td></tr>
+<tr class="memdesc:ga1bf561f9c071b0a31a429900d955553c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a pointer to the data stored inside a node.  <br /></td></tr>
 <tr class="separator:ga1bf561f9c071b0a31a429900d955553c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -131,16 +131,22 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Returns an iterator to the first node of the list. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Returns the first node of the list (begin iterator). </p>
+<p>Typical iteration pattern: </p><div class="fragment"><div class="line"><span class="keywordflow">for</span> (<a class="code hl_struct" href="structlist__node__t.html">list_node_t</a>* n = <a class="code hl_function" href="group__list__iteration.html#gad6a359fc22185fee80aed04bc818bd92">list_begin</a>(list, &amp;err);</div>
+<div class="line">     n != <a class="code hl_function" href="group__list__iteration.html#ga00dfa6d6eef17026ad6261b11fa207c7">list_end</a>(list, &amp;err);</div>
+<div class="line">     n = <a class="code hl_function" href="group__list__iteration.html#ga4264f62c82206d3109155fe7bc4ecd74">list_next</a>(n, &amp;err)) { ... }</div>
+<div class="ttc" id="agroup__list__iteration_html_ga00dfa6d6eef17026ad6261b11fa207c7"><div class="ttname"><a href="group__list__iteration.html#ga00dfa6d6eef17026ad6261b11fa207c7">list_end</a></div><div class="ttdeci">list_node_t * list_end(list_t *list, error_t *err)</div><div class="ttdoc">Returns the past-the-end sentinel (end iterator).</div><div class="ttdef"><b>Definition</b> list.c:250</div></div>
+<div class="ttc" id="agroup__list__iteration_html_ga4264f62c82206d3109155fe7bc4ecd74"><div class="ttname"><a href="group__list__iteration.html#ga4264f62c82206d3109155fe7bc4ecd74">list_next</a></div><div class="ttdeci">list_node_t * list_next(list_node_t *node, error_t *err)</div><div class="ttdoc">Advances to the next node.</div><div class="ttdef"><b>Definition</b> list.c:259</div></div>
+<div class="ttc" id="agroup__list__iteration_html_gad6a359fc22185fee80aed04bc818bd92"><div class="ttname"><a href="group__list__iteration.html#gad6a359fc22185fee80aed04bc818bd92">list_begin</a></div><div class="ttdeci">list_node_t * list_begin(list_t *list, error_t *err)</div><div class="ttdoc">Returns the first node of the list (begin iterator).</div><div class="ttdef"><b>Definition</b> list.c:241</div></div>
+<div class="ttc" id="astructlist__node__t_html"><div class="ttname"><a href="structlist__node__t.html">list_node_t</a></div><div class="ttdef"><b>Definition</b> list.c:4</div></div>
+</div><!-- fragment --><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">list</td><td>The list to iterate. Must be not NULL. </td></tr>
-    <tr><td class="paramname">err</td><td>Optional error output information. If non-NULL and the call fails, it will contain details about the failure.</td></tr>
+    <tr><td class="paramname">list</td><td>The list. Must not be NULL. </td></tr>
+    <tr><td class="paramname">err</td><td>Optional error output. Populated on failure. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Pointer to the first node in the list, or NULL if the list is empty or on failure.</dd></dl>
-<dl class="section note"><dt>Note</dt><dd>This function does not modify the list. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Pointer to the first node, or NULL if the list is empty. </dd></dl>
 
 </div>
 </div>
@@ -170,17 +176,16 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Returns the end iterator for the list. </p>
-<p>The end iterator represents a position past the last element and is used as a termination condition during iteration.</p>
+<p>Returns the past-the-end sentinel (end iterator). </p>
+<p>Always returns NULL. Provided for API symmetry with <code>list_begin</code> and to allow future extensibility without breaking call sites.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">list</td><td>The list. Must be not NULL. </td></tr>
-    <tr><td class="paramname">err</td><td>Optional error output information. If non-NULL and the call fails, it will contain details about the failure.</td></tr>
+    <tr><td class="paramname">list</td><td>The list. Must not be NULL. </td></tr>
+    <tr><td class="paramname">err</td><td>Optional error output. Populated on failure. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Always returns NULL (end sentinel). Provided for API symmetry and future extensibility.</dd></dl>
-<dl class="section note"><dt>Note</dt><dd>This function does not modify the list. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Always NULL. </dd></dl>
 
 </div>
 </div>
@@ -210,16 +215,15 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Returns the next node in the list. </p>
+<p>Advances to the next node. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">node</td><td>Current node. Must be a valid node belonging to a list and not NULL. </td></tr>
-    <tr><td class="paramname">err</td><td>Optional error output information. If non-NULL and the call fails, it will contain details about the failure.</td></tr>
+    <tr><td class="paramname">node</td><td>The current node. Must not be NULL. </td></tr>
+    <tr><td class="paramname">err</td><td>Optional error output. Populated on failure. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Pointer to the next node, or NULL if the end of the list is reached or on failure.</dd></dl>
-<dl class="section note"><dt>Note</dt><dd>This function does not modify the list. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Pointer to the next node, or NULL if <code>node</code> is the last node. Reaching the end is not an error; <code>ERROR_OK</code> is set. </dd></dl>
 
 </div>
 </div>
@@ -249,15 +253,16 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Returns a pointer to the data stored in a node. </p>
+<p>Returns a pointer to the data stored inside a node. </p>
+<p>The returned pointer is valid until the node is removed or the list is destroyed.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">node</td><td>The node. Must be not NULL. </td></tr>
-    <tr><td class="paramname">err</td><td>Optional error output information. If non-NULL and the call fails, it will contain details about the failure. </td></tr>
+    <tr><td class="paramname">node</td><td>The node. Must not be NULL. </td></tr>
+    <tr><td class="paramname">err</td><td>Optional error output. Populated on failure. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Pointer to the node's data, or NULL on failure. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Pointer to the node's data buffer, or NULL on failure. </dd></dl>
 
 </div>
 </div>
@@ -287,16 +292,15 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Returns the previous node in the list. </p>
+<p>Retreats to the previous node. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">node</td><td>Current node. Must be a valid node belonging to a list and not NULL. </td></tr>
-    <tr><td class="paramname">err</td><td>Optional error output information. If non-NULL and the call fails, it will contain details about the failure.</td></tr>
+    <tr><td class="paramname">node</td><td>The current node. Must not be NULL. </td></tr>
+    <tr><td class="paramname">err</td><td>Optional error output. Populated on failure. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Pointer to the previous node, or NULL if the beginning of the list is reached or on failure.</dd></dl>
-<dl class="section note"><dt>Note</dt><dd>This function does not modify the list. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Pointer to the previous node, or NULL if <code>node</code> is the first node. Reaching the beginning is not an error; <code>ERROR_OK</code> is set. </dd></dl>
 
 </div>
 </div>

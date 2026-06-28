@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['stack_0',['Stack',['../group__stack.html',1,'']]]
+  ['linked_20lists_0',['Linked lists',['../group__list.html',1,'']]],
+  ['lists_1',['Linked lists',['../group__list.html',1,'']]]
 ];

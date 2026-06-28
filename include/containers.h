@@ -1,60 +1,84 @@
 /// @file containers.h
+/// @brief Generic container library: dynamic arrays, linked lists, queues,
+///        stacks, and hash maps.
+///
+/// All containers are generic (operate on `void*` with caller-supplied
+/// element sizes) and report errors through an optional `error_t` output
+/// parameter. Passing NULL for `err` is always safe — errors are silently
+/// swallowed.
+///
+/// @note This library is not thread-safe. External synchronization is required
+///       for concurrent access.
+
 #ifndef H_CONTAINERS
 #define H_CONTAINERS
 
 #include <stdlib.h>
 #include <stdbool.h>
+#include <stdint.h>
 
 /**
  * @brief Error codes returned by the API.
  *
  * These values indicate failure conditions and define how the caller
- * should react.
+ * should react. Every API function that can fail accepts an optional
+ * `error_t*` output parameter; pass NULL to ignore errors.
  */
 typedef enum {
-    ERROR_OK,             ///< No errors detected.
-    ERROR_INVALID_ARGS,   ///< One or more arguments are invalid; caller must fix input before retrying. 
-    ERROR_OUT_OF_MEMORY,  ///< Memory allocation failed; operation cannot proceed, retry may succeed if memory is freed.
-    ERROR_INVALID_STATE,  ///< Internal state is corrupted; operation cannot proceed.
+    ERROR_OK,            ///< Operation completed successfully.
+    ERROR_INVALID_ARGS,  ///< One or more arguments are invalid. Fix the input before retrying.
+    ERROR_OUT_OF_MEMORY, ///< Memory allocation failed. Retry may succeed after freeing memory.
+    ERROR_INVALID_STATE, ///< Internal state is corrupted. The container must not be used further.
 } error_e;
 
 /**
- * @brief Generic error you can use to understand why something is failing.
+ * @brief Carries error information out of a failing API call.
+ *
+ * Pass a pointer to a stack-allocated `error_t` to any API function.
+ * On failure the function fills both fields. On success `code` is set
+ * to `ERROR_OK`. Passing NULL is always safe.
  */
 typedef struct {
-    error_e code; ///< Type of error. @see error_e 
-    char msg[256]; ///< Verbose message from the error.
+    error_e code;   ///< Identifies the failure category. @see error_e
+    char msg[256];  ///< Human-readable description of the failure.
 } error_t;
 
 /// @defgroup array Dynamic arrays
+/// @brief Resizable contiguous buffer with O(1) random access.
 /// @{
 
 /**
  * @brief Generic dynamic array.
+ *
+ * Maintains a heap-allocated contiguous buffer that grows automatically
+ * as elements are added. Invariant: `count <= cap` at all times.
  */
 typedef struct {
-    void* data; ///< pointer to the internal data of the array.
-    size_t cap; ///< current capacity of the array.
-    size_t count; ///< current number of elements in the array.
-    size_t elem_size; ///< size in bytes of a single element of the array.
+    void*  data;      ///< Pointer to the contiguous element buffer.
+    size_t cap;       ///< Number of elements the buffer can currently hold.
+    size_t count;     ///< Number of elements currently stored. Always `<= cap`.
+    size_t elem_size; ///< Size in bytes of a single element.
 } array_t;
 
-/// @defgroup array_allocation Allocation 
+/// @defgroup array_allocation Allocation
 /// @ingroup array
+/// @{
+
 /**
- * @brief Heap-allocates a new array.
- * @param elem_size Size in bytes of the elements of the array. Must be > 0.
- * @param cap Initial capacity (number of elements) of the array. Must be > 0.
- * @param err Optional output error information. If non-NULL and the call fails,
- *            it will contain details about the failure.
- * @return A pointer to the new heap-allocated array. NULL on failure.
+ * @brief Creates a new heap-allocated dynamic array.
+ *
+ * @param elem_size Size in bytes of each element. Must be > 0.
+ * @param cap       Initial capacity in number of elements. Must be > 0.
+ * @param err       Optional error output. Populated on failure.
+ * @return Pointer to the new array, or NULL on failure.
  * @ingroup array_allocation
  */
 array_t* array_create(size_t elem_size, size_t cap, error_t* err);
 
 /**
- * @brief Destroys the array and frees its resources.
- * @param arr The array to destroy. It can be NULL.
+ * @brief Destroys the array and frees all associated memory.
+ *
+ * @param arr The array to destroy. NULL is safe and does nothing.
  * @ingroup array_allocation
  */
 void array_destroy(array_t* arr);
@@ -63,37 +87,39 @@ void array_destroy(array_t* arr);
 
 /// @defgroup array_access Element access
 /// @ingroup array
+/// @{
 
 /**
- * @brief Access specified element with bounds checking.
+ * @brief Returns a pointer to the element at the given index.
  *
- * @param arr The array. Must be not NULL and not empty.
- * @param index Index of element to access. It must be < count.
- * @param err Optional error output information. If non-NULL and the call fails,
- *            it will contain details about the failure.
- * @return A pointer to the element, NULL on failure (or empty array if given index is 0).
+ * Performs bounds checking against `cap` (not `count`), so sparsely
+ * inserted elements beyond `count` are reachable.
+ *
+ * @param arr   The array. Must not be NULL.
+ * @param index Index of the element to access. Must be < cap.
+ * @param err   Optional error output. Populated on failure.
+ * @return Pointer to the element, or NULL if the array is empty and
+ *         index is 0, or if index is out of bounds.
  * @ingroup array_access
  */
 void* array_at(array_t* arr, size_t index, error_t* err);
 
 /**
- * @brief Access the first element of the array.
+ * @brief Returns a pointer to the first element.
  *
- * @param arr The array. Must be not NULL.
- * @param err Optional error output information. If non-NULL and the call fails,
- *            it will contain details about the failure.
- * @return A pointer to the element, NULL on failure (or empty array).
+ * @param arr The array. Must not be NULL.
+ * @param err Optional error output. Populated on failure.
+ * @return Pointer to the first element, or NULL if the array is empty.
  * @ingroup array_access
  */
 void* array_front(array_t* arr, error_t* err);
 
 /**
- * @brief Access the last element of the array.
+ * @brief Returns a pointer to the last element.
  *
- * @param arr The array. Must be not NULL.
- * @param err Optional error output information. If non-NULL and the call fails,
- *            it will contain details about the failure.
- * @return A pointer to the element, NULL on failure (or empty array).
+ * @param arr The array. Must not be NULL.
+ * @param err Optional error output. Populated on failure.
+ * @return Pointer to the last element, or NULL if the array is empty.
  * @ingroup array_access
  */
 void* array_back(array_t* arr, error_t* err);
@@ -102,148 +128,178 @@ void* array_back(array_t* arr, error_t* err);
 
 /// @defgroup array_capacity Capacity
 /// @ingroup array
+/// @{
 
 /**
- * @brief Checks whether the container is empty.
- * @param arr The array. Must be not NULL.
- * @param err Optional error output information. If non-NULL and the call fails,
- *            it will contain details about the failure.
- * @return True if the array is empty. False otherwise, or on failures.
+ * @brief Returns true if the array contains no elements.
+ *
+ * @param arr The array. Must not be NULL.
+ * @param err Optional error output. Populated on failure.
+ * @return true if `count == 0`, false otherwise or on failure.
  * @ingroup array_capacity
  */
 bool array_is_empty(array_t* arr, error_t* err);
 
 /**
- * @brief Returns the maximum possible number of elements.
- * @param arr The array. Must be not NULL.
- * @param err Optional error output information. If non-NULL and the call fails,
- *            it will contain details about the failure.
- * @return Maximum possible number of elements for the given array. Zero on failures.
+ * @brief Returns the theoretical maximum number of elements the array
+ *        could ever hold, based on `elem_size` and `SIZE_MAX`.
+ *
+ * @param arr The array. Must not be NULL.
+ * @param err Optional error output. Populated on failure.
+ * @return Maximum element count, or 0 on failure.
  * @ingroup array_capacity
  */
 size_t array_max_size(array_t* arr, error_t* err);
 
 /**
- * @brief Reserves storage for the array.
- * @param arr The array. Must be not NULL.
- * @param to_reserve Capacity to reserve. It must not exceed maximum number of elements.
- * @param err Optional error output information. If non-NULL and the call fails,
- *            it will contain details about the failure.
+ * @brief Ensures the array has capacity for at least `to_reserve` elements.
+ *
+ * If the current capacity already meets or exceeds `to_reserve`, this
+ * function does nothing. Otherwise the internal buffer is reallocated.
+ *
+ * @param arr        The array. Must not be NULL.
+ * @param to_reserve Minimum capacity to guarantee. Must not exceed
+ *                   the value returned by `array_max_size`.
+ * @param err        Optional error output. Populated on failure.
  * @ingroup array_capacity
  */
 void array_reserve(array_t* arr, size_t to_reserve, error_t* err);
 
 /**
- * @brief Reduces memory usage by freeing unused memory.
- * @param arr The array. Must be not NULL.
- * @param err Optional error output information. If non-NULL and the call fails,
- *            it will contain details about the failure.
+ * @brief Reduces allocated memory to fit the current element count.
+ *
+ * Reallocates the internal buffer so that `cap == count`. If the array
+ * is empty the buffer may be freed entirely.
+ *
+ * @param arr The array. Must not be NULL.
+ * @param err Optional error output. Populated on failure.
  * @ingroup array_capacity
  */
 void array_shrink_to_fit(array_t* arr, error_t* err);
-
 
 /// @} // array_capacity
 
 /// @defgroup array_modifiers Modifiers
 /// @ingroup array
+/// @{
 
 /**
- * @brief Clears the contents of the array.
- * @param arr The array. Must be not NULL.
- * @param err Optional error output information. If non-NULL and the call fails,
- *            it will contain details about the failure.
+ * @brief Removes all elements from the array without freeing the buffer.
+ *
+ * After this call `count == 0` and `cap` is unchanged.
+ *
+ * @param arr The array. Must not be NULL.
+ * @param err Optional error output. Populated on failure.
  * @ingroup array_modifiers
  */
 void array_clear(array_t* arr, error_t* err);
 
 /**
- * @brief Inserts an element into the array.
- * @param arr The array. Must be not NULL.
- * @param index Position to insert the element in. It must be <= count.
- * @param item Item's memory to insert in the array. Must be not NULL.
- * @param err Optional error output information. If non-NULL and the call fails,
- *            it will contain details about the failure.
+ * @brief Inserts an element at the given index, shifting subsequent
+ *        elements one position to the right.
+ *
+ * If `index == count` the element is appended (equivalent to
+ * `array_push_back`). The array grows automatically if needed.
+ *
+ * @param arr   The array. Must not be NULL.
+ * @param index Insertion position. Must be <= count.
+ * @param item  Pointer to the data to copy in. Must not be NULL.
+ * @param err   Optional error output. Populated on failure.
  * @ingroup array_modifiers
  */
 void array_insert(array_t* arr, size_t index, const void* item, error_t* err);
 
 /**
- * @brief Adds an element to the end of the array.
- * @param arr The array. Must be not NULL.
- * @param item The item to push into the array. Must be not NULL.
- * @param err Optional error output information. If non-NULL and the call fails,
- *            it will contain details about the failure.
+ * @brief Appends an element to the end of the array.
+ *
+ * The array grows automatically if `count == cap`.
+ *
+ * @param arr  The array. Must not be NULL.
+ * @param item Pointer to the data to copy in. Must not be NULL.
+ * @param err  Optional error output. Populated on failure.
  * @ingroup array_modifiers
  */
 void array_push_back(array_t* arr, const void* item, error_t* err);
 
 /**
- * @brief Removes element from the end of the array.
- * @param arr The array. Must be not NULL.
- * @param item_out If non-NULL, the removed data gets copied here.
- * @param err Optional error output information. If non-NULL and the call fails,
- *            it will contain details about the failure.
+ * @brief Removes the last element from the array.
+ *
+ * @param arr      The array. Must not be NULL.
+ * @param item_out Optional output buffer. If non-NULL, the removed
+ *                 element is copied here before removal. Must be large
+ *                 enough to hold `elem_size` bytes.
+ * @param err      Optional error output. Populated on failure.
+ *                 Sets `ERROR_INVALID_ARGS` if the array is empty.
  * @ingroup array_modifiers
  */
 void array_pop_back(array_t* arr, void* item_out, error_t* err);
 
 /**
- * @brief Removes element from the start of the array.
- * @param arr The array. Must be not NULL.
- * @param item_out If non-NULL, the removed data gets copied here.
- * @param err Optional error output information. If non-NULL and the call fails,
- *            it will contain details about the failure.
+ * @brief Removes the first element from the array, shifting all
+ *        subsequent elements one position to the left.
+ *
+ * @param arr      The array. Must not be NULL.
+ * @param item_out Optional output buffer. If non-NULL, the removed
+ *                 element is copied here before removal. Must be large
+ *                 enough to hold `elem_size` bytes.
+ * @param err      Optional error output. Populated on failure.
+ *                 Sets `ERROR_INVALID_ARGS` if the array is empty.
  * @ingroup array_modifiers
  */
 void array_pop_front(array_t* arr, void* item_out, error_t* err);
 
 /**
- * @brief Erases an element from the array.
- * @param arr The array. Must be not NULL.
- * @param index The index of the element to erase. It must be < count.
- * @param err Optional error output information. If non-NULL and the call fails,
- *            it will contain details about the failure.
+ * @brief Removes the element at the given index, shifting subsequent
+ *        elements one position to the left.
+ *
+ * @param arr   The array. Must not be NULL.
+ * @param index Index of the element to remove. Must be < count.
+ * @param err   Optional error output. Populated on failure.
+ *              Sets `ERROR_INVALID_ARGS` if index >= count.
  * @ingroup array_modifiers
  */
 void array_erase(array_t* arr, size_t index, error_t* err);
 
 /// @} // array_modifiers
-
 /// @} // array
 
 /// @defgroup list Linked lists
+/// @brief Doubly-linked list with O(1) insertion and removal at any node.
 /// @{
 
-// Forward declaration
-typedef struct list_node list_node_t;
+typedef struct list_node list_node_t; ///< Opaque linked list node.
 
 /**
- * @brief Generic linked list.
+ * @brief Doubly-linked list.
+ *
+ * Nodes are heap-allocated and owned by the list. Each node stores a
+ * copy of the caller's data (`elem_size` bytes).
  */
 typedef struct list {
-    list_node_t* root; ///< pointer to the root node.
-    list_node_t* tail; ///< pointer to the tail node.
-    size_t count;      ///< current number of nodes in the list.
-    size_t elem_size;  ///< Size in bytes of each element stored in the list.
+    list_node_t* root;      ///< First node, or NULL if the list is empty.
+    list_node_t* tail;      ///< Last node, or NULL if the list is empty.
+    size_t       count;     ///< Number of nodes currently in the list.
+    size_t       elem_size; ///< Size in bytes of each element.
 } list_t;
 
 /// @defgroup list_allocation Allocation
 /// @ingroup list
+/// @{
 
 /**
- * @brief Creates a new linked list.
- * @param elem_size Size of the data referenced by the nodes of the list. Must be > 0.
- * @param err Optional error output information. If non-NULL and the call fails,
- *            it will contain details about the failure.
- * @return pointer to the newly created list. NULL on failure.
+ * @brief Creates a new empty linked list.
+ *
+ * @param elem_size Size in bytes of each element. Must be > 0.
+ * @param err       Optional error output. Populated on failure.
+ * @return Pointer to the new list, or NULL on failure.
  * @ingroup list_allocation
  */
 list_t* list_create(size_t elem_size, error_t* err);
 
 /**
- * @brief Destroys the list and frees its resources.
- * @param list The list to destroy. It can be NULL.
+ * @brief Destroys the list and frees all nodes and associated memory.
+ *
+ * @param list The list to destroy. NULL is safe and does nothing.
  * @ingroup list_allocation
  */
 void list_destroy(list_t* list);
@@ -252,13 +308,14 @@ void list_destroy(list_t* list);
 
 /// @defgroup list_capacity Capacity
 /// @ingroup list
+/// @{
 
 /**
- * @brief Checks whether the container is empty.
- * @param list The list. Must be not NULL.
- * @param err Optional error output information. If non-NULL and the call fails,
- *            it will contain details about the failure.
- * @return True if the list is empty. False otherwise, or on failures.
+ * @brief Returns true if the list contains no elements.
+ *
+ * @param list The list. Must not be NULL.
+ * @param err  Optional error output. Populated on failure.
+ * @return true if `count == 0`, false otherwise or on failure.
  * @ingroup list_capacity
  */
 bool list_is_empty(list_t* list, error_t* err);
@@ -267,113 +324,109 @@ bool list_is_empty(list_t* list, error_t* err);
 
 /// @defgroup list_modifiers Modifiers
 /// @ingroup list
+/// @{
 
 /**
- * @brief Clears the contents of the list.
- * @param list The list. Must be not NULL.
- * @param err Optional error output information. If non-NULL and the call fails,
- *            it will contain details about the failure.
+ * @brief Removes all elements from the list and frees all nodes.
+ *
+ * After this call `count == 0` and both `root` and `tail` are NULL.
+ * Calling on an already-empty list is safe and sets `ERROR_OK`.
+ *
+ * @param list The list. Must not be NULL.
+ * @param err  Optional error output. Populated on failure.
  * @ingroup list_modifiers
  */
 void list_clear(list_t* list, error_t* err);
 
 /**
- * @brief Adds an element to the end of the list.
- * @param list The list. Must be not NULL.
- * @param item The item to push into the list. Must be not NULL.
- * @param err Optional error output information. If non-NULL and the call fails,
- *            it will contain details about the failure.
+ * @brief Appends an element to the end of the list.
+ *
+ * @param list The list. Must not be NULL.
+ * @param item Pointer to the data to copy in. Must not be NULL.
+ * @param err  Optional error output. Populated on failure.
  * @ingroup list_modifiers
  */
 void list_push_back(list_t* list, const void* item, error_t* err);
 
 /**
- * @brief Adds an element to the start of the list.
- * @param list The list. Must be not NULL.
- * @param item The item to push into the list. Must be not NULL.
- * @param err Optional error output information. If non-NULL and the call fails,
- *            it will contain details about the failure.
+ * @brief Prepends an element to the front of the list.
+ *
+ * @param list The list. Must not be NULL.
+ * @param item Pointer to the data to copy in. Must not be NULL.
+ * @param err  Optional error output. Populated on failure.
  * @ingroup list_modifiers
  */
 void list_push_front(list_t* list, const void* item, error_t* err);
 
 /**
- * @brief Removes the node at the end of the list.
- * @param list The list. Must be not NULL.
- * @param item_out If non-NULL, the removed node's data gets copied here.
- * @param err Optional error output information. If non-NULL and the call fails,
- *            it will contain details about the failure.
+ * @brief Removes the last element from the list.
+ *
+ * @param list     The list. Must not be NULL.
+ * @param item_out Optional output buffer. If non-NULL, the removed
+ *                 element is copied here before the node is freed.
+ *                 Must be large enough to hold `elem_size` bytes.
+ * @param err      Optional error output. Populated on failure.
+ *                 Sets `ERROR_INVALID_ARGS` if the list is empty.
  * @ingroup list_modifiers
  */
 void list_pop_back(list_t* list, void* item_out, error_t* err);
 
 /**
- * @brief Removes the node at the start of the list.
- * @param list The list. Must be not NULL.
- * @param err Optional error output information. If non-NULL and the call fails,
- *            it will contain details about the failure.
- * @param item_out If non-NULL, the removed node's data gets copied here.
+ * @brief Removes the first element from the list.
+ *
+ * @param list     The list. Must not be NULL.
+ * @param item_out Optional output buffer. If non-NULL, the removed
+ *                 element is copied here before the node is freed.
+ *                 Must be large enough to hold `elem_size` bytes.
+ * @param err      Optional error output. Populated on failure.
+ *                 Sets `ERROR_INVALID_ARGS` if the list is empty.
  * @ingroup list_modifiers
  */
 void list_pop_front(list_t* list, void* item_out, error_t* err);
 
 /**
- * @brief Inserts a new element before the specified position.
+ * @brief Inserts a new element immediately before `pos`.
  *
- * The new node is inserted immediately before `pos`.
+ * @param list The list. Must not be NULL.
+ * @param pos  Node before which to insert. If NULL, the element is
+ *             appended to the end of the list.
+ * @param item Pointer to the data to copy in. Must not be NULL.
+ * @param err  Optional error output. Populated on failure.
  *
- * @param list The list. Must be not NULL.
- * @param pos Iterator (node) indicating the insertion position.
- *            Must be either a valid node in the list or NULL.
- *            If NULL, the element is inserted at the end of the list.
- * @param item Pointer to the data to insert. Must be not NULL.
- *             The data is copied using `elem_size`.
- * @param err Optional error output information. If non-NULL and the call fails,
- *            it will contain details about the failure.
- *
- * @note Complexity: O(1) if inserting at known node.
- * @note Invalid `pos` (not belonging to `list`) results in undefined behavior.
+ * @note Complexity: O(1).
+ * @warning Passing a `pos` that does not belong to `list` is undefined behavior.
  * @ingroup list_modifiers
  */
 void list_insert_before(list_t* list, list_node_t* pos, const void* item, error_t* err);
 
 /**
- * @brief Inserts a new element after the specified position.
+ * @brief Inserts a new element immediately after `pos`.
  *
- * The new node is inserted immediately after `pos`.
+ * @param list The list. Must not be NULL.
+ * @param pos  Node after which to insert. If NULL, the element is
+ *             prepended to the front of the list.
+ * @param item Pointer to the data to copy in. Must not be NULL.
+ * @param err  Optional error output. Populated on failure.
  *
- * @param list The list. Must be not NULL.
- * @param pos Iterator (node) indicating the insertion position.
- *            Must be a valid node in the list or NULL.
- *            If NULL, the element is inserted at the front of the list.
- * @param item Pointer to the data to insert. Must be not NULL.
- *             The data is copied using `elem_size`.
- * @param err Optional error output information. If non-NULL and the call fails,
- *            it will contain details about the failure.
- *
- * @note Complexity: O(1) if inserting at known node.
- * @note If `pos` is NULL, insertion happens at the front of the list.
- * @note Invalid `pos` (not belonging to `list`) results in undefined behavior.
+ * @note Complexity: O(1).
+ * @warning Passing a `pos` that does not belong to `list` is undefined behavior.
  * @ingroup list_modifiers
  */
 void list_insert_after(list_t* list, list_node_t* pos, const void* item, error_t* err);
 
 /**
- * @brief Removes a node from the list.
+ * @brief Removes a node from the list and frees it.
  *
- * The node is detached from the list and its memory is freed.
+ * @param list     The list. Must not be NULL.
+ * @param node     Node to remove. Must not be NULL and must belong to `list`.
+ * @param item_out Optional output buffer. If non-NULL, the element data
+ *                 is copied here before the node is freed. Must be large
+ *                 enough to hold `elem_size` bytes.
+ * @param err      Optional error output. Populated on failure.
  *
- * @param list The list. Must be not NULL.
- * @param node Node to remove. Must be a valid node belonging to `list`.
- * @param item_out Optional output buffer. If non-NULL, the removed element's
- *                 data is copied into it before the node is freed.
- *                 Must be large enough to hold `elem_size` bytes.
- * @param err Optional error output information. If non-NULL and the call fails,
- *            it will contain details about the failure.
- *
- * @note Complexity: O(1)
- * @note After this call, `node` becomes invalid and must not be used.
- * @note Invalid `node` (not belonging to `list`) results in undefined behavior.
+ * @note Complexity: O(1).
+ * @warning After this call `node` is freed and must not be dereferenced.
+ * @warning Passing a `node` that does not belong to `list` is undefined behavior.
  * @ingroup list_modifiers
  */
 void list_erase(list_t* list, list_node_t* node, void* item_out, error_t* err);
@@ -382,93 +435,88 @@ void list_erase(list_t* list, list_node_t* node, void* item_out, error_t* err);
 
 /// @defgroup list_iteration Iteration
 /// @ingroup list
+/// @{
 
 /**
- * @brief Returns an iterator to the first node of the list.
+ * @brief Returns the first node of the list (begin iterator).
  *
- * @param list The list to iterate. Must be not NULL.
- * @param err Optional error output information. If non-NULL and the call fails,
- *            it will contain details about the failure.
+ * Typical iteration pattern:
+ * @code
+ * for (list_node_t* n = list_begin(list, &err);
+ *      n != list_end(list, &err);
+ *      n = list_next(n, &err)) { ... }
+ * @endcode
  *
- * @return Pointer to the first node in the list, or NULL if the list is empty
- *         or on failure.
- *
- * @note This function does not modify the list.
+ * @param list The list. Must not be NULL.
+ * @param err  Optional error output. Populated on failure.
+ * @return Pointer to the first node, or NULL if the list is empty.
  * @ingroup list_iteration
  */
 list_node_t* list_begin(list_t* list, error_t* err);
 
 /**
- * @brief Returns the end iterator for the list.
+ * @brief Returns the past-the-end sentinel (end iterator).
  *
- * The end iterator represents a position past the last element and is
- * used as a termination condition during iteration.
+ * Always returns NULL. Provided for API symmetry with `list_begin`
+ * and to allow future extensibility without breaking call sites.
  *
- * @param list The list. Must be not NULL.
- * @param err Optional error output information. If non-NULL and the call fails,
- *            it will contain details about the failure.
- *
- * @return Always returns NULL (end sentinel). Provided for API symmetry and
- *         future extensibility.
- *
- * @note This function does not modify the list.
+ * @param list The list. Must not be NULL.
+ * @param err  Optional error output. Populated on failure.
+ * @return Always NULL.
  * @ingroup list_iteration
  */
 list_node_t* list_end(list_t* list, error_t* err);
 
 /**
- * @brief Returns the next node in the list.
+ * @brief Advances to the next node.
  *
- * @param node Current node. Must be a valid node belonging to a list and not NULL.
- * @param err Optional error output information. If non-NULL and the call fails,
- *            it will contain details about the failure.
- *
- * @return Pointer to the next node, or NULL if the end of the list is reached
- *         or on failure.
- *
- * @note This function does not modify the list.
+ * @param node The current node. Must not be NULL.
+ * @param err  Optional error output. Populated on failure.
+ * @return Pointer to the next node, or NULL if `node` is the last node.
+ *         Reaching the end is not an error; `ERROR_OK` is set.
  * @ingroup list_iteration
  */
 list_node_t* list_next(list_node_t* node, error_t* err);
 
 /**
- * @brief Returns the previous node in the list.
+ * @brief Retreats to the previous node.
  *
- * @param node Current node. Must be a valid node belonging to a list and not NULL.
- * @param err Optional error output information. If non-NULL and the call fails,
- *            it will contain details about the failure.
- *
- * @return Pointer to the previous node, or NULL if the beginning of the list is
- *         reached or on failure.
- *
- * @note This function does not modify the list.
+ * @param node The current node. Must not be NULL.
+ * @param err  Optional error output. Populated on failure.
+ * @return Pointer to the previous node, or NULL if `node` is the first node.
+ *         Reaching the beginning is not an error; `ERROR_OK` is set.
  * @ingroup list_iteration
  */
 list_node_t* list_prev(list_node_t* node, error_t* err);
 
 /**
- * @brief Returns a pointer to the data stored in a node.
- * @param node The node. Must be not NULL.
- * @param err Optional error output information. If non-NULL and the call fails,
- *            it will contain details about the failure.
- * @return Pointer to the node's data, or NULL on failure.
+ * @brief Returns a pointer to the data stored inside a node.
+ *
+ * The returned pointer is valid until the node is removed or the list
+ * is destroyed.
+ *
+ * @param node The node. Must not be NULL.
+ * @param err  Optional error output. Populated on failure.
+ * @return Pointer to the node's data buffer, or NULL on failure.
  * @ingroup list_iteration
  */
 void* list_node_data(list_node_t* node, error_t* err);
 
 /// @} // list_iteration
-    
 /// @} // list
 
-///@defgroup queue Queues
-///@ {
+/// @defgroup queue Queues
+/// @brief FIFO queue backed by a linked list.
+/// @{
 
 /**
- * @brief Generic queue.
- * @ingroup queue
+ * @brief Generic FIFO queue.
+ *
+ * Elements are pushed to the back and popped from the front.
+ * Backed internally by a `list_t`.
  */
 typedef struct {
-    list_t* list; ///< internal container.
+    list_t* list; ///< Internal linked list storage.
 } queue_t;
 
 /// @defgroup queue_allocation Allocation
@@ -476,19 +524,19 @@ typedef struct {
 /// @{
 
 /**
- * @brief Creates a new queue.
- * @param elem_size Size in bytes of the elements stored in the queue.
- *                  Must be greater than zero.
- * @param err Optional error output information. If non-NULL and the call fails,
- *            it will contain details about the failure.
- * @return Pointer to the newly created queue. NULL on failure.
+ * @brief Creates a new empty queue.
+ *
+ * @param elem_size Size in bytes of each element. Must be > 0.
+ * @param err       Optional error output. Populated on failure.
+ * @return Pointer to the new queue, or NULL on failure.
  * @ingroup queue_allocation
  */
 queue_t* queue_create(size_t elem_size, error_t* err);
 
 /**
- * @brief Destroys the queue and frees its resources.
- * @param queue The queue to destroy. It can be NULL.
+ * @brief Destroys the queue and frees all associated memory.
+ *
+ * @param queue The queue to destroy. NULL is safe and does nothing.
  * @ingroup queue_allocation
  */
 void queue_destroy(queue_t* queue);
@@ -500,21 +548,21 @@ void queue_destroy(queue_t* queue);
 /// @{
 
 /**
- * @brief Checks whether the queue is empty.
- * @param queue The queue. Must be not NULL.
- * @param err Optional error output information. If non-NULL and the call fails,
- *            it will contain details about the failure.
- * @return True if the queue is empty. False otherwise, or on failure.
+ * @brief Returns true if the queue contains no elements.
+ *
+ * @param queue The queue. Must not be NULL.
+ * @param err   Optional error output. Populated on failure.
+ * @return true if empty, false otherwise or on failure.
  * @ingroup queue_capacity
  */
 bool queue_is_empty(queue_t* queue, error_t* err);
 
 /**
  * @brief Returns the number of elements in the queue.
- * @param queue The queue. Must be not NULL.
- * @param err Optional error output information. If non-NULL and the call fails,
- *            it will contain details about the failure.
- * @return Current number of elements in the queue. Zero on failures.
+ *
+ * @param queue The queue. Must not be NULL.
+ * @param err   Optional error output. Populated on failure.
+ * @return Element count, or 0 on failure.
  * @ingroup queue_capacity
  */
 size_t queue_size(queue_t* queue, error_t* err);
@@ -526,27 +574,25 @@ size_t queue_size(queue_t* queue, error_t* err);
 /// @{
 
 /**
- * @brief Returns a pointer to the element at the front of the queue.
- * @param queue The queue. Must be not NULL.
- * @param err Optional error output information. If non-NULL and the call fails,
- *            it will contain details about the failure.
- * @return Pointer to the front element, or NULL if the queue is empty or on
- *         failure.
- * @note The returned pointer remains valid until the element is removed or the
- *       queue is modified in a way that invalidates it.
+ * @brief Returns a pointer to the front element without removing it.
+ *
+ * @param queue The queue. Must not be NULL.
+ * @param err   Optional error output. Populated on failure.
+ * @return Pointer to the front element, or NULL if empty or on failure.
+ * @note The pointer is invalidated when the element is removed or the
+ *       queue is otherwise modified.
  * @ingroup queue_access
  */
 void* queue_front(queue_t* queue, error_t* err);
 
 /**
- * @brief Returns a pointer to the element at the back of the queue.
- * @param queue The queue. Must be not NULL.
- * @param err Optional error output information. If non-NULL and the call fails,
- *            it will contain details about the failure.
- * @return Pointer to the back element, or NULL if the queue is empty or on
- *         failure.
- * @note The returned pointer remains valid until the element is removed or the
- *       queue is modified in a way that invalidates it.
+ * @brief Returns a pointer to the back element without removing it.
+ *
+ * @param queue The queue. Must not be NULL.
+ * @param err   Optional error output. Populated on failure.
+ * @return Pointer to the back element, or NULL if empty or on failure.
+ * @note The pointer is invalidated when the element is removed or the
+ *       queue is otherwise modified.
  * @ingroup queue_access
  */
 void* queue_back(queue_t* queue, error_t* err);
@@ -560,11 +606,9 @@ void* queue_back(queue_t* queue, error_t* err);
 /**
  * @brief Inserts an element at the back of the queue.
  *
- * @param queue The queue. Must be not NULL.
- * @param item Pointer to the element to insert. Must be not NULL.
- *             The element is copied into the queue.
- * @param err Optional error output information. If non-NULL and the call fails,
- *            it will contain details about the failure.
+ * @param queue The queue. Must not be NULL.
+ * @param item  Pointer to the data to copy in. Must not be NULL.
+ * @param err   Optional error output. Populated on failure.
  * @ingroup queue_modifiers
  */
 void queue_push(queue_t* queue, const void* item, error_t* err);
@@ -572,12 +616,12 @@ void queue_push(queue_t* queue, const void* item, error_t* err);
 /**
  * @brief Removes the element at the front of the queue.
  *
- * @param queue The queue. Must be not NULL.
- * @param item_out Optional output buffer. If non-NULL, the removed element is
- *                 copied here before being removed. The buffer must be large
+ * @param queue    The queue. Must not be NULL.
+ * @param item_out Optional output buffer. If non-NULL, the removed
+ *                 element is copied here before removal. Must be large
  *                 enough to hold `elem_size` bytes.
- * @param err Optional error output information. If non-NULL and the call fails,
- *            it will contain details about the failure.
+ * @param err      Optional error output. Populated on failure.
+ *                 Sets `ERROR_INVALID_ARGS` if the queue is empty.
  * @ingroup queue_modifiers
  */
 void queue_pop(queue_t* queue, void* item_out, error_t* err);
@@ -585,15 +629,18 @@ void queue_pop(queue_t* queue, void* item_out, error_t* err);
 /// @} // queue_modifiers
 /// @} // queue
 
-/// @defgroup stack Stack
+/// @defgroup stack Stacks
+/// @brief LIFO stack backed by a dynamic array.
 /// @{
 
 /**
- * @brief Generic stack.
- * @ingroup stack
+ * @brief Generic LIFO stack.
+ *
+ * Elements are pushed and popped from the top. Backed internally by
+ * an `array_t`, giving amortized O(1) push and pop.
  */
 typedef struct {
-    array_t* arr; ///< internal container.
+    array_t* arr; ///< Internal dynamic array storage.
 } stack_t;
 
 /// @defgroup stack_allocation Allocation
@@ -601,24 +648,19 @@ typedef struct {
 /// @{
 
 /**
- * @brief Creates a new stack.
+ * @brief Creates a new empty stack.
  *
- * @param elem_size Size in bytes of the elements stored in the stack.
- *                  Must be greater than zero.
- * @param err Optional error output information. If non-NULL and the call fails,
- *            it will contain details about the failure.
- *
- * @return Pointer to the newly created stack. NULL on failure.
- *
+ * @param elem_size Size in bytes of each element. Must be > 0.
+ * @param err       Optional error output. Populated on failure.
+ * @return Pointer to the new stack, or NULL on failure.
  * @ingroup stack_allocation
  */
 stack_t* stack_create(size_t elem_size, error_t* err);
 
 /**
- * @brief Destroys the stack and frees its resources.
+ * @brief Destroys the stack and frees all associated memory.
  *
- * @param stack The stack to destroy. It can be NULL.
- *
+ * @param stack The stack to destroy. NULL is safe and does nothing.
  * @ingroup stack_allocation
  */
 void stack_destroy(stack_t* stack);
@@ -630,27 +672,21 @@ void stack_destroy(stack_t* stack);
 /// @{
 
 /**
- * @brief Checks whether the stack is empty.
+ * @brief Returns true if the stack contains no elements.
  *
- * @param stack The stack. Must be not NULL.
- * @param err Optional error output information. If non-NULL and the call fails,
- *            it will contain details about the failure.
- *
- * @return True if the stack is empty. False otherwise, or on failure.
- *
+ * @param stack The stack. Must not be NULL.
+ * @param err   Optional error output. Populated on failure.
+ * @return true if empty, false otherwise or on failure.
  * @ingroup stack_capacity
  */
 bool stack_is_empty(stack_t* stack, error_t* err);
 
 /**
- * @brief Returns the number of elements currently stored in the stack.
+ * @brief Returns the number of elements in the stack.
  *
- * @param stack The stack. Must be not NULL.
- * @param err Optional error output information. If non-NULL and the call fails,
- *            it will contain details about the failure.
- *
- * @return The number of elements in the stack. Zero on failure.
- *
+ * @param stack The stack. Must not be NULL.
+ * @param err   Optional error output. Populated on failure.
+ * @return Element count, or 0 on failure.
  * @ingroup stack_capacity
  */
 size_t stack_size(stack_t* stack, error_t* err);
@@ -662,18 +698,13 @@ size_t stack_size(stack_t* stack, error_t* err);
 /// @{
 
 /**
- * @brief Returns a pointer to the element at the top of the stack.
+ * @brief Returns a pointer to the top element without removing it.
  *
- * @param stack The stack. Must be not NULL.
- * @param err Optional error output information. If non-NULL and the call fails,
- *            it will contain details about the failure.
- *
- * @return Pointer to the top element, or NULL if the stack is empty or on
- *         failure.
- *
- * @note The returned pointer remains valid until the top element is removed or
- *       the stack is modified in a way that invalidates it.
- *
+ * @param stack The stack. Must not be NULL.
+ * @param err   Optional error output. Populated on failure.
+ * @return Pointer to the top element, or NULL if empty or on failure.
+ * @note The pointer is invalidated when the element is removed or the
+ *       stack is otherwise modified.
  * @ingroup stack_access
  */
 void* stack_top(stack_t* stack, error_t* err);
@@ -687,12 +718,9 @@ void* stack_top(stack_t* stack, error_t* err);
 /**
  * @brief Pushes an element onto the top of the stack.
  *
- * @param stack The stack. Must be not NULL.
- * @param item Pointer to the element to push. Must be not NULL.
- *             The element is copied into the stack.
- * @param err Optional error output information. If non-NULL and the call fails,
- *            it will contain details about the failure.
- *
+ * @param stack The stack. Must not be NULL.
+ * @param item  Pointer to the data to copy in. Must not be NULL.
+ * @param err   Optional error output. Populated on failure.
  * @ingroup stack_modifiers
  */
 void stack_push(stack_t* stack, const void* item, error_t* err);
@@ -700,18 +728,268 @@ void stack_push(stack_t* stack, const void* item, error_t* err);
 /**
  * @brief Removes the element at the top of the stack.
  *
- * @param stack The stack. Must be not NULL.
- * @param item_out Optional output buffer. If non-NULL, the removed element is
- *                 copied here before being removed. The buffer must be large
+ * @param stack    The stack. Must not be NULL.
+ * @param item_out Optional output buffer. If non-NULL, the removed
+ *                 element is copied here before removal. Must be large
  *                 enough to hold `elem_size` bytes.
- * @param err Optional error output information. If non-NULL and the call fails,
- *            it will contain details about the failure.
- *
+ * @param err      Optional error output. Populated on failure.
+ *                 Sets `ERROR_INVALID_ARGS` if the stack is empty.
  * @ingroup stack_modifiers
  */
 void stack_pop(stack_t* stack, void* item_out, error_t* err);
 
 /// @} // stack_modifiers
-
 /// @} // stack
+
+/// @defgroup map Hash maps
+/// @brief Hash map with separate chaining and automatic resizing.
+/// @{
+
+/**
+ * @brief Signature for a hash function.
+ *
+ * Must be deterministic: equal keys must always produce the same hash.
+ * Should distribute keys uniformly across the output range to minimise
+ * bucket collisions.
+ *
+ * @param key      Pointer to the key data. Must not be NULL.
+ * @param key_size Size of the key in bytes.
+ * @return Hash value.
+ * @ingroup map
+ */
+typedef size_t (*hash_fn_t)(const void* key, size_t key_size);
+
+/**
+ * @brief Signature for a key comparator function.
+ *
+ * Must be consistent with the hash function: if `cmp(a, b) == 0`
+ * then `hash(a) == hash(b)`.
+ *
+ * @param a        Pointer to the first key. Must not be NULL.
+ * @param b        Pointer to the second key. Must not be NULL.
+ * @param key_size Size of both keys in bytes.
+ * @return 0 if the keys are equal, non-zero otherwise.
+ * @ingroup map
+ */
+typedef int (*cmp_fn_t)(const void* a, const void* b, size_t key_size);
+
+/**
+ * @brief Hash map implementing a generic key-value store.
+ *
+ * Uses separate chaining (one `list_t` per bucket). Keys and values
+ * are stored inline in a flat `[key | value]` byte buffer inside each
+ * list node, so no per-entry heap allocations are needed beyond the
+ * node itself.
+ *
+ * The table resizes automatically when `count / bucket_count` exceeds
+ * `max_load_factor`.
+ *
+ * @ingroup map
+ */
+typedef struct {
+    list_t** buckets;       ///< Array of per-bucket linked lists.
+    size_t   bucket_count;  ///< Number of buckets.
+    size_t   count;         ///< Total number of key-value pairs stored.
+    size_t   key_size;      ///< Size in bytes of each key.
+    size_t   value_size;    ///< Size in bytes of each value.
+    float    max_load_factor; ///< Load factor threshold that triggers a resize.
+    hash_fn_t hash;         ///< Hash function. @see hash_fn_t
+    cmp_fn_t  cmp;          ///< Key comparator. @see cmp_fn_t
+} hashmap_t;
+
+/// @defgroup map_allocation Allocation
+/// @ingroup map
+/// @{
+
+/**
+ * @brief Creates a new empty hash map.
+ *
+ * @param key_size     Size in bytes of each key. Must be > 0.
+ * @param value_size   Size in bytes of each value. Must be > 0.
+ * @param bucket_count Initial number of buckets. Pass 0 to use the
+ *                     default (8 buckets).
+ * @param hash         Hash function. Must not be NULL.
+ * @param cmp          Key comparator. Must not be NULL. Must be
+ *                     consistent with `hash`.
+ * @param err          Optional error output. Populated on failure.
+ * @return Pointer to the new hash map, or NULL on failure.
+ * @ingroup map_allocation
+ */
+hashmap_t* hashmap_create(
+    size_t    key_size,
+    size_t    value_size,
+    size_t    bucket_count,
+    hash_fn_t hash,
+    cmp_fn_t  cmp,
+    error_t*  err);
+
+/**
+ * @brief Destroys the hash map and frees all associated memory.
+ *
+ * @param map The hash map to destroy. NULL is safe and does nothing.
+ * @ingroup map_allocation
+ */
+void hashmap_destroy(hashmap_t* map);
+
+/// @} // map_allocation
+
+/// @defgroup map_modifiers Modifiers
+/// @ingroup map
+/// @{
+
+/**
+ * @brief Inserts a key-value pair, or updates the value if the key exists.
+ *
+ * If the load factor exceeds `max_load_factor` after insertion, the
+ * table is automatically resized and all entries are rehashed.
+ *
+ * @param map   The hash map. Must not be NULL.
+ * @param key   Pointer to the key data. Must not be NULL.
+ * @param value Pointer to the value data. Must not be NULL.
+ * @param err   Optional error output. Populated on failure.
+ * @ingroup map_modifiers
+ */
+void hashmap_insert(hashmap_t* map, const void* key, const void* value, error_t* err);
+
+/**
+ * @brief Removes the entry with the given key.
+ *
+ * @param map      The hash map. Must not be NULL.
+ * @param key      Key to remove. Must not be NULL.
+ * @param item_out Optional output buffer. If non-NULL, the removed value
+ *                 is copied here before removal. Must be large enough to
+ *                 hold `value_size` bytes.
+ * @param err      Optional error output. Populated on failure.
+ *                 Sets `ERROR_INVALID_ARGS` if the key is not found.
+ * @ingroup map_modifiers
+ */
+void hashmap_remove(hashmap_t* map, const void* key, void* item_out, error_t* err);
+
+/// @} // map_modifiers
+
+/// @defgroup map_access Element access
+/// @ingroup map
+/// @{
+
+/**
+ * @brief Retrieves the value associated with a key.
+ *
+ * @param map      The hash map. Must not be NULL.
+ * @param key      Key to look up. Must not be NULL.
+ * @param item_out Optional output buffer. If non-NULL, the value is
+ *                 copied here. Must be large enough to hold `value_size`
+ *                 bytes. If NULL, the call acts as a presence check.
+ * @param err      Optional error output. Populated on failure.
+ *                 Sets `ERROR_INVALID_ARGS` if the key is not found.
+ * @ingroup map_access
+ */
+void hashmap_get(hashmap_t* map, const void* key, void* item_out, error_t* err);
+
+/// @} // map_access
+
+/// @defgroup hash_functions Built-in hash and comparator functions
+/// @brief Ready-to-use hash and comparator pairs for common key types.
+///
+/// Each hash function has a matching comparator. Always use them together:
+/// | Key type          | Hash function  | Comparator   |
+/// |-------------------|----------------|--------------|
+/// | Fixed-size buffer | `hash_bytes`   | `cmp_bytes`  |
+/// | C string (`char[]`)| `hash_string` | `cmp_string` |
+/// | `int` / `uint32_t`| `hash_int32`   | `cmp_bytes`  |
+/// | `int64_t`         | `hash_int64`   | `cmp_bytes`  |
+///
+/// @warning Do not use `hash_bytes` with struct keys that have padding
+///          bytes — padding is uninitialized and will cause equal structs
+///          to hash differently. Zero-initialize the struct with `memset`
+///          before use, or define a custom hash over only the meaningful
+///          fields.
+/// @ingroup map
+/// @{
+
+/**
+ * @brief FNV-1a hash over a fixed-size byte buffer.
+ *
+ * Processes all `key_size` bytes. Suitable for integer types, floats,
+ * and tightly packed structs without padding.
+ *
+ * @param key      Pointer to the key. Must not be NULL.
+ * @param key_size Number of bytes to hash.
+ * @return Hash value.
+ * @ingroup hash_functions
+ */
+size_t hash_bytes(const void* key, size_t key_size);
+
+/**
+ * @brief FNV-1a hash over a null-terminated C string.
+ *
+ * Stops at the null terminator, so only the string content is hashed —
+ * trailing bytes in the buffer beyond `\0` are ignored. Pair with
+ * `cmp_string`.
+ *
+ * @param key      Pointer to a null-terminated string. Must not be NULL.
+ * @param key_size Upper bound on bytes to scan (typically `sizeof(char[N])`).
+ * @return Hash value.
+ * @ingroup hash_functions
+ */
+size_t hash_string(const void* key, size_t key_size);
+
+/**
+ * @brief Murmur-inspired hash for 32-bit integer keys.
+ *
+ * Applies integer mixing for better bucket distribution than a raw
+ * FNV-1a pass over 4 bytes, especially for small sequential values.
+ * Pair with `cmp_bytes`.
+ *
+ * @param key      Pointer to an `int` or `uint32_t`. Must not be NULL.
+ * @param key_size Not used; present for consistency with `hash_fn_t`.
+ * @return Hash value.
+ * @ingroup hash_functions
+ */
+size_t hash_int32(const void* key, size_t key_size);
+
+/**
+ * @brief Murmur3 finalizer hash for 64-bit integer keys.
+ *
+ * Applies a three-round mixing sequence for uniform distribution.
+ * Pair with `cmp_bytes`.
+ *
+ * @param key      Pointer to an `int64_t` or `uint64_t`. Must not be NULL.
+ * @param key_size Not used; present for consistency with `hash_fn_t`.
+ * @return Hash value.
+ * @ingroup hash_functions
+ */
+size_t hash_int64(const void* key, size_t key_size);
+
+/**
+ * @brief Byte-level equality comparator using `memcmp`.
+ *
+ * Suitable for any fixed-size key where every byte is significant:
+ * integers, floats, and padding-free structs. Consistent with
+ * `hash_bytes`, `hash_int32`, and `hash_int64`.
+ *
+ * @param a        Pointer to the first key. Must not be NULL.
+ * @param b        Pointer to the second key. Must not be NULL.
+ * @param key_size Number of bytes to compare.
+ * @return 0 if equal, non-zero otherwise.
+ * @ingroup hash_functions
+ */
+int cmp_bytes(const void* a, const void* b, size_t key_size);
+
+/**
+ * @brief String equality comparator using `strncmp`.
+ *
+ * Compares up to `key_size` bytes, stopping at the null terminator.
+ * Consistent with `hash_string`.
+ *
+ * @param a        Pointer to the first null-terminated string. Must not be NULL.
+ * @param b        Pointer to the second null-terminated string. Must not be NULL.
+ * @param key_size Maximum number of bytes to compare.
+ * @return 0 if equal, non-zero otherwise.
+ * @ingroup hash_functions
+ */
+int cmp_string(const void* a, const void* b, size_t key_size);
+
+/// @} // hash_functions
+/// @} // map
+
 #endif // H_CONTAINERS

@@ -1,13 +1,129 @@
 /**
-\mainpage Containers: A type-agnostic data structures library in C
-
-\section intro Introduction
-
-This library offers type-agnostic data structures in C. Mainly an instructional exercise, not to be intended
-as a state-of-the-art implementation.
-
-\section note Note
-
-This project is in early development. Interfaces and internal structures
-may evolve as additional containers are introduced.
-*/
+ * @mainpage containers.h — A generic data structures library in C
+ *
+ * @section intro Introduction
+ *
+ * **containers.h** is a type-agnostic data structures library written in
+ * C99. It provides the most common container types through a uniform API:
+ * every container operates on `void*` with caller-supplied element sizes,
+ * reports errors through an optional `error_t` output parameter, and
+ * copies data by value so the caller retains ownership of its memory.
+ *
+ * This is primarily an instructional project. The goal is to produce clean,
+ * readable, well-documented C code rather than a production-grade,
+ * performance-optimised library.
+ *
+ * @section containers Containers
+ *
+ * | Container              | Header group  | Backing structure    | Push  | Pop   | Access |
+ * |------------------------|---------------|----------------------|-------|-------|--------|
+ * | Dynamic array          | @ref array    | Contiguous buffer    | O(1)† | O(1)  | O(1)   |
+ * | Doubly-linked list     | @ref list     | Heap-allocated nodes | O(1)  | O(1)  | O(n)   |
+ * | Queue                  | @ref queue    | `list_t`             | O(1)  | O(1)  | O(1)   |
+ * | Stack                  | @ref stack    | `array_t`            | O(1)† | O(1)  | O(1)   |
+ * | Hash map               | @ref map      | Bucket + `list_t`    | O(1)† | O(1)† | O(1)†  |
+ *
+ * † Amortised.
+ *
+ * @section building Building
+ *
+ * Requirements: CMake 3.31+, a C99-compatible compiler.
+ *
+ * @code{.sh}
+ * mkdir build && cd build
+ * cmake ..
+ * cmake --build .
+ * @endcode
+ *
+ * This produces `libcontainers.a` (or `containers.lib` on Windows) in the
+ * build directory. To link the library into your own CMake project:
+ *
+ * @code{.cmake}
+ * target_link_libraries(my_target PRIVATE containers)
+ * @endcode
+ *
+ * @section tests Running the tests
+ *
+ * After building, run any test binary directly from the build directory:
+ *
+ * @code{.sh}
+ * ./test_array
+ * ./test_list
+ * ./test_queue
+ * ./test_stack
+ * ./test_hashmap
+ * @endcode
+ *
+ * To check for memory leaks with Valgrind:
+ *
+ * @code{.sh}
+ * valgrind --leak-check=full --show-leak-kinds=all ./test_hashmap
+ * @endcode
+ *
+ * @section error_handling Error handling
+ *
+ * Every fallible function accepts a trailing `error_t* err` parameter.
+ * Passing `NULL` is always safe — errors are silently ignored.
+ * On failure the function populates `err->code` with one of the
+ * @ref error_e values and `err->msg` with a human-readable description.
+ *
+ * @code
+ * error_t err;
+ * array_t* arr = array_create(sizeof(int), 16, &err);
+ * if (!arr) {
+ *     fprintf(stderr, "error %d: %s\n", err.code, err.msg);
+ *     return 1;
+ * }
+ * @endcode
+ *
+ * @section generics Working with generic containers
+ *
+ * All containers store copies of your data. You provide the element size
+ * at creation time; the library handles the rest:
+ *
+ * @code
+ * typedef struct { float x, y; } vec2_t;
+ *
+ * array_t* points = array_create(sizeof(vec2_t), 64, NULL);
+ * vec2_t p = { 1.0f, 2.0f };
+ * array_push_back(points, &p, NULL);
+ *
+ * vec2_t* q = (vec2_t*)array_front(points, NULL);
+ * printf("%.1f %.1f\n", q->x, q->y);
+ * array_destroy(points);
+ * @endcode
+ *
+ * @section hash_maps Hash maps
+ *
+ * Hash maps require a hash function and a comparator. Built-in pairs are
+ * provided for the most common key types:
+ *
+ * @code
+ * // integer keys
+ * hashmap_t* scores = hashmap_create(
+ *     sizeof(int), sizeof(float), 0, hash_int32, cmp_bytes, NULL);
+ *
+ * // string keys
+ * hashmap_t* names = hashmap_create(
+ *     32, sizeof(int), 0, hash_string, cmp_string, NULL);
+ * @endcode
+ *
+ * See @ref hash_functions for the full list of built-in hash and
+ * comparator functions, and guidance on writing your own.
+ *
+ * @section notes Notes and limitations
+ *
+ * - **Not thread-safe.** External synchronisation is required for
+ *   concurrent access to any container.
+ * - **No iterators for arrays.** Use index-based access via `array_at`,
+ *   `array_front`, and `array_back`.
+ * - **Struct keys with padding** must be zero-initialised with `memset`
+ *   before use as hash map keys, or hashing will produce inconsistent
+ *   results across equal structs.
+ * - This project is in early development. Interfaces may evolve as
+ *   additional containers are introduced.
+ *
+ * @section license License
+ *
+ * Released for educational purposes.
+ *//

@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Containers: Containers: A type-agnostic data structures library in C</title>
+<title>Containers: containers.h — A generic data structures library in C</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -70,15 +70,105 @@ $(function() {
 </div>
 
 <div><div class="header">
-  <div class="headertitle"><div class="title">Containers: A type-agnostic data structures library in C </div></div>
+  <div class="headertitle"><div class="title"><a class="el" href="containers_8h.html" title="Generic container library: dynamic arrays, linked lists, queues, stacks, and hash maps.">containers.h</a> — A generic data structures library in C </div></div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><h1><a class="anchor" id="intro"></a>
 Introduction</h1>
-<p>This library offers type-agnostic data structures in C. Mainly an instructional exercise, not to be intended as a state-of-the-art implementation.</p>
-<h1><a class="anchor" id="note"></a>
-Note</h1>
-<p>This project is in early development. Interfaces and internal structures may evolve as additional containers are introduced. </p>
+<p><b><a class="el" href="containers_8h.html" title="Generic container library: dynamic arrays, linked lists, queues, stacks, and hash maps.">containers.h</a></b> is a type-agnostic data structures library written in C99. It provides the most common container types through a uniform API: every container operates on <code>void*</code> with caller-supplied element sizes, reports errors through an optional <code><a class="el" href="structerror__t.html" title="Carries error information out of a failing API call.">error_t</a></code> output parameter, and copies data by value so the caller retains ownership of its memory.</p>
+<p>This is primarily an instructional project. The goal is to produce clean, readable, well-documented C code rather than a production-grade, performance-optimised library.</p>
+<h1><a class="anchor" id="containers"></a>
+Containers</h1>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Container   </th><th class="markdownTableHeadNone">Header group   </th><th class="markdownTableHeadNone">Backing structure   </th><th class="markdownTableHeadNone">Push   </th><th class="markdownTableHeadNone">Pop   </th><th class="markdownTableHeadNone">Access    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">Dynamic array   </td><td class="markdownTableBodyNone"><a class="el" href="group__array.html">Dynamic arrays</a>   </td><td class="markdownTableBodyNone">Contiguous buffer   </td><td class="markdownTableBodyNone">O(1)†   </td><td class="markdownTableBodyNone">O(1)   </td><td class="markdownTableBodyNone">O(1)    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">Doubly-linked list   </td><td class="markdownTableBodyNone"><a class="el" href="group__list.html">Linked lists</a>   </td><td class="markdownTableBodyNone">Heap-allocated nodes   </td><td class="markdownTableBodyNone">O(1)   </td><td class="markdownTableBodyNone">O(1)   </td><td class="markdownTableBodyNone">O(n)    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">Queue   </td><td class="markdownTableBodyNone"><a class="el" href="group__queue.html">Queues</a>   </td><td class="markdownTableBodyNone"><code><a class="el" href="structlist__t.html" title="Doubly-linked list.">list_t</a></code>   </td><td class="markdownTableBodyNone">O(1)   </td><td class="markdownTableBodyNone">O(1)   </td><td class="markdownTableBodyNone">O(1)    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">Stack   </td><td class="markdownTableBodyNone"><a class="el" href="group__stack.html">Stacks</a>   </td><td class="markdownTableBodyNone"><code><a class="el" href="structarray__t.html" title="Generic dynamic array.">array_t</a></code>   </td><td class="markdownTableBodyNone">O(1)†   </td><td class="markdownTableBodyNone">O(1)   </td><td class="markdownTableBodyNone">O(1)    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">Hash map   </td><td class="markdownTableBodyNone"><a class="el" href="group__map.html">Hash maps</a>   </td><td class="markdownTableBodyNone">Bucket + <code><a class="el" href="structlist__t.html" title="Doubly-linked list.">list_t</a></code>   </td><td class="markdownTableBodyNone">O(1)†   </td><td class="markdownTableBodyNone">O(1)†   </td><td class="markdownTableBodyNone">O(1)†   </td></tr>
+</table>
+<p>† Amortised.</p>
+<h1><a class="anchor" id="building"></a>
+Building</h1>
+<p>Requirements: CMake 3.31+, a C99-compatible compiler.</p>
+<div class="fragment"><div class="line">mkdir build &amp;&amp; cd build</div>
+<div class="line">cmake ..</div>
+<div class="line">cmake --build .</div>
+</div><!-- fragment --><p>This produces <code>libcontainers.a</code> (or <code>containers.lib</code> on Windows) in the build directory. To link the library into your own CMake project:</p>
+<div class="fragment"><div class="line">target_link_libraries(my_target PRIVATE containers)</div>
+</div><!-- fragment --><h1><a class="anchor" id="tests"></a>
+Running the tests</h1>
+<p>After building, run any test binary directly from the build directory:</p>
+<div class="fragment"><div class="line">./test_array</div>
+<div class="line">./test_list</div>
+<div class="line">./test_queue</div>
+<div class="line">./test_stack</div>
+<div class="line">./test_hashmap</div>
+</div><!-- fragment --><p>To check for memory leaks with Valgrind:</p>
+<div class="fragment"><div class="line">valgrind --leak-check=full --show-leak-kinds=all ./test_hashmap</div>
+</div><!-- fragment --><h1><a class="anchor" id="error_handling"></a>
+Error handling</h1>
+<p>Every fallible function accepts a trailing <code>error_t* err</code> parameter. Passing <code>NULL</code> is always safe — errors are silently ignored. On failure the function populates <code>err-&gt;code</code> with one of the <a class="el" href="containers_8h.html#a09c25ad25f326a930ae42ace60b70232">error_e</a> values and <code>err-&gt;msg</code> with a human-readable description.</p>
+<div class="fragment"><div class="line"><a class="code hl_struct" href="structerror__t.html">error_t</a> err;</div>
+<div class="line"><a class="code hl_struct" href="structarray__t.html">array_t</a>* arr = <a class="code hl_function" href="group__array__allocation.html#gafb3a66eb9e9fe75d61f73f254b36d457">array_create</a>(<span class="keyword">sizeof</span>(<span class="keywordtype">int</span>), 16, &amp;err);</div>
+<div class="line"><span class="keywordflow">if</span> (!arr) {</div>
+<div class="line">    fprintf(stderr, <span class="stringliteral">&quot;error %d: %s\n&quot;</span>, err.<a class="code hl_variable" href="structerror__t.html#ac8a0b7b6f854e572da0df6ba77565ff3">code</a>, err.<a class="code hl_variable" href="structerror__t.html#a29982a1d33c55d7c436f8e4b93c023d6">msg</a>);</div>
+<div class="line">    <span class="keywordflow">return</span> 1;</div>
+<div class="line">}</div>
+<div class="ttc" id="agroup__array__allocation_html_gafb3a66eb9e9fe75d61f73f254b36d457"><div class="ttname"><a href="group__array__allocation.html#gafb3a66eb9e9fe75d61f73f254b36d457">array_create</a></div><div class="ttdeci">array_t * array_create(size_t elem_size, size_t cap, error_t *err)</div><div class="ttdoc">Creates a new heap-allocated dynamic array.</div><div class="ttdef"><b>Definition</b> array.c:16</div></div>
+<div class="ttc" id="astructarray__t_html"><div class="ttname"><a href="structarray__t.html">array_t</a></div><div class="ttdoc">Generic dynamic array.</div><div class="ttdef"><b>Definition</b> containers.h:56</div></div>
+<div class="ttc" id="astructerror__t_html"><div class="ttname"><a href="structerror__t.html">error_t</a></div><div class="ttdoc">Carries error information out of a failing API call.</div><div class="ttdef"><b>Definition</b> containers.h:41</div></div>
+<div class="ttc" id="astructerror__t_html_a29982a1d33c55d7c436f8e4b93c023d6"><div class="ttname"><a href="structerror__t.html#a29982a1d33c55d7c436f8e4b93c023d6">error_t::msg</a></div><div class="ttdeci">char msg[256]</div><div class="ttdoc">Human-readable description of the failure.</div><div class="ttdef"><b>Definition</b> containers.h:43</div></div>
+<div class="ttc" id="astructerror__t_html_ac8a0b7b6f854e572da0df6ba77565ff3"><div class="ttname"><a href="structerror__t.html#ac8a0b7b6f854e572da0df6ba77565ff3">error_t::code</a></div><div class="ttdeci">error_e code</div><div class="ttdoc">Identifies the failure category.</div><div class="ttdef"><b>Definition</b> containers.h:42</div></div>
+</div><!-- fragment --><h1><a class="anchor" id="generics"></a>
+Working with generic containers</h1>
+<p>All containers store copies of your data. You provide the element size at creation time; the library handles the rest:</p>
+<div class="fragment"><div class="line"><span class="keyword">typedef</span> <span class="keyword">struct </span>{ <span class="keywordtype">float</span> x, y; } vec2_t;</div>
+<div class="line"> </div>
+<div class="line"><a class="code hl_struct" href="structarray__t.html">array_t</a>* points = <a class="code hl_function" href="group__array__allocation.html#gafb3a66eb9e9fe75d61f73f254b36d457">array_create</a>(<span class="keyword">sizeof</span>(vec2_t), 64, NULL);</div>
+<div class="line">vec2_t p = { 1.0f, 2.0f };</div>
+<div class="line"><a class="code hl_function" href="group__array__modifiers.html#ga81fafea435225ae19cd67b175e9c225e">array_push_back</a>(points, &amp;p, NULL);</div>
+<div class="line"> </div>
+<div class="line">vec2_t* q = (vec2_t*)<a class="code hl_function" href="group__array__access.html#ga9f83bb8c28cc6bca24de16d3d98bdea1">array_front</a>(points, NULL);</div>
+<div class="line">printf(<span class="stringliteral">&quot;%.1f %.1f\n&quot;</span>, q-&gt;x, q-&gt;y);</div>
+<div class="line"><a class="code hl_function" href="group__array__allocation.html#gab43549424b9a1a7e6c0abccb4a93ff31">array_destroy</a>(points);</div>
+<div class="ttc" id="agroup__array__access_html_ga9f83bb8c28cc6bca24de16d3d98bdea1"><div class="ttname"><a href="group__array__access.html#ga9f83bb8c28cc6bca24de16d3d98bdea1">array_front</a></div><div class="ttdeci">void * array_front(array_t *arr, error_t *err)</div><div class="ttdoc">Returns a pointer to the first element.</div><div class="ttdef"><b>Definition</b> array.c:76</div></div>
+<div class="ttc" id="agroup__array__allocation_html_gab43549424b9a1a7e6c0abccb4a93ff31"><div class="ttname"><a href="group__array__allocation.html#gab43549424b9a1a7e6c0abccb4a93ff31">array_destroy</a></div><div class="ttdeci">void array_destroy(array_t *arr)</div><div class="ttdoc">Destroys the array and frees all associated memory.</div><div class="ttdef"><b>Definition</b> array.c:47</div></div>
+<div class="ttc" id="agroup__array__modifiers_html_ga81fafea435225ae19cd67b175e9c225e"><div class="ttname"><a href="group__array__modifiers.html#ga81fafea435225ae19cd67b175e9c225e">array_push_back</a></div><div class="ttdeci">void array_push_back(array_t *arr, const void *item, error_t *err)</div><div class="ttdoc">Appends an element to the end of the array.</div><div class="ttdef"><b>Definition</b> array.c:187</div></div>
+</div><!-- fragment --><h1><a class="anchor" id="hash_maps"></a>
+Hash maps</h1>
+<p>Hash maps require a hash function and a comparator. Built-in pairs are provided for the most common key types:</p>
+<div class="fragment"><div class="line"><span class="comment">// integer keys</span></div>
+<div class="line"><a class="code hl_struct" href="structhashmap__t.html">hashmap_t</a>* scores = <a class="code hl_function" href="group__map__allocation.html#ga4ff98f733847e14d681845ba5648067d">hashmap_create</a>(</div>
+<div class="line">    <span class="keyword">sizeof</span>(<span class="keywordtype">int</span>), <span class="keyword">sizeof</span>(<span class="keywordtype">float</span>), 0, <a class="code hl_function" href="group__hash__functions.html#gabb53e7cd5a0f30a3f79b9096941f30d6">hash_int32</a>, <a class="code hl_function" href="group__hash__functions.html#ga5be747a799acf95c061b6ecf4ed96fb6">cmp_bytes</a>, NULL);</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// string keys</span></div>
+<div class="line"><a class="code hl_struct" href="structhashmap__t.html">hashmap_t</a>* names = <a class="code hl_function" href="group__map__allocation.html#ga4ff98f733847e14d681845ba5648067d">hashmap_create</a>(</div>
+<div class="line">    32, <span class="keyword">sizeof</span>(<span class="keywordtype">int</span>), 0, <a class="code hl_function" href="group__hash__functions.html#ga981834551ca725645a60b3acd3cd500b">hash_string</a>, <a class="code hl_function" href="group__hash__functions.html#gad7b03c2adbb4e60b0d9c2fa94467fec1">cmp_string</a>, NULL);</div>
+<div class="ttc" id="agroup__hash__functions_html_ga5be747a799acf95c061b6ecf4ed96fb6"><div class="ttname"><a href="group__hash__functions.html#ga5be747a799acf95c061b6ecf4ed96fb6">cmp_bytes</a></div><div class="ttdeci">int cmp_bytes(const void *a, const void *b, size_t key_size)</div><div class="ttdoc">Byte-level equality comparator using memcmp.</div><div class="ttdef"><b>Definition</b> hash_functions.c:47</div></div>
+<div class="ttc" id="agroup__hash__functions_html_ga981834551ca725645a60b3acd3cd500b"><div class="ttname"><a href="group__hash__functions.html#ga981834551ca725645a60b3acd3cd500b">hash_string</a></div><div class="ttdeci">size_t hash_string(const void *key, size_t key_size)</div><div class="ttdoc">FNV-1a hash over a null-terminated C string.</div><div class="ttdef"><b>Definition</b> hash_functions.c:17</div></div>
+<div class="ttc" id="agroup__hash__functions_html_gabb53e7cd5a0f30a3f79b9096941f30d6"><div class="ttname"><a href="group__hash__functions.html#gabb53e7cd5a0f30a3f79b9096941f30d6">hash_int32</a></div><div class="ttdeci">size_t hash_int32(const void *key, size_t key_size)</div><div class="ttdoc">Murmur-inspired hash for 32-bit integer keys.</div><div class="ttdef"><b>Definition</b> hash_functions.c:27</div></div>
+<div class="ttc" id="agroup__hash__functions_html_gad7b03c2adbb4e60b0d9c2fa94467fec1"><div class="ttname"><a href="group__hash__functions.html#gad7b03c2adbb4e60b0d9c2fa94467fec1">cmp_string</a></div><div class="ttdeci">int cmp_string(const void *a, const void *b, size_t key_size)</div><div class="ttdoc">String equality comparator using strncmp.</div><div class="ttdef"><b>Definition</b> hash_functions.c:51</div></div>
+<div class="ttc" id="agroup__map__allocation_html_ga4ff98f733847e14d681845ba5648067d"><div class="ttname"><a href="group__map__allocation.html#ga4ff98f733847e14d681845ba5648067d">hashmap_create</a></div><div class="ttdeci">hashmap_t * hashmap_create(size_t key_size, size_t value_size, size_t bucket_count, hash_fn_t hash, cmp_fn_t cmp, error_t *err)</div><div class="ttdoc">Creates a new empty hash map.</div><div class="ttdef"><b>Definition</b> hashmap.c:24</div></div>
+<div class="ttc" id="astructhashmap__t_html"><div class="ttname"><a href="structhashmap__t.html">hashmap_t</a></div><div class="ttdoc">Hash map implementing a generic key-value store.</div><div class="ttdef"><b>Definition</b> containers.h:789</div></div>
+</div><!-- fragment --><p>See <a class="el" href="group__hash__functions.html">Built-in hash and comparator functions</a> for the full list of built-in hash and comparator functions, and guidance on writing your own.</p>
+<h1><a class="anchor" id="notes"></a>
+Notes and limitations</h1>
+<ul>
+<li><b>Not thread-safe.</b> External synchronisation is required for concurrent access to any container.</li>
+<li><b>No iterators for arrays.</b> Use index-based access via <code>array_at</code>, <code>array_front</code>, and <code>array_back</code>.</li>
+<li><b>Struct keys with padding</b> must be zero-initialised with <code>memset</code> before use as hash map keys, or hashing will produce inconsistent results across equal structs.</li>
+<li>This project is in early development. Interfaces may evolve as additional containers are introduced.</li>
+</ul>
+<h1><a class="anchor" id="license"></a>
+License</h1>
+<p>Released for educational purposes. </p>
 </div></div><!-- PageDoc -->
 </div><!-- contents -->
 <!-- start footer part -->

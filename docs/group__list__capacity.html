@@ -80,7 +80,7 @@ Collaboration diagram for Capacity:</div>
 <div class="dyncontent">
 <div class="center"><img src="group__list__capacity.png" border="0" usemap="#agroup____list____capacity" alt=""/></div>
 <map name="agroup____list____capacity" id="agroup____list____capacity">
-<area shape="rect" href="group__list.html" title=" " alt="" coords="5,5,100,31"/>
+<area shape="rect" href="group__list.html" title="Doubly&#45;linked list with O(1) insertion and removal at any node." alt="" coords="5,5,100,31"/>
 <area shape="rect" title=" " alt="" coords="148,5,227,31"/>
 </map>
 </div>
@@ -88,7 +88,7 @@ Collaboration diagram for Capacity:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:gad3b02926f520e90f062c6742943e096d" id="r_gad3b02926f520e90f062c6742943e096d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__list__capacity.html#gad3b02926f520e90f062c6742943e096d">list_is_empty</a> (<a class="el" href="structlist__t.html">list_t</a> *list, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
-<tr class="memdesc:gad3b02926f520e90f062c6742943e096d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks whether the container is empty.  <br /></td></tr>
+<tr class="memdesc:gad3b02926f520e90f062c6742943e096d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the list contains no elements.  <br /></td></tr>
 <tr class="separator:gad3b02926f520e90f062c6742943e096d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -119,15 +119,15 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Checks whether the container is empty. </p>
+<p>Returns true if the list contains no elements. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">list</td><td>The list. Must be not NULL. </td></tr>
-    <tr><td class="paramname">err</td><td>Optional error output information. If non-NULL and the call fails, it will contain details about the failure. </td></tr>
+    <tr><td class="paramname">list</td><td>The list. Must not be NULL. </td></tr>
+    <tr><td class="paramname">err</td><td>Optional error output. Populated on failure. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>True if the list is empty. False otherwise, or on failures. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>true if <code>count == 0</code>, false otherwise or on failure. </dd></dl>
 
 </div>
 </div>

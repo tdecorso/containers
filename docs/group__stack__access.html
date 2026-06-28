@@ -72,7 +72,7 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#func-members">Functions</a>  </div>
-  <div class="headertitle"><div class="title">Element access<div class="ingroups"><a class="el" href="group__stack.html">Stack</a></div></div></div>
+  <div class="headertitle"><div class="title">Element access<div class="ingroups"><a class="el" href="group__stack.html">Stacks</a></div></div></div>
 </div><!--header-->
 <div class="contents">
 <div class="dynheader">
@@ -80,15 +80,15 @@ Collaboration diagram for Element access:</div>
 <div class="dyncontent">
 <div class="center"><img src="group__stack__access.png" border="0" usemap="#agroup____stack____access" alt=""/></div>
 <map name="agroup____stack____access" id="agroup____stack____access">
-<area shape="rect" href="group__stack.html" title=" " alt="" coords="5,5,64,31"/>
-<area shape="rect" title=" " alt="" coords="112,5,236,31"/>
+<area shape="rect" href="group__stack.html" title="LIFO stack backed by a dynamic array." alt="" coords="5,5,71,31"/>
+<area shape="rect" title=" " alt="" coords="119,5,243,31"/>
 </map>
 </div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:ga8af3882031d613b6c6ab8738e27b4055" id="r_ga8af3882031d613b6c6ab8738e27b4055"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__stack__access.html#ga8af3882031d613b6c6ab8738e27b4055">stack_top</a> (<a class="el" href="structstack__t.html">stack_t</a> *stack, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
-<tr class="memdesc:ga8af3882031d613b6c6ab8738e27b4055"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a pointer to the element at the top of the stack.  <br /></td></tr>
+<tr class="memdesc:ga8af3882031d613b6c6ab8738e27b4055"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a pointer to the top element without removing it.  <br /></td></tr>
 <tr class="separator:ga8af3882031d613b6c6ab8738e27b4055"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -119,16 +119,16 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Returns a pointer to the element at the top of the stack. </p>
+<p>Returns a pointer to the top element without removing it. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">stack</td><td>The stack. Must be not NULL. </td></tr>
-    <tr><td class="paramname">err</td><td>Optional error output information. If non-NULL and the call fails, it will contain details about the failure.</td></tr>
+    <tr><td class="paramname">stack</td><td>The stack. Must not be NULL. </td></tr>
+    <tr><td class="paramname">err</td><td>Optional error output. Populated on failure. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Pointer to the top element, or NULL if the stack is empty or on failure.</dd></dl>
-<dl class="section note"><dt>Note</dt><dd>The returned pointer remains valid until the top element is removed or the stack is modified in a way that invalidates it. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Pointer to the top element, or NULL if empty or on failure. </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>The pointer is invalidated when the element is removed or the stack is otherwise modified. </dd></dl>
 
 </div>
 </div>

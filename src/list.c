@@ -1,5 +1,11 @@
-#include "list.h"
+#include <containers.h>
 #include <string.h>
+
+typedef struct list_node {
+    void* data;             
+    struct list_node* next; 
+    struct list_node* prev;
+} list_node_t;
 
 static void error_create(error_t* err, error_e code, const char* msg) {
     if (!err) return;
@@ -9,7 +15,7 @@ static void error_create(error_t* err, error_e code, const char* msg) {
     err->msg[len] = '\0';
 }
 
-list_node_t* list_node_create(size_t elem_size, error_t* err) {
+static list_node_t* list_node_create(size_t elem_size, error_t* err) {
     if (elem_size == 0) {
         error_create(err, ERROR_INVALID_ARGS, "Element size cannot be zero.");
         return NULL;
@@ -31,6 +37,12 @@ list_node_t* list_node_create(size_t elem_size, error_t* err) {
     return n;
 }
 
+static void list_node_destroy(list_node_t* n) {
+    if (!n) return;
+    if (n->data) free(n->data);
+    free(n);
+}
+
 list_t* list_create(size_t elem_size, error_t* err) {
     if (elem_size == 0) {
         error_create(err, ERROR_INVALID_ARGS, "Element size cannot be zero.");
@@ -49,12 +61,6 @@ list_t* list_create(size_t elem_size, error_t* err) {
     l->elem_size = elem_size;
     error_create(err, ERROR_OK, "No error found.");
     return l;
-}
-
-void list_node_destroy(list_node_t* n) {
-    if (!n) return;
-    if (n->data) free(n->data);
-    free(n);
 }
 
 void list_destroy(list_t* l) {

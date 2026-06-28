@@ -85,23 +85,24 @@ $(function() {
 Data Fields</h2></td></tr>
 <tr class="memitem:ae8cfdfb8badd07bffcea8f98f5fdabf6" id="r_ae8cfdfb8badd07bffcea8f98f5fdabf6"><td class="memItemLeft" align="right" valign="top"><a id="ae8cfdfb8badd07bffcea8f98f5fdabf6" name="ae8cfdfb8badd07bffcea8f98f5fdabf6"></a>
 void *&#160;</td><td class="memItemRight" valign="bottom"><b>data</b></td></tr>
-<tr class="memdesc:ae8cfdfb8badd07bffcea8f98f5fdabf6"><td class="mdescLeft">&#160;</td><td class="mdescRight">pointer to the internal data of the array. <br /></td></tr>
+<tr class="memdesc:ae8cfdfb8badd07bffcea8f98f5fdabf6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pointer to the contiguous element buffer. <br /></td></tr>
 <tr class="separator:ae8cfdfb8badd07bffcea8f98f5fdabf6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa5792f9486c9efe9dfff89c120bc3bf0" id="r_aa5792f9486c9efe9dfff89c120bc3bf0"><td class="memItemLeft" align="right" valign="top"><a id="aa5792f9486c9efe9dfff89c120bc3bf0" name="aa5792f9486c9efe9dfff89c120bc3bf0"></a>
 size_t&#160;</td><td class="memItemRight" valign="bottom"><b>cap</b></td></tr>
-<tr class="memdesc:aa5792f9486c9efe9dfff89c120bc3bf0"><td class="mdescLeft">&#160;</td><td class="mdescRight">current capacity of the array. <br /></td></tr>
+<tr class="memdesc:aa5792f9486c9efe9dfff89c120bc3bf0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of elements the buffer can currently hold. <br /></td></tr>
 <tr class="separator:aa5792f9486c9efe9dfff89c120bc3bf0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad41ce86b593c10ca56331ddfc15656b1" id="r_ad41ce86b593c10ca56331ddfc15656b1"><td class="memItemLeft" align="right" valign="top"><a id="ad41ce86b593c10ca56331ddfc15656b1" name="ad41ce86b593c10ca56331ddfc15656b1"></a>
 size_t&#160;</td><td class="memItemRight" valign="bottom"><b>count</b></td></tr>
-<tr class="memdesc:ad41ce86b593c10ca56331ddfc15656b1"><td class="mdescLeft">&#160;</td><td class="mdescRight">current number of elements in the array. <br /></td></tr>
+<tr class="memdesc:ad41ce86b593c10ca56331ddfc15656b1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of elements currently stored. Always <code>&lt;= cap</code>. <br /></td></tr>
 <tr class="separator:ad41ce86b593c10ca56331ddfc15656b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a27f75ca9aeb9b03ce2c53d81135e8587" id="r_a27f75ca9aeb9b03ce2c53d81135e8587"><td class="memItemLeft" align="right" valign="top"><a id="a27f75ca9aeb9b03ce2c53d81135e8587" name="a27f75ca9aeb9b03ce2c53d81135e8587"></a>
 size_t&#160;</td><td class="memItemRight" valign="bottom"><b>elem_size</b></td></tr>
-<tr class="memdesc:a27f75ca9aeb9b03ce2c53d81135e8587"><td class="mdescLeft">&#160;</td><td class="mdescRight">size in bytes of a single element of the array. <br /></td></tr>
+<tr class="memdesc:a27f75ca9aeb9b03ce2c53d81135e8587"><td class="mdescLeft">&#160;</td><td class="mdescRight">Size in bytes of a single element. <br /></td></tr>
 <tr class="separator:a27f75ca9aeb9b03ce2c53d81135e8587"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Generic dynamic array. </p>
+<p>Maintains a heap-allocated contiguous buffer that grows automatically as elements are added. Invariant: <code>count &lt;= cap</code> at all times. </p>
 </div><hr/>The documentation for this struct was generated from the following file:<ul>
 <li>include/<a class="el" href="containers_8h_source.html">containers.h</a></li>
 </ul>

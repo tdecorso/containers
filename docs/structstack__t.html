@@ -72,11 +72,11 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-attribs">Data Fields</a>  </div>
-  <div class="headertitle"><div class="title">stack_t Struct Reference<div class="ingroups"><a class="el" href="group__stack.html">Stack</a></div></div></div>
+  <div class="headertitle"><div class="title">stack_t Struct Reference<div class="ingroups"><a class="el" href="group__stack.html">Stacks</a></div></div></div>
 </div><!--header-->
 <div class="contents">
 
-<p>Generic stack.  
+<p>Generic LIFO stack.  
  <a href="structstack__t.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="containers_8h_source.html">containers.h</a>&gt;</code></p>
@@ -85,7 +85,7 @@ Collaboration diagram for stack_t:</div>
 <div class="dyncontent">
 <div class="center"><img src="structstack__t__coll__graph.png" border="0" usemap="#astack__t_coll__map" alt="Collaboration graph"/></div>
 <map name="astack__t_coll__map" id="astack__t_coll__map">
-<area shape="rect" title="Generic stack." alt="" coords="5,93,75,119"/>
+<area shape="rect" title="Generic LIFO stack." alt="" coords="5,93,75,119"/>
 <area shape="rect" href="structarray__t.html" title="Generic dynamic array." alt="" coords="6,5,74,31"/>
 <area shape="poly" title=" " alt="" coords="43,45,43,93,37,93,37,45"/>
 </map>
@@ -95,11 +95,12 @@ Collaboration diagram for stack_t:</div>
 Data Fields</h2></td></tr>
 <tr class="memitem:a48bfb16c1562c82d2833215198f390d9" id="r_a48bfb16c1562c82d2833215198f390d9"><td class="memItemLeft" align="right" valign="top"><a id="a48bfb16c1562c82d2833215198f390d9" name="a48bfb16c1562c82d2833215198f390d9"></a>
 <a class="el" href="structarray__t.html">array_t</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>arr</b></td></tr>
-<tr class="memdesc:a48bfb16c1562c82d2833215198f390d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">internal container. <br /></td></tr>
+<tr class="memdesc:a48bfb16c1562c82d2833215198f390d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal dynamic array storage. <br /></td></tr>
 <tr class="separator:a48bfb16c1562c82d2833215198f390d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Generic stack. </p>
+<div class="textblock"><p>Generic LIFO stack. </p>
+<p>Elements are pushed and popped from the top. Backed internally by an <code><a class="el" href="structarray__t.html" title="Generic dynamic array.">array_t</a></code>, giving amortized O(1) push and pop. </p>
 </div><hr/>The documentation for this struct was generated from the following file:<ul>
 <li>include/<a class="el" href="containers_8h_source.html">containers.h</a></li>
 </ul>

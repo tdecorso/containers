@@ -80,7 +80,7 @@ Collaboration diagram for Capacity:</div>
 <div class="dyncontent">
 <div class="center"><img src="group__queue__capacity.png" border="0" usemap="#agroup____queue____capacity" alt=""/></div>
 <map name="agroup____queue____capacity" id="agroup____queue____capacity">
-<area shape="rect" href="group__queue.html" title=" " alt="" coords="5,5,76,31"/>
+<area shape="rect" href="group__queue.html" title="FIFO queue backed by a linked list." alt="" coords="5,5,76,31"/>
 <area shape="rect" title=" " alt="" coords="124,5,203,31"/>
 </map>
 </div>
@@ -88,7 +88,7 @@ Collaboration diagram for Capacity:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:ga75f3733f75257febd01129ad43396618" id="r_ga75f3733f75257febd01129ad43396618"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__queue__capacity.html#ga75f3733f75257febd01129ad43396618">queue_is_empty</a> (<a class="el" href="structqueue__t.html">queue_t</a> *queue, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
-<tr class="memdesc:ga75f3733f75257febd01129ad43396618"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks whether the queue is empty.  <br /></td></tr>
+<tr class="memdesc:ga75f3733f75257febd01129ad43396618"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the queue contains no elements.  <br /></td></tr>
 <tr class="separator:ga75f3733f75257febd01129ad43396618"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gaaf6f2fe5057ef17d74bacd9c38265633" id="r_gaaf6f2fe5057ef17d74bacd9c38265633"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__queue__capacity.html#gaaf6f2fe5057ef17d74bacd9c38265633">queue_size</a> (<a class="el" href="structqueue__t.html">queue_t</a> *queue, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
 <tr class="memdesc:gaaf6f2fe5057ef17d74bacd9c38265633"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of elements in the queue.  <br /></td></tr>
@@ -122,15 +122,15 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Checks whether the queue is empty. </p>
+<p>Returns true if the queue contains no elements. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">queue</td><td>The queue. Must be not NULL. </td></tr>
-    <tr><td class="paramname">err</td><td>Optional error output information. If non-NULL and the call fails, it will contain details about the failure. </td></tr>
+    <tr><td class="paramname">queue</td><td>The queue. Must not be NULL. </td></tr>
+    <tr><td class="paramname">err</td><td>Optional error output. Populated on failure. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>True if the queue is empty. False otherwise, or on failure. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>true if empty, false otherwise or on failure. </dd></dl>
 
 </div>
 </div>
@@ -163,12 +163,12 @@ Functions</h2></td></tr>
 <p>Returns the number of elements in the queue. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">queue</td><td>The queue. Must be not NULL. </td></tr>
-    <tr><td class="paramname">err</td><td>Optional error output information. If non-NULL and the call fails, it will contain details about the failure. </td></tr>
+    <tr><td class="paramname">queue</td><td>The queue. Must not be NULL. </td></tr>
+    <tr><td class="paramname">err</td><td>Optional error output. Populated on failure. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Current number of elements in the queue. Zero on failures. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Element count, or 0 on failure. </dd></dl>
 
 </div>
 </div>

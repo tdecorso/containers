@@ -1,5 +1,7 @@
 var searchData=
 [
-  ['tail_0',['tail',['../structlist__t.html#a45dc80e38f8869f66e5d006117aae5f2',1,'list_t']]],
-  ['type_20agnostic_20data_20structures_20library_20in_20c_1',['Containers: A type-agnostic data structures library in C',['../index.html',1,'']]]
+  ['maps_0',['maps',['../group__map.html',1,'Hash maps'],['../index.html#hash_maps',1,'Hash maps']]],
+  ['max_5fload_5ffactor_1',['max_load_factor',['../structhashmap__t.html#a34ecf096f1775c44b57ec1f75f09126f',1,'hashmap_t']]],
+  ['modifiers_2',['modifiers',['../group__array__modifiers.html',1,'Modifiers'],['../group__list__modifiers.html',1,'Modifiers'],['../group__queue__modifiers.html',1,'Modifiers'],['../group__stack__modifiers.html',1,'Modifiers'],['../group__map__modifiers.html',1,'Modifiers']]],
+  ['msg_3',['msg',['../structerror__t.html#a29982a1d33c55d7c436f8e4b93c023d6',1,'error_t']]]
 ];

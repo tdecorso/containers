@@ -80,7 +80,7 @@ Collaboration diagram for Element access:</div>
 <div class="dyncontent">
 <div class="center"><img src="group__queue__access.png" border="0" usemap="#agroup____queue____access" alt=""/></div>
 <map name="agroup____queue____access" id="agroup____queue____access">
-<area shape="rect" href="group__queue.html" title=" " alt="" coords="5,5,76,31"/>
+<area shape="rect" href="group__queue.html" title="FIFO queue backed by a linked list." alt="" coords="5,5,76,31"/>
 <area shape="rect" title=" " alt="" coords="124,5,248,31"/>
 </map>
 </div>
@@ -88,10 +88,10 @@ Collaboration diagram for Element access:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:ga4655ad4db9be0805ea49544bbe0c6958" id="r_ga4655ad4db9be0805ea49544bbe0c6958"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__queue__access.html#ga4655ad4db9be0805ea49544bbe0c6958">queue_front</a> (<a class="el" href="structqueue__t.html">queue_t</a> *queue, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
-<tr class="memdesc:ga4655ad4db9be0805ea49544bbe0c6958"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a pointer to the element at the front of the queue.  <br /></td></tr>
+<tr class="memdesc:ga4655ad4db9be0805ea49544bbe0c6958"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a pointer to the front element without removing it.  <br /></td></tr>
 <tr class="separator:ga4655ad4db9be0805ea49544bbe0c6958"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga622d9459bcbe595474672b1c92a224d9" id="r_ga622d9459bcbe595474672b1c92a224d9"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__queue__access.html#ga622d9459bcbe595474672b1c92a224d9">queue_back</a> (<a class="el" href="structqueue__t.html">queue_t</a> *queue, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
-<tr class="memdesc:ga622d9459bcbe595474672b1c92a224d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a pointer to the element at the back of the queue.  <br /></td></tr>
+<tr class="memdesc:ga622d9459bcbe595474672b1c92a224d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a pointer to the back element without removing it.  <br /></td></tr>
 <tr class="separator:ga622d9459bcbe595474672b1c92a224d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -122,16 +122,16 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Returns a pointer to the element at the back of the queue. </p>
+<p>Returns a pointer to the back element without removing it. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">queue</td><td>The queue. Must be not NULL. </td></tr>
-    <tr><td class="paramname">err</td><td>Optional error output information. If non-NULL and the call fails, it will contain details about the failure. </td></tr>
+    <tr><td class="paramname">queue</td><td>The queue. Must not be NULL. </td></tr>
+    <tr><td class="paramname">err</td><td>Optional error output. Populated on failure. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Pointer to the back element, or NULL if the queue is empty or on failure. </dd></dl>
-<dl class="section note"><dt>Note</dt><dd>The returned pointer remains valid until the element is removed or the queue is modified in a way that invalidates it. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Pointer to the back element, or NULL if empty or on failure. </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>The pointer is invalidated when the element is removed or the queue is otherwise modified. </dd></dl>
 
 </div>
 </div>
@@ -161,16 +161,16 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Returns a pointer to the element at the front of the queue. </p>
+<p>Returns a pointer to the front element without removing it. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">queue</td><td>The queue. Must be not NULL. </td></tr>
-    <tr><td class="paramname">err</td><td>Optional error output information. If non-NULL and the call fails, it will contain details about the failure. </td></tr>
+    <tr><td class="paramname">queue</td><td>The queue. Must not be NULL. </td></tr>
+    <tr><td class="paramname">err</td><td>Optional error output. Populated on failure. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Pointer to the front element, or NULL if the queue is empty or on failure. </dd></dl>
-<dl class="section note"><dt>Note</dt><dd>The returned pointer remains valid until the element is removed or the queue is modified in a way that invalidates it. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Pointer to the front element, or NULL if empty or on failure. </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>The pointer is invalidated when the element is removed or the queue is otherwise modified. </dd></dl>
 
 </div>
 </div>
