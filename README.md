@@ -1,6 +1,6 @@
 # containers.h
 
-A single-header, type-agnostic data structures library in C99.
+A type-agnostic data structures library in C99.
 
 ## Overview
 
