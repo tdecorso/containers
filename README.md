@@ -222,8 +222,7 @@ Then open `docs/html/index.html` in your browser.
 
 - **Not thread-safe.** External synchronisation is required for concurrent access to any container.
 - **No iterators for arrays.** Use index-based access via `array_at`, `array_front`, and `array_back`.
-- **Tree traversal is manual.** No built-in traversal functions are provided; use `tree_first_child`, `tree_next_sibling`, 
--                               and a caller-managed stack or queue.
+- **Tree traversal is manual.** No built-in traversal functions are provided; use `tree_first_child`, `tree_next_sibling`, and a caller-managed stack or queue.
 - **Early development.** Interfaces may evolve as additional containers are introduced.
 
 ## License
