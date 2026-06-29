@@ -24,7 +24,7 @@
  * | Hash map           | @ref map      | Bucket + `list_t`    | O(1)† | O(1)†  | O(1)†  |
  * | N-ary tree         | @ref tree     | Heap-allocated nodes | O(1)  | O(d)‡  | O(n)   |
  *
- * † Amortised. ‡ O(d) where d is the depth of the subtree being removed.
+ * † Amortised. ‡ O(d) where d is the size of the subtree being removed.
  *
  * @section building Building
  *
@@ -98,9 +98,11 @@
  * @section trees N-ary trees
  *
  * Trees are built by appending children and siblings to existing nodes.
- * The root is created by passing NULL as the parent to `tree_append_child`.
- * Traversal is manual — use `tree_first_child` and `tree_next_sibling`
- * with a caller-managed stack or queue:
+ * The root is created by passing `NULL` as the parent to `tree_append_child`.
+ * Nodes can also be inserted at arbitrary positions with `tree_insert_before`
+ * and relocated with `tree_move`. Each node tracks its direct child count
+ * in O(1) via `tree_child_count`, and the sibling chain is doubly-linked so
+ * `tree_prev_sibling` is also O(1).
  *
  * @code
  * tree_t* tree = tree_create(sizeof(int), NULL);
@@ -108,26 +110,33 @@
  * int v;
  * v = 1; tree_node_t* root = tree_append_child(tree, NULL, &v, NULL);
  * v = 2; tree_node_t* c1   = tree_append_child(tree, root, &v, NULL);
- * v = 3;              tree_append_child(tree, root, &v, NULL);
- * v = 4;              tree_append_child(tree, c1,   &v, NULL);
- * v = 5;              tree_append_child(tree, c1,   &v, NULL);
+ * v = 3;               tree_append_child(tree, root, &v, NULL);
+ * v = 4;               tree_append_child(tree, c1,   &v, NULL);
+ * v = 5;               tree_append_child(tree, c1,   &v, NULL);
+ * @endcode
  *
- * // depth-first pre-order traversal
- * tree_node_t* stk[64];
- * int top = 0;
- * stk[top++] = root;
- * while (top > 0) {
- *     tree_node_t* n = stk[--top];
- *     printf("%d\n", *(int*)tree_node_data(n, NULL));
- *     tree_node_t* children[64];
- *     int nchildren = 0;
- *     tree_node_t* ch = tree_first_child(n, NULL);
- *     while (ch) { children[nchildren++] = ch; ch = tree_next_sibling(ch, NULL); }
- *     for (int i = nchildren - 1; i >= 0; i--) stk[top++] = children[i];
+ * Built-in pre-order and post-order walks accept a @ref tree_walk_fn callback
+ * and a caller-supplied context pointer:
+ *
+ * @code
+ * typedef struct { int sum; } sum_ctx_t;
+ *
+ * tree_walk_result_t sum_cb(tree_node_t* node, size_t depth, void* userdata) {
+ *     sum_ctx_t* ctx = (sum_ctx_t*)userdata;
+ *     ctx->sum += *(int*)tree_node_data(node, NULL);
+ *     return TREE_WALK_CONTINUE;
  * }
+ *
+ * sum_ctx_t ctx = { 0 };
+ * tree_walk_preorder(tree, sum_cb, &ctx, NULL);
+ * printf("sum = %d\n", ctx.sum);
  *
  * tree_destroy(tree);
  * @endcode
+ *
+ * Return @ref TREE_WALK_STOP to abort traversal early, or
+ * @ref TREE_WALK_SKIP_CHILDREN (pre-order only) to skip a node's entire
+ * subtree without visiting its descendants.
  *
  * @section hash_maps Hash maps
  *
@@ -153,9 +162,9 @@
  *   concurrent access to any container.
  * - **No iterators for arrays.** Use index-based access via `array_at`,
  *   `array_front`, and `array_back`.
- * - **Tree traversal is manual.** No built-in traversal functions are
- *   provided; use `tree_first_child`, `tree_next_sibling`, and a
- *   caller-managed stack or queue.
+ * - **No cycle detection in `tree_move`.** Moving a node to be a descendant
+ *   of itself is undefined behaviour; the caller is responsible for
+ *   preventing it.
  * - **Struct keys with padding** must be zero-initialised with `memset`
  *   before use as hash map keys, or hashing will produce inconsistent
  *   results across equal structs.

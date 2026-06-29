@@ -80,7 +80,7 @@ Collaboration diagram for Modifiers:</div>
 <div class="dyncontent">
 <div class="center"><img src="group__tree__modifiers.png" border="0" usemap="#agroup____tree____modifiers" alt=""/></div>
 <map name="agroup____tree____modifiers" id="agroup____tree____modifiers">
-<area shape="rect" href="group__tree.html" title="N&#45;ary tree with O(1) child and sibling insertion." alt="" coords="5,5,61,31"/>
+<area shape="rect" href="group__tree.html" title="N&#45;ary tree with O(1) insertion, removal, and sibling traversal." alt="" coords="5,5,61,31"/>
 <area shape="rect" title=" " alt="" coords="109,5,192,31"/>
 </map>
 </div>
@@ -93,6 +93,12 @@ Functions</h2></td></tr>
 <tr class="memitem:gad0368e336acfdb34aebd30fc67e0b21f" id="r_gad0368e336acfdb34aebd30fc67e0b21f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group__tree.html#ga2408a83ad1c7155197f3ab27403ebd20">tree_node_t</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__tree__modifiers.html#gad0368e336acfdb34aebd30fc67e0b21f">tree_append_sibling</a> (<a class="el" href="structtree__t.html">tree_t</a> *tree, <a class="el" href="group__tree.html#ga2408a83ad1c7155197f3ab27403ebd20">tree_node_t</a> *node, const void *item, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
 <tr class="memdesc:gad0368e336acfdb34aebd30fc67e0b21f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inserts a new node immediately after the given node in the sibling chain.  <br /></td></tr>
 <tr class="separator:gad0368e336acfdb34aebd30fc67e0b21f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gabc8640d4d93cc315c7282e90bf2f154d" id="r_gabc8640d4d93cc315c7282e90bf2f154d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group__tree.html#ga2408a83ad1c7155197f3ab27403ebd20">tree_node_t</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__tree__modifiers.html#gabc8640d4d93cc315c7282e90bf2f154d">tree_insert_before</a> (<a class="el" href="structtree__t.html">tree_t</a> *tree, <a class="el" href="group__tree.html#ga2408a83ad1c7155197f3ab27403ebd20">tree_node_t</a> *ref, const void *item, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
+<tr class="memdesc:gabc8640d4d93cc315c7282e90bf2f154d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inserts a new node immediately before <code>ref</code> in the sibling chain.  <br /></td></tr>
+<tr class="separator:gabc8640d4d93cc315c7282e90bf2f154d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaf94b3dd47e8d483503657bc75d8b5610" id="r_gaf94b3dd47e8d483503657bc75d8b5610"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__tree__modifiers.html#gaf94b3dd47e8d483503657bc75d8b5610">tree_move</a> (<a class="el" href="structtree__t.html">tree_t</a> *tree, <a class="el" href="group__tree.html#ga2408a83ad1c7155197f3ab27403ebd20">tree_node_t</a> *node, <a class="el" href="group__tree.html#ga2408a83ad1c7155197f3ab27403ebd20">tree_node_t</a> *new_parent, <a class="el" href="group__tree.html#ga2408a83ad1c7155197f3ab27403ebd20">tree_node_t</a> *before, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
+<tr class="memdesc:gaf94b3dd47e8d483503657bc75d8b5610"><td class="mdescLeft">&#160;</td><td class="mdescRight">Moves an existing node to a new position in the tree.  <br /></td></tr>
+<tr class="separator:gaf94b3dd47e8d483503657bc75d8b5610"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga1e00fd95b06544b3fb20038bc79ed580" id="r_ga1e00fd95b06544b3fb20038bc79ed580"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__tree__modifiers.html#ga1e00fd95b06544b3fb20038bc79ed580">tree_erase</a> (<a class="el" href="structtree__t.html">tree_t</a> *tree, <a class="el" href="group__tree.html#ga2408a83ad1c7155197f3ab27403ebd20">tree_node_t</a> *node, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
 <tr class="memdesc:ga1e00fd95b06544b3fb20038bc79ed580"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes the subtree rooted at the given node.  <br /></td></tr>
 <tr class="separator:ga1e00fd95b06544b3fb20038bc79ed580"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -148,7 +154,8 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Pointer to the newly created node, or NULL on failure. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Pointer to the newly created node, or NULL on failure.</dd></dl>
+<dl class="section note"><dt>Note</dt><dd>Complexity: O(1). </dd></dl>
 
 </div>
 </div>
@@ -201,7 +208,8 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Pointer to the newly created node, or NULL on failure. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Pointer to the newly created node, or NULL on failure.</dd></dl>
+<dl class="section note"><dt>Note</dt><dd>Complexity: O(1). </dd></dl>
 
 </div>
 </div>
@@ -249,6 +257,122 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section note"><dt>Note</dt><dd>Complexity: O(d) where d is the size of the subtree being removed. </dd></dl>
 <dl class="section warning"><dt>Warning</dt><dd>After this call, <code>node</code> and all nodes in its subtree are freed and must not be dereferenced. </dd></dl>
+
+</div>
+</div>
+<a id="gabc8640d4d93cc315c7282e90bf2f154d" name="gabc8640d4d93cc315c7282e90bf2f154d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gabc8640d4d93cc315c7282e90bf2f154d">&#9670;&#160;</a></span>tree_insert_before()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="group__tree.html#ga2408a83ad1c7155197f3ab27403ebd20">tree_node_t</a> * tree_insert_before </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structtree__t.html">tree_t</a> *&#160;</td>
+          <td class="paramname"><em>tree</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__tree.html#ga2408a83ad1c7155197f3ab27403ebd20">tree_node_t</a> *&#160;</td>
+          <td class="paramname"><em>ref</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const void *&#160;</td>
+          <td class="paramname"><em>item</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structerror__t.html">error_t</a> *&#160;</td>
+          <td class="paramname"><em>err</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Inserts a new node immediately before <code>ref</code> in the sibling chain. </p>
+<p>The new node shares the same parent as <code>ref</code>. If <code>ref</code> is the current first child, the new node becomes the new first child. Passing the root node sets <code>ERROR_INVALID_ARGS</code>.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">tree</td><td>The tree. Must not be NULL. </td></tr>
+    <tr><td class="paramname">ref</td><td>Node before which the new node is inserted. Must not be NULL and must not be the root. </td></tr>
+    <tr><td class="paramname">item</td><td>Data to store in the new node. Must not be NULL. </td></tr>
+    <tr><td class="paramname">err</td><td>Optional error output. Populated on failure. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Pointer to the newly created node, or NULL on failure.</dd></dl>
+<dl class="section note"><dt>Note</dt><dd>Complexity: O(1). </dd></dl>
+
+</div>
+</div>
+<a id="gaf94b3dd47e8d483503657bc75d8b5610" name="gaf94b3dd47e8d483503657bc75d8b5610"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaf94b3dd47e8d483503657bc75d8b5610">&#9670;&#160;</a></span>tree_move()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void tree_move </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structtree__t.html">tree_t</a> *&#160;</td>
+          <td class="paramname"><em>tree</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__tree.html#ga2408a83ad1c7155197f3ab27403ebd20">tree_node_t</a> *&#160;</td>
+          <td class="paramname"><em>node</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__tree.html#ga2408a83ad1c7155197f3ab27403ebd20">tree_node_t</a> *&#160;</td>
+          <td class="paramname"><em>new_parent</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__tree.html#ga2408a83ad1c7155197f3ab27403ebd20">tree_node_t</a> *&#160;</td>
+          <td class="paramname"><em>before</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structerror__t.html">error_t</a> *&#160;</td>
+          <td class="paramname"><em>err</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Moves an existing node to a new position in the tree. </p>
+<p>Detaches <code>node</code> from its current position and reattaches it under <code>new_parent</code>, immediately before <code>before</code>. Pass NULL for <code>before</code> to append as the last child of <code>new_parent</code>.</p>
+<p>The tree's total node count is unchanged by this operation.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">tree</td><td>The tree. Must not be NULL. </td></tr>
+    <tr><td class="paramname">node</td><td>Node to move. Must not be NULL. Must not equal <code>new_parent</code>. </td></tr>
+    <tr><td class="paramname">new_parent</td><td>Destination parent. Must not be NULL and must not be <code>node</code> or a descendant of <code>node</code> — no cycle detection is performed; violating this is undefined behaviour. </td></tr>
+    <tr><td class="paramname">before</td><td>Sibling before which <code>node</code> is inserted, or NULL to append. If non-NULL, must be a direct child of <code>new_parent</code>. </td></tr>
+    <tr><td class="paramname">err</td><td>Optional error output. Populated on failure.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>Note</dt><dd>Complexity: O(1). </dd></dl>
+<dl class="section warning"><dt>Warning</dt><dd>Moving a node to be its own ancestor creates a cycle and is undefined behaviour. The caller is responsible for preventing this. </dd></dl>
 
 </div>
 </div>

@@ -1,7 +1,8 @@
 <map id="Trees" name="Trees">
-<area shape="rect" id="Node000001" title="N&#45;ary tree with O(1) child and sibling insertion." alt="" coords="5,80,61,105"/>
+<area shape="rect" id="Node000001" title="N&#45;ary tree with O(1) insertion, removal, and sibling traversal." alt="" coords="5,104,61,129"/>
 <area shape="rect" id="Node000002" href="$group__tree__allocation.html" title=" " alt="" coords="109,5,196,31"/>
 <area shape="rect" id="Node000003" href="$group__tree__capacity.html" title=" " alt="" coords="113,55,192,80"/>
 <area shape="rect" id="Node000004" href="$group__tree__iteration.html" title=" " alt="" coords="114,104,191,129"/>
 <area shape="rect" id="Node000005" href="$group__tree__modifiers.html" title=" " alt="" coords="111,153,194,179"/>
+<area shape="rect" id="Node000006" href="$group__tree__traversal.html" title=" " alt="" coords="112,203,193,228"/>
 </map>

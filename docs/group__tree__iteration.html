@@ -80,7 +80,7 @@ Collaboration diagram for Iteration:</div>
 <div class="dyncontent">
 <div class="center"><img src="group__tree__iteration.png" border="0" usemap="#agroup____tree____iteration" alt=""/></div>
 <map name="agroup____tree____iteration" id="agroup____tree____iteration">
-<area shape="rect" href="group__tree.html" title="N&#45;ary tree with O(1) child and sibling insertion." alt="" coords="5,5,61,31"/>
+<area shape="rect" href="group__tree.html" title="N&#45;ary tree with O(1) insertion, removal, and sibling traversal." alt="" coords="5,5,61,31"/>
 <area shape="rect" title=" " alt="" coords="109,5,187,31"/>
 </map>
 </div>
@@ -102,15 +102,60 @@ Functions</h2></td></tr>
 <tr class="memitem:gaeaf6fd5ec8c9f9f2414a4a1b323f4472" id="r_gaeaf6fd5ec8c9f9f2414a4a1b323f4472"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group__tree.html#ga2408a83ad1c7155197f3ab27403ebd20">tree_node_t</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__tree__iteration.html#gaeaf6fd5ec8c9f9f2414a4a1b323f4472">tree_next_sibling</a> (<a class="el" href="group__tree.html#ga2408a83ad1c7155197f3ab27403ebd20">tree_node_t</a> *node, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
 <tr class="memdesc:gaeaf6fd5ec8c9f9f2414a4a1b323f4472"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the next sibling of a node.  <br /></td></tr>
 <tr class="separator:gaeaf6fd5ec8c9f9f2414a4a1b323f4472"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga77afe6062d62e424f4ec5d4a120d4851" id="r_ga77afe6062d62e424f4ec5d4a120d4851"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group__tree.html#ga2408a83ad1c7155197f3ab27403ebd20">tree_node_t</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__tree__iteration.html#ga77afe6062d62e424f4ec5d4a120d4851">tree_prev_sibling</a> (<a class="el" href="group__tree.html#ga2408a83ad1c7155197f3ab27403ebd20">tree_node_t</a> *node, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
+<tr class="memdesc:ga77afe6062d62e424f4ec5d4a120d4851"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the previous sibling of a node.  <br /></td></tr>
+<tr class="separator:ga77afe6062d62e424f4ec5d4a120d4851"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gad266d4e38c4257a8b2525afe004727e5" id="r_gad266d4e38c4257a8b2525afe004727e5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__tree__iteration.html#gad266d4e38c4257a8b2525afe004727e5">tree_has_children</a> (<a class="el" href="group__tree.html#ga2408a83ad1c7155197f3ab27403ebd20">tree_node_t</a> *node, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
 <tr class="memdesc:gad266d4e38c4257a8b2525afe004727e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if a node has at least one child.  <br /></td></tr>
 <tr class="separator:gad266d4e38c4257a8b2525afe004727e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga088092d5e1cfa9c35018f0a69caa9c82" id="r_ga088092d5e1cfa9c35018f0a69caa9c82"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__tree__iteration.html#ga088092d5e1cfa9c35018f0a69caa9c82">tree_child_count</a> (<a class="el" href="group__tree.html#ga2408a83ad1c7155197f3ab27403ebd20">tree_node_t</a> *node, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
+<tr class="memdesc:ga088092d5e1cfa9c35018f0a69caa9c82"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of direct children of a node.  <br /></td></tr>
+<tr class="separator:ga088092d5e1cfa9c35018f0a69caa9c82"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gac87b2538427aeeab756fec6d4f6dd31c" id="r_gac87b2538427aeeab756fec6d4f6dd31c"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__tree__iteration.html#gac87b2538427aeeab756fec6d4f6dd31c">tree_node_data</a> (<a class="el" href="group__tree.html#ga2408a83ad1c7155197f3ab27403ebd20">tree_node_t</a> *node, <a class="el" href="structerror__t.html">error_t</a> *err)</td></tr>
 <tr class="memdesc:gac87b2538427aeeab756fec6d4f6dd31c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a pointer to the data stored in a node.  <br /></td></tr>
 <tr class="separator:gac87b2538427aeeab756fec6d4f6dd31c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <h2 class="groupheader">Function Documentation</h2>
+<a id="ga088092d5e1cfa9c35018f0a69caa9c82" name="ga088092d5e1cfa9c35018f0a69caa9c82"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga088092d5e1cfa9c35018f0a69caa9c82">&#9670;&#160;</a></span>tree_child_count()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t tree_child_count </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__tree.html#ga2408a83ad1c7155197f3ab27403ebd20">tree_node_t</a> *&#160;</td>
+          <td class="paramname"><em>node</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structerror__t.html">error_t</a> *&#160;</td>
+          <td class="paramname"><em>err</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the number of direct children of a node. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">node</td><td>The node. Must not be NULL. </td></tr>
+    <tr><td class="paramname">err</td><td>Optional error output. Populated on failure. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Number of direct children, or 0 on failure.</dd></dl>
+<dl class="section note"><dt>Note</dt><dd>Complexity: O(1). </dd></dl>
+
+</div>
+</div>
 <a id="ga908aa815aa419597962ff5c67a35f8e1" name="ga908aa815aa419597962ff5c67a35f8e1"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ga908aa815aa419597962ff5c67a35f8e1">&#9670;&#160;</a></span>tree_first_child()</h2>
 
@@ -337,6 +382,44 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Pointer to the parent node, or NULL if <code>node</code> is the root. Reaching the root is not an error; <code>ERROR_OK</code> is set. </dd></dl>
+
+</div>
+</div>
+<a id="ga77afe6062d62e424f4ec5d4a120d4851" name="ga77afe6062d62e424f4ec5d4a120d4851"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga77afe6062d62e424f4ec5d4a120d4851">&#9670;&#160;</a></span>tree_prev_sibling()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="group__tree.html#ga2408a83ad1c7155197f3ab27403ebd20">tree_node_t</a> * tree_prev_sibling </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__tree.html#ga2408a83ad1c7155197f3ab27403ebd20">tree_node_t</a> *&#160;</td>
+          <td class="paramname"><em>node</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structerror__t.html">error_t</a> *&#160;</td>
+          <td class="paramname"><em>err</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the previous sibling of a node. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">node</td><td>The node. Must not be NULL. </td></tr>
+    <tr><td class="paramname">err</td><td>Optional error output. Populated on failure. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Pointer to the previous sibling, or NULL if <code>node</code> is the first sibling. Reaching the start of the sibling chain is not an error; <code>ERROR_OK</code> is set. </dd></dl>
 
 </div>
 </div>

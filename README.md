@@ -18,7 +18,8 @@ This is primarily an instructional project. The goal is to produce clean, readab
 | Stack | `array_t` | O(1)† | O(1) | O(1) |
 | Hash map | Bucket + `list_t` | O(1)† | O(1)† | O(1)† |
 | N-ary tree | Heap-allocated nodes | O(1) | O(d)‡  | O(n) |
-† Amortised. ‡ O(d) where d is the depth of the subtree being removed. 
+
+† Amortised. ‡ O(d) where d is the size of the subtree being removed.
 
 ## Usage
 
@@ -143,6 +144,7 @@ hashmap_destroy(map);
 > `memset` before use, or hashing will produce inconsistent results across
 > equal structs.
 ### N-ary trees
+
 ```c
 tree_t* tree = tree_create(sizeof(int), NULL);
 
@@ -153,26 +155,44 @@ tree_t* tree = tree_create(sizeof(int), NULL);
  *    4   5
  */
 int v;
-v = 1; tree_node_t* root = tree_append_child(tree, NULL,  &v, NULL);
-v = 2; tree_node_t* c1   = tree_append_child(tree, root,  &v, NULL);
-v = 3;              tree_append_child(tree, root,  &v, NULL);
-v = 4;              tree_append_child(tree, c1,    &v, NULL);
-v = 5;              tree_append_child(tree, c1,    &v, NULL);
+v = 1; tree_node_t* root = tree_append_child(tree, NULL, &v, NULL);
+v = 2; tree_node_t* c1   = tree_append_child(tree, root, &v, NULL);
+v = 3;               tree_append_child(tree, root, &v, NULL);
+v = 4;               tree_append_child(tree, c1,   &v, NULL);
+v = 5;               tree_append_child(tree, c1,   &v, NULL);
 
-/* depth-first pre-order traversal */
-tree_node_t* stk[64];
-int top = 0;
-stk[top++] = root;
-while (top > 0) {
-    tree_node_t* n = stk[--top];
-    printf("%d\n", *(int*)tree_node_data(n, NULL));
-    tree_node_t* children[64];
-    int nchildren = 0;
-    tree_node_t* ch = tree_first_child(n, NULL);
-    while (ch) { children[nchildren++] = ch; ch = tree_next_sibling(ch, NULL); }
-    for (int i = nchildren - 1; i >= 0; i--) stk[top++] = children[i];
+printf("children of root: %zu\n", tree_child_count(root, NULL)); /* 2 */
+
+/* insert a new node before c1 */
+v = 0; tree_insert_before(tree, c1, &v, NULL);
+
+/* move c1 to be the last child of root */
+tree_move(tree, c1, root, NULL, NULL);
+```
+
+#### Traversal
+
+Built-in pre-order and post-order walks accept a callback and a caller-supplied
+context pointer (`userdata`):
+
+```c
+typedef struct { int sum; } sum_ctx_t;
+
+tree_walk_result_t sum_cb(tree_node_t* node, size_t depth, void* userdata) {
+    sum_ctx_t* ctx = (sum_ctx_t*)userdata;
+    ctx->sum += *(int*)tree_node_data(node, NULL);
+    return TREE_WALK_CONTINUE;
 }
 
+sum_ctx_t ctx = { 0 };
+tree_walk_preorder(tree, sum_cb, &ctx, NULL);
+printf("sum = %d\n", ctx.sum);
+```
+
+Return `TREE_WALK_STOP` from the callback to abort traversal early, or
+`TREE_WALK_SKIP_CHILDREN` (pre-order only) to skip a node's entire subtree.
+
+```c
 tree_destroy(tree);
 ```
 ## Building
@@ -222,9 +242,9 @@ Then open `docs/html/index.html` in your browser.
 
 - **Not thread-safe.** External synchronisation is required for concurrent access to any container.
 - **No iterators for arrays.** Use index-based access via `array_at`, `array_front`, and `array_back`.
-- **Tree traversal is manual.** No built-in traversal functions are provided; use `tree_first_child`, `tree_next_sibling`, and a caller-managed stack or queue.
+- **No cycle detection in `tree_move`.** Moving a node to be a descendant of itself is undefined behaviour; the caller is responsible for preventing it.
 - **Early development.** Interfaces may evolve as additional containers are introduced.
 
 ## License
 
-Released for educational purposes.
+Released for educational purposes.eleased for educational purposes.

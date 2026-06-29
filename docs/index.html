@@ -95,7 +95,7 @@ Containers</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">N-ary tree   </td><td class="markdownTableBodyNone"><a class="el" href="group__tree.html">Trees</a>   </td><td class="markdownTableBodyNone">Heap-allocated nodes   </td><td class="markdownTableBodyNone">O(1)   </td><td class="markdownTableBodyNone">O(d)‡   </td><td class="markdownTableBodyNone">O(n)   </td></tr>
 </table>
-<p>† Amortised. ‡ O(d) where d is the depth of the subtree being removed.</p>
+<p>† Amortised. ‡ O(d) where d is the size of the subtree being removed.</p>
 <h1><a class="anchor" id="building"></a>
 Building</h1>
 <p>Requirements: CMake 3.31+, a C99-compatible compiler.</p>
@@ -146,40 +146,40 @@ Working with generic containers</h1>
 <div class="ttc" id="agroup__array__modifiers_html_ga81fafea435225ae19cd67b175e9c225e"><div class="ttname"><a href="group__array__modifiers.html#ga81fafea435225ae19cd67b175e9c225e">array_push_back</a></div><div class="ttdeci">void array_push_back(array_t *arr, const void *item, error_t *err)</div><div class="ttdoc">Appends an element to the end of the array.</div></div>
 </div><!-- fragment --><h1><a class="anchor" id="trees"></a>
 N-ary trees</h1>
-<p>Trees are built by appending children and siblings to existing nodes. The root is created by passing NULL as the parent to <code>tree_append_child</code>. Traversal is manual — use <code>tree_first_child</code> and <code>tree_next_sibling</code> with a caller-managed stack or queue:</p>
+<p>Trees are built by appending children and siblings to existing nodes. The root is created by passing <code>NULL</code> as the parent to <code>tree_append_child</code>. Nodes can also be inserted at arbitrary positions with <code>tree_insert_before</code> and relocated with <code>tree_move</code>. Each node tracks its direct child count in O(1) via <code>tree_child_count</code>, and the sibling chain is doubly-linked so <code>tree_prev_sibling</code> is also O(1).</p>
 <div class="fragment"><div class="line"><a class="code hl_struct" href="structtree__t.html">tree_t</a>* tree = <a class="code hl_function" href="group__tree__allocation.html#gac072e7c3ee2a01f5ddfb9c81cae672c9">tree_create</a>(<span class="keyword">sizeof</span>(<span class="keywordtype">int</span>), NULL);</div>
 <div class="line"> </div>
 <div class="line"><span class="keywordtype">int</span> v;</div>
 <div class="line">v = 1; <a class="code hl_typedef" href="group__tree.html#ga2408a83ad1c7155197f3ab27403ebd20">tree_node_t</a>* root = <a class="code hl_function" href="group__tree__modifiers.html#gab7d6a6334f959bfe0bcdb2bf79f347a9">tree_append_child</a>(tree, NULL, &amp;v, NULL);</div>
 <div class="line">v = 2; <a class="code hl_typedef" href="group__tree.html#ga2408a83ad1c7155197f3ab27403ebd20">tree_node_t</a>* c1   = <a class="code hl_function" href="group__tree__modifiers.html#gab7d6a6334f959bfe0bcdb2bf79f347a9">tree_append_child</a>(tree, root, &amp;v, NULL);</div>
-<div class="line">v = 3;              <a class="code hl_function" href="group__tree__modifiers.html#gab7d6a6334f959bfe0bcdb2bf79f347a9">tree_append_child</a>(tree, root, &amp;v, NULL);</div>
-<div class="line">v = 4;              <a class="code hl_function" href="group__tree__modifiers.html#gab7d6a6334f959bfe0bcdb2bf79f347a9">tree_append_child</a>(tree, c1,   &amp;v, NULL);</div>
-<div class="line">v = 5;              <a class="code hl_function" href="group__tree__modifiers.html#gab7d6a6334f959bfe0bcdb2bf79f347a9">tree_append_child</a>(tree, c1,   &amp;v, NULL);</div>
-<div class="line"> </div>
-<div class="line"><span class="comment">// depth-first pre-order traversal</span></div>
-<div class="line"><a class="code hl_typedef" href="group__tree.html#ga2408a83ad1c7155197f3ab27403ebd20">tree_node_t</a>* stk[64];</div>
-<div class="line"><span class="keywordtype">int</span> top = 0;</div>
-<div class="line">stk[top++] = root;</div>
-<div class="line"><span class="keywordflow">while</span> (top &gt; 0) {</div>
-<div class="line">    <a class="code hl_typedef" href="group__tree.html#ga2408a83ad1c7155197f3ab27403ebd20">tree_node_t</a>* n = stk[--top];</div>
-<div class="line">    printf(<span class="stringliteral">&quot;%d\n&quot;</span>, *(<span class="keywordtype">int</span>*)<a class="code hl_function" href="group__tree__iteration.html#gac87b2538427aeeab756fec6d4f6dd31c">tree_node_data</a>(n, NULL));</div>
-<div class="line">    <a class="code hl_typedef" href="group__tree.html#ga2408a83ad1c7155197f3ab27403ebd20">tree_node_t</a>* children[64];</div>
-<div class="line">    <span class="keywordtype">int</span> nchildren = 0;</div>
-<div class="line">    <a class="code hl_typedef" href="group__tree.html#ga2408a83ad1c7155197f3ab27403ebd20">tree_node_t</a>* ch = <a class="code hl_function" href="group__tree__iteration.html#ga908aa815aa419597962ff5c67a35f8e1">tree_first_child</a>(n, NULL);</div>
-<div class="line">    <span class="keywordflow">while</span> (ch) { children[nchildren++] = ch; ch = <a class="code hl_function" href="group__tree__iteration.html#gaeaf6fd5ec8c9f9f2414a4a1b323f4472">tree_next_sibling</a>(ch, NULL); }</div>
-<div class="line">    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = nchildren - 1; i &gt;= 0; i--) stk[top++] = children[i];</div>
-<div class="line">}</div>
-<div class="line"> </div>
-<div class="line"><a class="code hl_function" href="group__tree__allocation.html#ga8005bed8a0fa0877eda56c8232701fd4">tree_destroy</a>(tree);</div>
-<div class="ttc" id="agroup__tree__allocation_html_ga8005bed8a0fa0877eda56c8232701fd4"><div class="ttname"><a href="group__tree__allocation.html#ga8005bed8a0fa0877eda56c8232701fd4">tree_destroy</a></div><div class="ttdeci">void tree_destroy(tree_t *tree)</div><div class="ttdoc">Destroys the tree and frees all associated memory.</div></div>
+<div class="line">v = 3;               <a class="code hl_function" href="group__tree__modifiers.html#gab7d6a6334f959bfe0bcdb2bf79f347a9">tree_append_child</a>(tree, root, &amp;v, NULL);</div>
+<div class="line">v = 4;               <a class="code hl_function" href="group__tree__modifiers.html#gab7d6a6334f959bfe0bcdb2bf79f347a9">tree_append_child</a>(tree, c1,   &amp;v, NULL);</div>
+<div class="line">v = 5;               <a class="code hl_function" href="group__tree__modifiers.html#gab7d6a6334f959bfe0bcdb2bf79f347a9">tree_append_child</a>(tree, c1,   &amp;v, NULL);</div>
 <div class="ttc" id="agroup__tree__allocation_html_gac072e7c3ee2a01f5ddfb9c81cae672c9"><div class="ttname"><a href="group__tree__allocation.html#gac072e7c3ee2a01f5ddfb9c81cae672c9">tree_create</a></div><div class="ttdeci">tree_t * tree_create(size_t elem_size, error_t *err)</div><div class="ttdoc">Creates a new empty n-ary tree.</div></div>
-<div class="ttc" id="agroup__tree__iteration_html_ga908aa815aa419597962ff5c67a35f8e1"><div class="ttname"><a href="group__tree__iteration.html#ga908aa815aa419597962ff5c67a35f8e1">tree_first_child</a></div><div class="ttdeci">tree_node_t * tree_first_child(tree_node_t *node, error_t *err)</div><div class="ttdoc">Returns the first child of a node.</div></div>
-<div class="ttc" id="agroup__tree__iteration_html_gac87b2538427aeeab756fec6d4f6dd31c"><div class="ttname"><a href="group__tree__iteration.html#gac87b2538427aeeab756fec6d4f6dd31c">tree_node_data</a></div><div class="ttdeci">void * tree_node_data(tree_node_t *node, error_t *err)</div><div class="ttdoc">Returns a pointer to the data stored in a node.</div></div>
-<div class="ttc" id="agroup__tree__iteration_html_gaeaf6fd5ec8c9f9f2414a4a1b323f4472"><div class="ttname"><a href="group__tree__iteration.html#gaeaf6fd5ec8c9f9f2414a4a1b323f4472">tree_next_sibling</a></div><div class="ttdeci">tree_node_t * tree_next_sibling(tree_node_t *node, error_t *err)</div><div class="ttdoc">Returns the next sibling of a node.</div></div>
 <div class="ttc" id="agroup__tree__modifiers_html_gab7d6a6334f959bfe0bcdb2bf79f347a9"><div class="ttname"><a href="group__tree__modifiers.html#gab7d6a6334f959bfe0bcdb2bf79f347a9">tree_append_child</a></div><div class="ttdeci">tree_node_t * tree_append_child(tree_t *tree, tree_node_t *parent, const void *item, error_t *err)</div><div class="ttdoc">Appends a new node as the last child of a parent.</div></div>
 <div class="ttc" id="agroup__tree_html_ga2408a83ad1c7155197f3ab27403ebd20"><div class="ttname"><a href="group__tree.html#ga2408a83ad1c7155197f3ab27403ebd20">tree_node_t</a></div><div class="ttdeci">struct tree_node tree_node_t</div><div class="ttdoc">Opaque n-ary tree node.</div><div class="ttdef"><b>Definition</b> containers.h:999</div></div>
 <div class="ttc" id="astructtree__t_html"><div class="ttname"><a href="structtree__t.html">tree_t</a></div><div class="ttdoc">Generic n-ary tree.</div><div class="ttdef"><b>Definition</b> containers.h:1010</div></div>
-</div><!-- fragment --><h1><a class="anchor" id="hash_maps"></a>
+</div><!-- fragment --><p>Built-in pre-order and post-order walks accept a <a class="el" href="group__tree.html#ga711393be1345d2de611594d97210982b">tree_walk_fn</a> callback and a caller-supplied context pointer:</p>
+<div class="fragment"><div class="line"><span class="keyword">typedef</span> <span class="keyword">struct </span>{ <span class="keywordtype">int</span> sum; } sum_ctx_t;</div>
+<div class="line"> </div>
+<div class="line"><a class="code hl_enumeration" href="group__tree.html#ga43cfaf1320ba84bc1e607f9f251e3674">tree_walk_result_t</a> sum_cb(<a class="code hl_typedef" href="group__tree.html#ga2408a83ad1c7155197f3ab27403ebd20">tree_node_t</a>* node, <span class="keywordtype">size_t</span> depth, <span class="keywordtype">void</span>* userdata) {</div>
+<div class="line">    sum_ctx_t* ctx = (sum_ctx_t*)userdata;</div>
+<div class="line">    ctx-&gt;sum += *(<span class="keywordtype">int</span>*)<a class="code hl_function" href="group__tree__iteration.html#gac87b2538427aeeab756fec6d4f6dd31c">tree_node_data</a>(node, NULL);</div>
+<div class="line">    <span class="keywordflow">return</span> <a class="code hl_enumvalue" href="group__tree.html#gga43cfaf1320ba84bc1e607f9f251e3674a97aab3f2bd46462c488c532b232160b8">TREE_WALK_CONTINUE</a>;</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line">sum_ctx_t ctx = { 0 };</div>
+<div class="line"><a class="code hl_function" href="group__tree__traversal.html#ga4a05363248fc0b8d5bf3f764527f74b9">tree_walk_preorder</a>(tree, sum_cb, &amp;ctx, NULL);</div>
+<div class="line">printf(<span class="stringliteral">&quot;sum = %d\n&quot;</span>, ctx.sum);</div>
+<div class="line"> </div>
+<div class="line"><a class="code hl_function" href="group__tree__allocation.html#ga8005bed8a0fa0877eda56c8232701fd4">tree_destroy</a>(tree);</div>
+<div class="ttc" id="agroup__tree__allocation_html_ga8005bed8a0fa0877eda56c8232701fd4"><div class="ttname"><a href="group__tree__allocation.html#ga8005bed8a0fa0877eda56c8232701fd4">tree_destroy</a></div><div class="ttdeci">void tree_destroy(tree_t *tree)</div><div class="ttdoc">Destroys the tree and frees all associated memory.</div></div>
+<div class="ttc" id="agroup__tree__iteration_html_gac87b2538427aeeab756fec6d4f6dd31c"><div class="ttname"><a href="group__tree__iteration.html#gac87b2538427aeeab756fec6d4f6dd31c">tree_node_data</a></div><div class="ttdeci">void * tree_node_data(tree_node_t *node, error_t *err)</div><div class="ttdoc">Returns a pointer to the data stored in a node.</div></div>
+<div class="ttc" id="agroup__tree__traversal_html_ga4a05363248fc0b8d5bf3f764527f74b9"><div class="ttname"><a href="group__tree__traversal.html#ga4a05363248fc0b8d5bf3f764527f74b9">tree_walk_preorder</a></div><div class="ttdeci">void tree_walk_preorder(tree_t *tree, tree_walk_fn fn, void *userdata, error_t *err)</div><div class="ttdoc">Visits every node in pre-order (parent before children).</div></div>
+<div class="ttc" id="agroup__tree_html_ga43cfaf1320ba84bc1e607f9f251e3674"><div class="ttname"><a href="group__tree.html#ga43cfaf1320ba84bc1e607f9f251e3674">tree_walk_result_t</a></div><div class="ttdeci">tree_walk_result_t</div><div class="ttdoc">Controls how a tree walk callback proceeds after visiting a node.</div><div class="ttdef"><b>Definition</b> containers.h:1020</div></div>
+<div class="ttc" id="agroup__tree_html_gga43cfaf1320ba84bc1e607f9f251e3674a97aab3f2bd46462c488c532b232160b8"><div class="ttname"><a href="group__tree.html#gga43cfaf1320ba84bc1e607f9f251e3674a97aab3f2bd46462c488c532b232160b8">TREE_WALK_CONTINUE</a></div><div class="ttdeci">@ TREE_WALK_CONTINUE</div><div class="ttdoc">Continue traversal normally.</div><div class="ttdef"><b>Definition</b> containers.h:1021</div></div>
+</div><!-- fragment --><p>Return <a class="el" href="group__tree.html#gga43cfaf1320ba84bc1e607f9f251e3674a71c4a86b45fb692c487cdc6c4cae180c">TREE_WALK_STOP</a> to abort traversal early, or <a class="el" href="group__tree.html#gga43cfaf1320ba84bc1e607f9f251e3674a0fab51d0e1a4bf0738c5d54e0e86f919">TREE_WALK_SKIP_CHILDREN</a> (pre-order only) to skip a node's entire subtree without visiting its descendants.</p>
+<h1><a class="anchor" id="hash_maps"></a>
 Hash maps</h1>
 <p>Hash maps require a hash function and a comparator. Built-in pairs are provided for the most common key types:</p>
 <div class="fragment"><div class="line"><span class="comment">// integer keys</span></div>
@@ -201,7 +201,7 @@ Notes and limitations</h1>
 <ul>
 <li><b>Not thread-safe.</b> External synchronisation is required for concurrent access to any container.</li>
 <li><b>No iterators for arrays.</b> Use index-based access via <code>array_at</code>, <code>array_front</code>, and <code>array_back</code>.</li>
-<li><b>Tree traversal is manual.</b> No built-in traversal functions are provided; use <code>tree_first_child</code>, <code>tree_next_sibling</code>, and a caller-managed stack or queue.</li>
+<li><b>No cycle detection in <code>tree_move</code>.</b> Moving a node to be a descendant of itself is undefined behaviour; the caller is responsible for preventing it.</li>
 <li><b>Struct keys with padding</b> must be zero-initialised with <code>memset</code> before use as hash map keys, or hashing will produce inconsistent results across equal structs.</li>
 <li>This project is in early development. Interfaces may evolve as additional containers are introduced.</li>
 </ul>

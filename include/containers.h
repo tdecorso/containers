@@ -993,7 +993,7 @@ int cmp_string(const void* a, const void* b, size_t key_size);
 /// @} // map
 
 /// @defgroup tree Trees
-/// @brief N-ary tree with O(1) child and sibling insertion.
+/// @brief N-ary tree with O(1) insertion, removal, and sibling traversal.
 /// @{
 
 typedef struct tree_node tree_node_t; ///< Opaque n-ary tree node.
@@ -1002,7 +1002,7 @@ typedef struct tree_node tree_node_t; ///< Opaque n-ary tree node.
  * @brief Generic n-ary tree.
  *
  * Each node owns its data and may have an arbitrary number of children,
- * linked as a singly-connected sibling chain. The tree owns all nodes
+ * linked as a doubly-connected sibling chain. The tree owns all nodes
  * inserted into it and frees them recursively on destroy or erase.
  *
  * @ingroup tree
@@ -1012,6 +1012,29 @@ typedef struct {
     size_t       count;     ///< Total number of nodes currently in the tree.
     size_t       elem_size; ///< Size in bytes of the data stored in each node.
 } tree_t;
+
+/**
+ * @brief Controls how a tree walk callback proceeds after visiting a node.
+ * @ingroup tree
+ */
+typedef enum {
+    TREE_WALK_CONTINUE,       ///< Continue traversal normally.
+    TREE_WALK_SKIP_CHILDREN,  ///< Skip descendants of this node (pre-order only).
+    TREE_WALK_STOP,           ///< Abort traversal immediately.
+} tree_walk_result_t;
+
+/**
+ * @brief Callback invoked for each node during a tree walk.
+ *
+ * @param node     The current node. Never NULL.
+ * @param depth    Depth of the node (root is 0).
+ * @param userdata Caller-supplied context pointer.
+ * @return A @ref tree_walk_result_t value controlling traversal.
+ * @ingroup tree
+ */
+typedef tree_walk_result_t (*tree_walk_fn)(tree_node_t* node,
+                                           size_t depth,
+                                           void* userdata);
 
 /// @defgroup tree_allocation Allocation
 /// @ingroup tree
@@ -1126,6 +1149,17 @@ tree_node_t* tree_last_child(tree_node_t* node, error_t* err);
 tree_node_t* tree_next_sibling(tree_node_t* node, error_t* err);
 
 /**
+ * @brief Returns the previous sibling of a node.
+ *
+ * @param node The node. Must not be NULL.
+ * @param err  Optional error output. Populated on failure.
+ * @return Pointer to the previous sibling, or NULL if `node` is the first sibling.
+ *         Reaching the start of the sibling chain is not an error; `ERROR_OK` is set.
+ * @ingroup tree_iteration
+ */
+tree_node_t* tree_prev_sibling(tree_node_t* node, error_t* err);
+
+/**
  * @brief Returns true if a node has at least one child.
  *
  * @param node The node. Must not be NULL.
@@ -1134,6 +1168,18 @@ tree_node_t* tree_next_sibling(tree_node_t* node, error_t* err);
  * @ingroup tree_iteration
  */
 bool tree_has_children(tree_node_t* node, error_t* err);
+
+/**
+ * @brief Returns the number of direct children of a node.
+ *
+ * @param node The node. Must not be NULL.
+ * @param err  Optional error output. Populated on failure.
+ * @return Number of direct children, or 0 on failure.
+ *
+ * @note Complexity: O(1).
+ * @ingroup tree_iteration
+ */
+size_t tree_child_count(tree_node_t* node, error_t* err);
 
 /**
  * @brief Returns a pointer to the data stored in a node.
@@ -1167,9 +1213,12 @@ void* tree_node_data(tree_node_t* node, error_t* err);
  * @param item   Data to store in the new node. Must not be NULL.
  * @param err    Optional error output. Populated on failure.
  * @return Pointer to the newly created node, or NULL on failure.
+ *
+ * @note Complexity: O(1).
  * @ingroup tree_modifiers
  */
-tree_node_t* tree_append_child(tree_t* tree, tree_node_t* parent, const void* item, error_t* err);
+tree_node_t* tree_append_child(tree_t* tree, tree_node_t* parent,
+                               const void* item, error_t* err);
 
 /**
  * @brief Inserts a new node immediately after the given node in the
@@ -1184,9 +1233,58 @@ tree_node_t* tree_append_child(tree_t* tree, tree_node_t* parent, const void* it
  * @param item Data to store in the new node. Must not be NULL.
  * @param err  Optional error output. Populated on failure.
  * @return Pointer to the newly created node, or NULL on failure.
+ *
+ * @note Complexity: O(1).
  * @ingroup tree_modifiers
  */
-tree_node_t* tree_append_sibling(tree_t* tree, tree_node_t* node, const void* item, error_t* err);
+tree_node_t* tree_append_sibling(tree_t* tree, tree_node_t* node,
+                                 const void* item, error_t* err);
+
+/**
+ * @brief Inserts a new node immediately before `ref` in the sibling chain.
+ *
+ * The new node shares the same parent as `ref`. If `ref` is the current
+ * first child, the new node becomes the new first child.
+ * Passing the root node sets `ERROR_INVALID_ARGS`.
+ *
+ * @param tree The tree. Must not be NULL.
+ * @param ref  Node before which the new node is inserted. Must not be NULL
+ *             and must not be the root.
+ * @param item Data to store in the new node. Must not be NULL.
+ * @param err  Optional error output. Populated on failure.
+ * @return Pointer to the newly created node, or NULL on failure.
+ *
+ * @note Complexity: O(1).
+ * @ingroup tree_modifiers
+ */
+tree_node_t* tree_insert_before(tree_t* tree, tree_node_t* ref,
+                                const void* item, error_t* err);
+
+/**
+ * @brief Moves an existing node to a new position in the tree.
+ *
+ * Detaches `node` from its current position and reattaches it under
+ * `new_parent`, immediately before `before`. Pass NULL for `before` to
+ * append as the last child of `new_parent`.
+ *
+ * The tree's total node count is unchanged by this operation.
+ *
+ * @param tree       The tree. Must not be NULL.
+ * @param node       Node to move. Must not be NULL. Must not equal `new_parent`.
+ * @param new_parent Destination parent. Must not be NULL and must not be
+ *                   `node` or a descendant of `node` — no cycle detection
+ *                   is performed; violating this is undefined behaviour.
+ * @param before     Sibling before which `node` is inserted, or NULL to append.
+ *                   If non-NULL, must be a direct child of `new_parent`.
+ * @param err        Optional error output. Populated on failure.
+ *
+ * @note Complexity: O(1).
+ * @warning Moving a node to be its own ancestor creates a cycle and is
+ *          undefined behaviour. The caller is responsible for preventing this.
+ * @ingroup tree_modifiers
+ */
+void tree_move(tree_t* tree, tree_node_t* node, tree_node_t* new_parent,
+               tree_node_t* before, error_t* err);
 
 /**
  * @brief Removes the subtree rooted at the given node.
@@ -1207,6 +1305,49 @@ tree_node_t* tree_append_sibling(tree_t* tree, tree_node_t* node, const void* it
 void tree_erase(tree_t* tree, tree_node_t* node, error_t* err);
 
 /// @} // tree_modifiers
+
+/// @defgroup tree_traversal Traversal
+/// @ingroup tree
+/// @{
+
+/**
+ * @brief Visits every node in pre-order (parent before children).
+ *
+ * The callback may return @ref TREE_WALK_SKIP_CHILDREN to skip the
+ * descendants of the current node, or @ref TREE_WALK_STOP to abort
+ * traversal entirely.
+ *
+ * @param tree     The tree. Must not be NULL.
+ * @param fn       Callback invoked for each node. Must not be NULL.
+ * @param userdata Opaque pointer forwarded to every callback invocation.
+ * @param err      Optional error output. Populated on failure.
+ *
+ * @note Complexity: O(n) where n is the total number of nodes.
+ * @ingroup tree_traversal
+ */
+void tree_walk_preorder(tree_t* tree, tree_walk_fn fn,
+                        void* userdata, error_t* err);
+
+/**
+ * @brief Visits every node in post-order (children before parent).
+ *
+ * The callback may return @ref TREE_WALK_STOP to abort traversal.
+ * @ref TREE_WALK_SKIP_CHILDREN has no effect in post-order since
+ * children are visited before the callback fires; it is treated as
+ * @ref TREE_WALK_CONTINUE.
+ *
+ * @param tree     The tree. Must not be NULL.
+ * @param fn       Callback invoked for each node. Must not be NULL.
+ * @param userdata Opaque pointer forwarded to every callback invocation.
+ * @param err      Optional error output. Populated on failure.
+ *
+ * @note Complexity: O(n) where n is the total number of nodes.
+ * @ingroup tree_traversal
+ */
+void tree_walk_postorder(tree_t* tree, tree_walk_fn fn,
+                         void* userdata, error_t* err);
+
+/// @} // tree_traversal
 /// @} // tree
 
 #endif // H_CONTAINERS

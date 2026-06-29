@@ -73,23 +73,25 @@ $(function() {
   <div class="summary">
 <a href="#groups">Modules</a> &#124;
 <a href="#nested-classes">Data Structures</a> &#124;
-<a href="#typedef-members">Typedefs</a>  </div>
+<a href="#typedef-members">Typedefs</a> &#124;
+<a href="#enum-members">Enumerations</a>  </div>
   <div class="headertitle"><div class="title">Trees</div></div>
 </div><!--header-->
 <div class="contents">
 
-<p>N-ary tree with O(1) child and sibling insertion.  
+<p>N-ary tree with O(1) insertion, removal, and sibling traversal.  
 <a href="#details">More...</a></p>
 <div class="dynheader">
 Collaboration diagram for Trees:</div>
 <div class="dyncontent">
 <div class="center"><img src="group__tree.png" border="0" usemap="#agroup____tree" alt=""/></div>
 <map name="agroup____tree" id="agroup____tree">
-<area shape="rect" title="N&#45;ary tree with O(1) child and sibling insertion." alt="" coords="5,80,61,105"/>
+<area shape="rect" title="N&#45;ary tree with O(1) insertion, removal, and sibling traversal." alt="" coords="5,104,61,129"/>
 <area shape="rect" href="group__tree__allocation.html" title=" " alt="" coords="109,5,196,31"/>
 <area shape="rect" href="group__tree__capacity.html" title=" " alt="" coords="113,55,192,80"/>
 <area shape="rect" href="group__tree__iteration.html" title=" " alt="" coords="114,104,191,129"/>
 <area shape="rect" href="group__tree__modifiers.html" title=" " alt="" coords="111,153,194,179"/>
+<area shape="rect" href="group__tree__traversal.html" title=" " alt="" coords="112,203,193,228"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -102,6 +104,8 @@ Modules</h2></td></tr>
 <tr class="memitem:group__tree__iteration" id="r_group__tree__iteration"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__tree__iteration.html">Iteration</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:group__tree__modifiers" id="r_group__tree__modifiers"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__tree__modifiers.html">Modifiers</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:group__tree__traversal" id="r_group__tree__traversal"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__tree__traversal.html">Traversal</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
@@ -116,9 +120,72 @@ Typedefs</h2></td></tr>
 typedef struct tree_node&#160;</td><td class="memItemRight" valign="bottom"><b>tree_node_t</b></td></tr>
 <tr class="memdesc:ga2408a83ad1c7155197f3ab27403ebd20"><td class="mdescLeft">&#160;</td><td class="mdescRight">Opaque n-ary tree node. <br /></td></tr>
 <tr class="separator:ga2408a83ad1c7155197f3ab27403ebd20"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga711393be1345d2de611594d97210982b" id="r_ga711393be1345d2de611594d97210982b"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="group__tree.html#ga43cfaf1320ba84bc1e607f9f251e3674">tree_walk_result_t</a>(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__tree.html#ga711393be1345d2de611594d97210982b">tree_walk_fn</a>) (<a class="el" href="group__tree.html#ga2408a83ad1c7155197f3ab27403ebd20">tree_node_t</a> *node, size_t depth, void *userdata)</td></tr>
+<tr class="memdesc:ga711393be1345d2de611594d97210982b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Callback invoked for each node during a tree walk.  <br /></td></tr>
+<tr class="separator:ga711393be1345d2de611594d97210982b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
+Enumerations</h2></td></tr>
+<tr class="memitem:ga43cfaf1320ba84bc1e607f9f251e3674" id="r_ga43cfaf1320ba84bc1e607f9f251e3674"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__tree.html#ga43cfaf1320ba84bc1e607f9f251e3674">tree_walk_result_t</a> { <a class="el" href="group__tree.html#gga43cfaf1320ba84bc1e607f9f251e3674a97aab3f2bd46462c488c532b232160b8">TREE_WALK_CONTINUE</a>
+, <a class="el" href="group__tree.html#gga43cfaf1320ba84bc1e607f9f251e3674a0fab51d0e1a4bf0738c5d54e0e86f919">TREE_WALK_SKIP_CHILDREN</a>
+, <a class="el" href="group__tree.html#gga43cfaf1320ba84bc1e607f9f251e3674a71c4a86b45fb692c487cdc6c4cae180c">TREE_WALK_STOP</a>
+ }</td></tr>
+<tr class="memdesc:ga43cfaf1320ba84bc1e607f9f251e3674"><td class="mdescLeft">&#160;</td><td class="mdescRight">Controls how a tree walk callback proceeds after visiting a node.  <a href="group__tree.html#ga43cfaf1320ba84bc1e607f9f251e3674">More...</a><br /></td></tr>
+<tr class="separator:ga43cfaf1320ba84bc1e607f9f251e3674"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<p>N-ary tree with O(1) child and sibling insertion. </p>
+<p>N-ary tree with O(1) insertion, removal, and sibling traversal. </p>
+<h2 class="groupheader">Typedef Documentation</h2>
+<a id="ga711393be1345d2de611594d97210982b" name="ga711393be1345d2de611594d97210982b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga711393be1345d2de611594d97210982b">&#9670;&#160;</a></span>tree_walk_fn</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef <a class="el" href="group__tree.html#ga43cfaf1320ba84bc1e607f9f251e3674">tree_walk_result_t</a>(* tree_walk_fn) (<a class="el" href="group__tree.html#ga2408a83ad1c7155197f3ab27403ebd20">tree_node_t</a> *node, size_t depth, void *userdata)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Callback invoked for each node during a tree walk. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">node</td><td>The current node. Never NULL. </td></tr>
+    <tr><td class="paramname">depth</td><td>Depth of the node (root is 0). </td></tr>
+    <tr><td class="paramname">userdata</td><td>Caller-supplied context pointer. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A <a class="el" href="group__tree.html#ga43cfaf1320ba84bc1e607f9f251e3674">tree_walk_result_t</a> value controlling traversal. </dd></dl>
+
+</div>
+</div>
+<h2 class="groupheader">Enumeration Type Documentation</h2>
+<a id="ga43cfaf1320ba84bc1e607f9f251e3674" name="ga43cfaf1320ba84bc1e607f9f251e3674"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga43cfaf1320ba84bc1e607f9f251e3674">&#9670;&#160;</a></span>tree_walk_result_t</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="group__tree.html#ga43cfaf1320ba84bc1e607f9f251e3674">tree_walk_result_t</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Controls how a tree walk callback proceeds after visiting a node. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="gga43cfaf1320ba84bc1e607f9f251e3674a97aab3f2bd46462c488c532b232160b8" name="gga43cfaf1320ba84bc1e607f9f251e3674a97aab3f2bd46462c488c532b232160b8"></a>TREE_WALK_CONTINUE&#160;</td><td class="fielddoc"><p>Continue traversal normally. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="gga43cfaf1320ba84bc1e607f9f251e3674a0fab51d0e1a4bf0738c5d54e0e86f919" name="gga43cfaf1320ba84bc1e607f9f251e3674a0fab51d0e1a4bf0738c5d54e0e86f919"></a>TREE_WALK_SKIP_CHILDREN&#160;</td><td class="fielddoc"><p>Skip descendants of this node (pre-order only). </p>
+</td></tr>
+<tr><td class="fieldname"><a id="gga43cfaf1320ba84bc1e607f9f251e3674a71c4a86b45fb692c487cdc6c4cae180c" name="gga43cfaf1320ba84bc1e607f9f251e3674a71c4a86b45fb692c487cdc6c4cae180c"></a>TREE_WALK_STOP&#160;</td><td class="fielddoc"><p>Abort traversal immediately. </p>
+</td></tr>
+</table>
+
+</div>
+</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

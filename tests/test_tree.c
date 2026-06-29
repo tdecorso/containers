@@ -348,20 +348,21 @@ int test_tree_erase(void) {
     ASSERT(tree_first_child(root, &err) == c2, "c2 is now first child of root");
     ASSERT(tree_has_children(c2, &err) == false, "c2 has no children");
 
-    /* erase a mid sibling: c2 */
+    /* erase a mid sibling: c2 — verify prev linkage of c3 is updated */
     tree_erase(tree, c2, &err);
-    ASSERT(err.code == ERROR_OK,              "erase of mid sibling c2 succeeds");
-    ASSERT(tree->count == 2,                  "count is 2 after erasing c2");
+    ASSERT(err.code == ERROR_OK,               "erase of mid sibling c2 succeeds");
+    ASSERT(tree->count == 2,                   "count is 2 after erasing c2");
     ASSERT(tree_first_child(root, &err) == c3, "c3 is now only child of root");
-    ASSERT(tree_last_child(root, &err)  == c3, "c3 is also last child of root");
+    ASSERT(tree_last_child(root,  &err) == c3, "c3 is also last child of root");
+    ASSERT(tree_prev_sibling(c3,  &err) == NULL, "c3 prev is NULL after c2 erased");
 
     /* erase last child: c3 */
     tree_erase(tree, c3, &err);
-    ASSERT(err.code == ERROR_OK,                    "erase of last child c3 succeeds");
-    ASSERT(tree->count == 1,                        "count is 1 after erasing c3");
-    ASSERT(tree_has_children(root, &err) == false,  "root has no children after c3 erased");
+    ASSERT(err.code == ERROR_OK,                   "erase of last child c3 succeeds");
+    ASSERT(tree->count == 1,                       "count is 1 after erasing c3");
+    ASSERT(tree_has_children(root, &err) == false, "root has no children after c3 erased");
 
-    /* erase root: tree becomes empty, err untouched */
+    /* erase root: tree becomes empty */
     err.code = ERROR_OK;
     tree_erase(tree, root, &err);
     ASSERT(err.code == ERROR_OK,              "erase of root sets ERROR_OK");
@@ -373,6 +374,409 @@ int test_tree_erase(void) {
     root = tree_append_child(tree, NULL, &v, NULL);
     tree_erase(tree, root, NULL);
     ASSERT(1, "tree_erase works fine with NULL err pointer");
+
+    tree_destroy(tree);
+    return 0;
+}
+
+/* ---------------------------------------------------------------- */
+/* tree_prev_sibling                                                 */
+/* ---------------------------------------------------------------- */
+
+int test_tree_prev_sibling(void) {
+    error_t       err;
+    tree_t       *tree = tree_create(sizeof(int), &err);
+    tree_node_t  *root, *c1, *c2, *c3;
+    int           a = 1, b = 2, c = 3, d = 4;
+
+    ASSERT(tree != NULL, "tree_create succeeds before tree_prev_sibling test");
+
+    /* invalid args */
+    err.code = ERROR_OK;
+    tree_prev_sibling(NULL, &err);
+    ASSERT(err.code == ERROR_INVALID_ARGS, "tree_prev_sibling on NULL node sets invalid args error");
+
+    /*
+     * build:  root -> [c1, c2, c3]
+     */
+    root = tree_append_child(tree, NULL,  &a, &err);
+    c1   = tree_append_child(tree, root,  &b, &err);
+    c2   = tree_append_child(tree, root,  &c, &err);
+    c3   = tree_append_child(tree, root,  &d, &err);
+
+    /* first child has no prev */
+    ASSERT(tree_prev_sibling(c1, &err) == NULL, "first child c1 has no prev sibling");
+    ASSERT(err.code == ERROR_OK,                "reaching start of siblings is not an error");
+
+    /* mid and last */
+    ASSERT(tree_prev_sibling(c2, &err) == c1, "prev sibling of c2 is c1");
+    ASSERT(tree_prev_sibling(c3, &err) == c2, "prev sibling of c3 is c2");
+
+    /* root has no prev (no parent) */
+    ASSERT(tree_prev_sibling(root, &err) == NULL, "root has no prev sibling");
+    ASSERT(err.code == ERROR_OK,                  "no error on root prev sibling");
+
+    /* after erasing c2, c3->prev must be c1 */
+    tree_erase(tree, c2, &err);
+    ASSERT(tree_prev_sibling(c3, &err) == c1, "c3->prev is c1 after c2 erased");
+
+    /* NULL err pointer */
+    ASSERT(tree_prev_sibling(c3, NULL) == c1, "tree_prev_sibling works fine with NULL err pointer");
+
+    tree_destroy(tree);
+    return 0;
+}
+
+/* ---------------------------------------------------------------- */
+/* tree_child_count                                                  */
+/* ---------------------------------------------------------------- */
+
+int test_tree_child_count(void) {
+    error_t       err;
+    tree_t       *tree = tree_create(sizeof(int), &err);
+    tree_node_t  *root, *c1, *c2, *c3;
+    int           v = 1;
+
+    ASSERT(tree != NULL, "tree_create succeeds before tree_child_count test");
+
+    /* invalid args */
+    err.code = ERROR_OK;
+    tree_child_count(NULL, &err);
+    ASSERT(err.code == ERROR_INVALID_ARGS, "tree_child_count on NULL node sets invalid args error");
+
+    root = tree_append_child(tree, NULL, &v, &err);
+    ASSERT(tree_child_count(root, &err) == 0, "root child_count is 0 before any children");
+
+    c1 = tree_append_child(tree, root, &v, &err);
+    ASSERT(tree_child_count(root, &err) == 1, "root child_count is 1 after append_child");
+
+    c2 = tree_append_child(tree, root, &v, &err);
+    ASSERT(tree_child_count(root, &err) == 2, "root child_count is 2 after second append_child");
+
+    c3 = tree_append_sibling(tree, c2, &v, &err);
+    ASSERT(tree_child_count(root, &err) == 3, "root child_count is 3 after append_sibling");
+
+    /* leaf nodes have count 0 */
+    ASSERT(tree_child_count(c1,   &err) == 0, "leaf c1 child_count is 0");
+    ASSERT(tree_child_count(c2,   &err) == 0, "leaf c2 child_count is 0");
+
+    /* erase decrements parent's count */
+    tree_erase(tree, c2, &err);
+    ASSERT(tree_child_count(root, &err) == 2, "root child_count is 2 after erasing c2");
+
+    tree_erase(tree, c1, &err);
+    ASSERT(tree_child_count(root, &err) == 1, "root child_count is 1 after erasing c1");
+
+    tree_erase(tree, c3, &err);
+    ASSERT(tree_child_count(root, &err) == 0, "root child_count is 0 after erasing last child");
+
+    /* NULL err pointer */
+    ASSERT(tree_child_count(root, NULL) == 0, "tree_child_count works fine with NULL err pointer");
+
+    tree_destroy(tree);
+    return 0;
+}
+
+/* ---------------------------------------------------------------- */
+/* tree_insert_before                                                */
+/* ---------------------------------------------------------------- */
+
+int test_tree_insert_before(void) {
+    error_t       err;
+    tree_t       *tree = tree_create(sizeof(int), &err);
+    tree_node_t  *root, *c1, *c2, *ins;
+    int           a = 10, b = 20, c = 30, d = 99;
+
+    ASSERT(tree != NULL, "tree_create succeeds before tree_insert_before test");
+
+    /* invalid args */
+    err.code = ERROR_OK;
+    tree_insert_before(NULL, NULL, &a, &err);
+    ASSERT(err.code == ERROR_INVALID_ARGS, "insert_before on NULL tree sets invalid args error");
+
+    root = tree_append_child(tree, NULL, &a, &err);
+
+    err.code = ERROR_OK;
+    tree_insert_before(tree, NULL, &a, &err);
+    ASSERT(err.code == ERROR_INVALID_ARGS, "insert_before with NULL ref sets invalid args error");
+
+    err.code = ERROR_OK;
+    tree_insert_before(tree, root, &a, &err);
+    ASSERT(err.code == ERROR_INVALID_ARGS, "insert_before root sets invalid args error");
+
+    err.code = ERROR_OK;
+    c1 = tree_append_child(tree, root, &a, &err);
+    tree_insert_before(tree, c1, NULL, &err);
+    ASSERT(err.code == ERROR_INVALID_ARGS, "insert_before with NULL item sets invalid args error");
+
+    /*
+     * build:  root -> [c1, c2]
+     * insert before c1 -> root -> [ins, c1, c2]
+     */
+    c2  = tree_append_child(tree, root, &b, &err);
+    ins = tree_insert_before(tree, c1, &d, &err);
+    ASSERT(ins != NULL,           "insert_before c1 returns valid node");
+    ASSERT(err.code == ERROR_OK,  "no error on insert_before c1");
+    ASSERT(tree->count == 4,      "count is 4 after insert_before");
+    ASSERT(tree_child_count(root, &err) == 3, "root child_count is 3 after insert_before");
+
+    /* ins is new first child */
+    ASSERT(tree_first_child(root, &err)   == ins, "ins is now first child of root");
+    ASSERT(tree_next_sibling(ins, &err)   == c1,  "ins->next is c1");
+    ASSERT(tree_prev_sibling(c1,  &err)   == ins, "c1->prev is ins");
+    ASSERT(tree_prev_sibling(ins, &err)   == NULL,"ins->prev is NULL (first child)");
+    ASSERT(*(int*)tree_node_data(ins, &err) == 99, "ins stores correct value");
+
+    /* insert before c2 (mid position) -> root -> [ins, c1, mid, c2] */
+    int           m = 55;
+    tree_node_t  *mid = tree_insert_before(tree, c2, &m, &err);
+    ASSERT(mid != NULL,                        "insert_before c2 returns valid node");
+    ASSERT(tree->count == 5,                   "count is 5 after second insert_before");
+    ASSERT(tree_next_sibling(c1,  &err) == mid, "c1->next is mid");
+    ASSERT(tree_next_sibling(mid, &err) == c2,  "mid->next is c2");
+    ASSERT(tree_prev_sibling(mid, &err) == c1,  "mid->prev is c1");
+    ASSERT(tree_prev_sibling(c2,  &err) == mid, "c2->prev is mid");
+    ASSERT(tree_last_child(root,  &err) == c2,  "last child of root is still c2");
+
+    /* NULL err pointer */
+    int n = 0;
+    tree_node_t *tmp = tree_insert_before(tree, c2, &n, NULL);
+    ASSERT(tmp != NULL, "insert_before works fine with NULL err pointer");
+
+    tree_destroy(tree);
+    return 0;
+}
+
+/* ---------------------------------------------------------------- */
+/* tree_move                                                         */
+/* ---------------------------------------------------------------- */
+
+int test_tree_move(void) {
+    error_t       err;
+    tree_t       *tree = tree_create(sizeof(int), &err);
+    tree_node_t  *root, *c1, *c2, *c3, *gc1;
+    int           a = 1, b = 2, c = 3, d = 4, e = 5;
+
+    ASSERT(tree != NULL, "tree_create succeeds before tree_move test");
+
+    /* invalid args */
+    root = tree_append_child(tree, NULL, &a, &err);
+    c1   = tree_append_child(tree, root, &b, &err);
+
+    err.code = ERROR_OK;
+    tree_move(NULL, c1, root, NULL, &err);
+    ASSERT(err.code == ERROR_INVALID_ARGS, "tree_move on NULL tree sets invalid args error");
+
+    err.code = ERROR_OK;
+    tree_move(tree, NULL, root, NULL, &err);
+    ASSERT(err.code == ERROR_INVALID_ARGS, "tree_move with NULL node sets invalid args error");
+
+    err.code = ERROR_OK;
+    tree_move(tree, c1, NULL, NULL, &err);
+    ASSERT(err.code == ERROR_INVALID_ARGS, "tree_move with NULL new_parent sets invalid args error");
+
+    err.code = ERROR_OK;
+    tree_move(tree, root, root, NULL, &err);
+    ASSERT(err.code == ERROR_INVALID_ARGS, "tree_move node to itself sets invalid args error");
+
+    err.code = ERROR_OK;
+    tree_move(tree, c1, root, root, &err);  /* before=root, not a child of root's new_parent */
+    ASSERT(err.code == ERROR_INVALID_ARGS, "tree_move with before not child of new_parent sets invalid args error");
+
+    /*
+     * build:   root
+     *         / | \
+     *        c1  c2  c3
+     *        |
+     *       gc1
+     *
+     * total: 5 nodes
+     */
+    c2  = tree_append_child(tree, root, &c, &err);
+    c3  = tree_append_child(tree, root, &d, &err);
+    gc1 = tree_append_child(tree, c1,   &e, &err);
+    ASSERT(tree->count == 5, "tree has 5 nodes before move tests");
+
+    /* move gc1 to root as last child (append) */
+    tree_move(tree, gc1, root, NULL, &err);
+    ASSERT(err.code == ERROR_OK,  "tree_move gc1 to root (append) succeeds");
+    ASSERT(tree->count == 5,      "count unchanged after move");
+    ASSERT(tree_child_count(root, &err) == 4,  "root now has 4 children");
+    ASSERT(tree_child_count(c1,   &err) == 0,  "c1 now has 0 children");
+    ASSERT(tree_last_child(root,  &err) == gc1, "gc1 is last child of root");
+    ASSERT(tree_parent(gc1,       &err) == root,"gc1 parent is root");
+    ASSERT(tree_prev_sibling(gc1, &err) == c3,  "gc1->prev is c3");
+    ASSERT(tree_next_sibling(c3,  &err) == gc1, "c3->next is gc1");
+
+    /* move c3 before c2 -> root -> [c1, c3, c2, gc1] */
+    tree_move(tree, c3, root, c2, &err);
+    ASSERT(err.code == ERROR_OK,  "tree_move c3 before c2 succeeds");
+    ASSERT(tree->count == 5,      "count unchanged after move");
+    ASSERT(tree_first_child(root, &err)    == c1,  "first child still c1");
+    ASSERT(tree_next_sibling(c1,  &err)    == c3,  "c1->next is c3");
+    ASSERT(tree_next_sibling(c3,  &err)    == c2,  "c3->next is c2");
+    ASSERT(tree_prev_sibling(c3,  &err)    == c1,  "c3->prev is c1");
+    ASSERT(tree_prev_sibling(c2,  &err)    == c3,  "c2->prev is c3");
+
+    /* move c1 to be first child of c2 (append, c2 had no children) */
+    tree_move(tree, c1, c2, NULL, &err);
+    ASSERT(err.code == ERROR_OK,              "tree_move c1 under c2 succeeds");
+    ASSERT(tree->count == 5,                  "count unchanged after move");
+    ASSERT(tree_child_count(root, &err) == 3, "root now has 3 children");
+    ASSERT(tree_child_count(c2,   &err) == 1, "c2 now has 1 child");
+    ASSERT(tree_first_child(root, &err) == c3, "first child of root is now c3");
+    ASSERT(tree_first_child(c2,   &err) == c1, "c1 is now child of c2");
+    ASSERT(tree_parent(c1,        &err) == c2, "c1 parent is c2");
+    ASSERT(tree_prev_sibling(c3,  &err) == NULL, "c3->prev is NULL (new first child)");
+
+    /* NULL err pointer */
+    tree_move(tree, c1, root, NULL, NULL);
+    ASSERT(1, "tree_move works fine with NULL err pointer");
+
+    tree_destroy(tree);
+    return 0;
+}
+
+/* ---------------------------------------------------------------- */
+/* tree_walk_preorder / tree_walk_postorder                          */
+/* ---------------------------------------------------------------- */
+
+typedef struct {
+    int  visited[16];
+    int  depths[16];
+    int  count;
+} walk_result_t;
+
+static tree_walk_result_t walk_collect(tree_node_t* node, size_t depth, void* userdata) {
+    walk_result_t *r = (walk_result_t*)userdata;
+    r->visited[r->count] = *(int*)tree_node_data(node, NULL);
+    r->depths[r->count]  = (int)depth;
+    r->count++;
+    return TREE_WALK_CONTINUE;
+}
+
+static tree_walk_result_t walk_stop_at_3(tree_node_t* node, size_t depth, void* userdata) {
+    walk_result_t *r = (walk_result_t*)userdata;
+    r->visited[r->count] = *(int*)tree_node_data(node, NULL);
+    r->count++;
+    (void)depth;
+    return (r->count == 3) ? TREE_WALK_STOP : TREE_WALK_CONTINUE;
+}
+
+static tree_walk_result_t walk_skip_c1(tree_node_t* node, size_t depth, void* userdata) {
+    walk_result_t *r = (walk_result_t*)userdata;
+    int val = *(int*)tree_node_data(node, NULL);
+    r->visited[r->count++] = val;
+    (void)depth;
+    /* skip children of node with value 2 (c1) */
+    return (val == 2) ? TREE_WALK_SKIP_CHILDREN : TREE_WALK_CONTINUE;
+}
+
+int test_tree_walk(void) {
+    error_t       err;
+    tree_t       *tree = tree_create(sizeof(int), &err);
+    tree_node_t  *root, *c1, *c2, *c3;
+    int           a = 1, b = 2, c = 3, d = 4, e = 5, f = 6;
+    walk_result_t r;
+
+    ASSERT(tree != NULL, "tree_create succeeds before walk test");
+
+    /* invalid args */
+    err.code = ERROR_OK;
+    tree_walk_preorder(NULL, walk_collect, NULL, &err);
+    ASSERT(err.code == ERROR_INVALID_ARGS, "walk_preorder on NULL tree sets invalid args error");
+
+    err.code = ERROR_OK;
+    tree_walk_preorder(tree, NULL, NULL, &err);
+    ASSERT(err.code == ERROR_INVALID_ARGS, "walk_preorder with NULL callback sets invalid args error");
+
+    err.code = ERROR_OK;
+    tree_walk_postorder(NULL, walk_collect, NULL, &err);
+    ASSERT(err.code == ERROR_INVALID_ARGS, "walk_postorder on NULL tree sets invalid args error");
+
+    err.code = ERROR_OK;
+    tree_walk_postorder(tree, NULL, NULL, &err);
+    ASSERT(err.code == ERROR_INVALID_ARGS, "walk_postorder with NULL callback sets invalid args error");
+
+    /* walk on empty tree is a no-op */
+    memset(&r, 0, sizeof(r));
+    tree_walk_preorder(tree, walk_collect, &r, &err);
+    ASSERT(err.code == ERROR_OK, "walk_preorder on empty tree sets ERROR_OK");
+    ASSERT(r.count == 0,         "walk_preorder on empty tree visits no nodes");
+
+    /*
+     * build:        1 (root)
+     *              / | \
+     *             2   3   4
+     *            / \
+     *           5   6
+     *
+     * pre-order:  1, 2, 5, 6, 3, 4
+     * post-order: 5, 6, 2, 3, 4, 1
+     */
+    root = tree_append_child(tree, NULL,  &a, &err);
+    c1   = tree_append_child(tree, root,  &b, &err);
+    c2   = tree_append_child(tree, root,  &c, &err);
+    c3   = tree_append_child(tree, root,  &d, &err);
+           tree_append_child(tree, c1,    &e, &err);
+           tree_append_child(tree, c1,    &f, &err);
+    ASSERT(tree->count == 6, "tree has 6 nodes before walk tests");
+
+    /* pre-order */
+    memset(&r, 0, sizeof(r));
+    tree_walk_preorder(tree, walk_collect, &r, &err);
+    ASSERT(err.code == ERROR_OK, "walk_preorder sets ERROR_OK");
+    ASSERT(r.count == 6,         "walk_preorder visits all 6 nodes");
+    ASSERT(r.visited[0] == 1,    "pre-order: node 0 is root (1)");
+    ASSERT(r.visited[1] == 2,    "pre-order: node 1 is c1 (2)");
+    ASSERT(r.visited[2] == 5,    "pre-order: node 2 is gc1 (5)");
+    ASSERT(r.visited[3] == 6,    "pre-order: node 3 is gc2 (6)");
+    ASSERT(r.visited[4] == 3,    "pre-order: node 4 is c2 (3)");
+    ASSERT(r.visited[5] == 4,    "pre-order: node 5 is c3 (4)");
+    /* depth checks */
+    ASSERT(r.depths[0] == 0,     "root depth is 0");
+    ASSERT(r.depths[1] == 1,     "c1 depth is 1");
+    ASSERT(r.depths[2] == 2,     "gc1 depth is 2");
+
+    /* post-order */
+    memset(&r, 0, sizeof(r));
+    tree_walk_postorder(tree, walk_collect, &r, &err);
+    ASSERT(err.code == ERROR_OK, "walk_postorder sets ERROR_OK");
+    ASSERT(r.count == 6,         "walk_postorder visits all 6 nodes");
+    ASSERT(r.visited[0] == 5,    "post-order: node 0 is gc1 (5)");
+    ASSERT(r.visited[1] == 6,    "post-order: node 1 is gc2 (6)");
+    ASSERT(r.visited[2] == 2,    "post-order: node 2 is c1 (2)");
+    ASSERT(r.visited[3] == 3,    "post-order: node 3 is c2 (3)");
+    ASSERT(r.visited[4] == 4,    "post-order: node 4 is c3 (4)");
+    ASSERT(r.visited[5] == 1,    "post-order: node 5 is root (1)");
+
+    /* TREE_WALK_STOP: abort after 3 nodes */
+    memset(&r, 0, sizeof(r));
+    tree_walk_preorder(tree, walk_stop_at_3, &r, &err);
+    ASSERT(r.count == 3, "walk_preorder STOP aborts after 3 nodes");
+    ASSERT(r.visited[0] == 1 && r.visited[1] == 2 && r.visited[2] == 5,
+           "walk_preorder STOP visits correct nodes before stopping");
+
+    memset(&r, 0, sizeof(r));
+    tree_walk_postorder(tree, walk_stop_at_3, &r, &err);
+    ASSERT(r.count == 3, "walk_postorder STOP aborts after 3 nodes");
+    ASSERT(r.visited[0] == 5 && r.visited[1] == 6 && r.visited[2] == 2,
+           "walk_postorder STOP visits correct nodes before stopping");
+
+    /* TREE_WALK_SKIP_CHILDREN: skip c1's subtree in pre-order
+     * expected: 1, 2, 3, 4  (gc1 and gc2 skipped) */
+    memset(&r, 0, sizeof(r));
+    tree_walk_preorder(tree, walk_skip_c1, &r, &err);
+    ASSERT(r.count == 4,      "walk_preorder SKIP_CHILDREN skips c1 subtree");
+    ASSERT(r.visited[0] == 1, "skip test: node 0 is root (1)");
+    ASSERT(r.visited[1] == 2, "skip test: node 1 is c1 (2)");
+    ASSERT(r.visited[2] == 3, "skip test: node 2 is c2 (3)");
+    ASSERT(r.visited[3] == 4, "skip test: node 3 is c3 (4)");
+
+    /* NULL err pointer */
+    memset(&r, 0, sizeof(r));
+    tree_walk_preorder(tree, walk_collect, &r, NULL);
+    ASSERT(r.count == 6, "walk_preorder works fine with NULL err pointer");
 
     tree_destroy(tree);
     return 0;
@@ -531,6 +935,11 @@ int main(void) {
     RUN_TEST("tree_append_sibling",  test_tree_append_sibling);
     RUN_TEST("tree_erase",           test_tree_erase);
     RUN_TEST("tree_iteration",       test_tree_iteration);
+    RUN_TEST("tree_prev_sibling",    test_tree_prev_sibling);
+    RUN_TEST("tree_child_count",     test_tree_child_count);
+    RUN_TEST("tree_insert_before",   test_tree_insert_before);
+    RUN_TEST("tree_move",            test_tree_move);
+    RUN_TEST("tree_walk",            test_tree_walk);
 
     SUMMARY();
     return failed ? 1 : 0;
