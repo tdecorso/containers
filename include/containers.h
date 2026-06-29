@@ -1,6 +1,6 @@
 /// @file containers.h
 /// @brief Generic container library: dynamic arrays, linked lists, queues,
-///        stacks, and hash maps.
+///        stacks, hash maps, and n-ary trees.
 ///
 /// All containers are generic (operate on `void*` with caller-supplied
 /// element sizes) and report errors through an optional `error_t` output
@@ -991,5 +991,222 @@ int cmp_string(const void* a, const void* b, size_t key_size);
 
 /// @} // hash_functions
 /// @} // map
+
+/// @defgroup tree Trees
+/// @brief N-ary tree with O(1) child and sibling insertion.
+/// @{
+
+typedef struct tree_node tree_node_t; ///< Opaque n-ary tree node.
+
+/**
+ * @brief Generic n-ary tree.
+ *
+ * Each node owns its data and may have an arbitrary number of children,
+ * linked as a singly-connected sibling chain. The tree owns all nodes
+ * inserted into it and frees them recursively on destroy or erase.
+ *
+ * @ingroup tree
+ */
+typedef struct {
+    tree_node_t* root;      ///< Root node, or NULL if the tree is empty.
+    size_t       count;     ///< Total number of nodes currently in the tree.
+    size_t       elem_size; ///< Size in bytes of the data stored in each node.
+} tree_t;
+
+/// @defgroup tree_allocation Allocation
+/// @ingroup tree
+/// @{
+
+/**
+ * @brief Creates a new empty n-ary tree.
+ *
+ * The tree owns all nodes inserted into it. Each node stores a deep
+ * copy of the caller's data using the specified element size.
+ *
+ * @param elem_size Size in bytes of the data stored in each node. Must be > 0.
+ * @param err       Optional error output. Populated on failure.
+ * @return Pointer to the newly created tree, or NULL on failure.
+ * @ingroup tree_allocation
+ */
+tree_t* tree_create(size_t elem_size, error_t* err);
+
+/**
+ * @brief Destroys the tree and frees all associated memory.
+ *
+ * Recursively destroys every node and the data it owns, then frees
+ * the tree itself.
+ *
+ * @param tree The tree to destroy. NULL is safe and does nothing.
+ * @ingroup tree_allocation
+ */
+void tree_destroy(tree_t* tree);
+
+/// @} // tree_allocation
+
+/// @defgroup tree_capacity Capacity
+/// @ingroup tree
+/// @{
+
+/**
+ * @brief Returns true if the tree contains no nodes.
+ *
+ * @param tree The tree. Must not be NULL.
+ * @param err  Optional error output. Populated on failure.
+ * @return true if `count == 0`, false otherwise or on failure.
+ * @ingroup tree_capacity
+ */
+bool tree_is_empty(tree_t* tree, error_t* err);
+
+/**
+ * @brief Returns the total number of nodes in the tree.
+ *
+ * @param tree The tree. Must not be NULL.
+ * @param err  Optional error output. Populated on failure.
+ * @return Node count, or 0 on failure.
+ * @ingroup tree_capacity
+ */
+size_t tree_size(tree_t* tree, error_t* err);
+
+/// @} // tree_capacity
+
+/// @defgroup tree_iteration Iteration
+/// @ingroup tree
+/// @{
+
+/**
+ * @brief Returns the root node of the tree.
+ *
+ * @param tree The tree. Must not be NULL.
+ * @param err  Optional error output. Populated on failure.
+ * @return Pointer to the root node, or NULL if the tree is empty or on failure.
+ * @ingroup tree_iteration
+ */
+tree_node_t* tree_root(tree_t* tree, error_t* err);
+
+/**
+ * @brief Returns the parent of a node.
+ *
+ * @param node The node. Must not be NULL.
+ * @param err  Optional error output. Populated on failure.
+ * @return Pointer to the parent node, or NULL if `node` is the root.
+ *         Reaching the root is not an error; `ERROR_OK` is set.
+ * @ingroup tree_iteration
+ */
+tree_node_t* tree_parent(tree_node_t* node, error_t* err);
+
+/**
+ * @brief Returns the first child of a node.
+ *
+ * @param node The node. Must not be NULL.
+ * @param err  Optional error output. Populated on failure.
+ * @return Pointer to the first child, or NULL if the node has no children or on failure.
+ * @ingroup tree_iteration
+ */
+tree_node_t* tree_first_child(tree_node_t* node, error_t* err);
+
+/**
+ * @brief Returns the last child of a node.
+ *
+ * @param node The node. Must not be NULL.
+ * @param err  Optional error output. Populated on failure.
+ * @return Pointer to the last child, or NULL if the node has no children or on failure.
+ * @ingroup tree_iteration
+ */
+tree_node_t* tree_last_child(tree_node_t* node, error_t* err);
+
+/**
+ * @brief Returns the next sibling of a node.
+ *
+ * @param node The node. Must not be NULL.
+ * @param err  Optional error output. Populated on failure.
+ * @return Pointer to the next sibling, or NULL if `node` is the last sibling.
+ *         Reaching the end of the sibling chain is not an error; `ERROR_OK` is set.
+ * @ingroup tree_iteration
+ */
+tree_node_t* tree_next_sibling(tree_node_t* node, error_t* err);
+
+/**
+ * @brief Returns true if a node has at least one child.
+ *
+ * @param node The node. Must not be NULL.
+ * @param err  Optional error output. Populated on failure.
+ * @return true if the node has one or more children, false otherwise or on failure.
+ * @ingroup tree_iteration
+ */
+bool tree_has_children(tree_node_t* node, error_t* err);
+
+/**
+ * @brief Returns a pointer to the data stored in a node.
+ *
+ * The returned pointer is valid until the node is removed or the tree
+ * is destroyed.
+ *
+ * @param node The node. Must not be NULL.
+ * @param err  Optional error output. Populated on failure.
+ * @return Pointer to the node's data buffer, or NULL on failure.
+ * @ingroup tree_iteration
+ */
+void* tree_node_data(tree_node_t* node, error_t* err);
+
+/// @} // tree_iteration
+
+/// @defgroup tree_modifiers Modifiers
+/// @ingroup tree
+/// @{
+
+/**
+ * @brief Appends a new node as the last child of a parent.
+ *
+ * If `parent` is NULL and the tree is empty, the new node becomes the
+ * root. Passing NULL as `parent` when the tree already has a root, or
+ * passing a non-NULL `parent` when the tree is empty, sets
+ * `ERROR_INVALID_ARGS`.
+ *
+ * @param tree   The tree. Must not be NULL.
+ * @param parent Parent node, or NULL to create the root.
+ * @param item   Data to store in the new node. Must not be NULL.
+ * @param err    Optional error output. Populated on failure.
+ * @return Pointer to the newly created node, or NULL on failure.
+ * @ingroup tree_modifiers
+ */
+tree_node_t* tree_append_child(tree_t* tree, tree_node_t* parent, const void* item, error_t* err);
+
+/**
+ * @brief Inserts a new node immediately after the given node in the
+ *        sibling chain.
+ *
+ * The new node shares the same parent as `node`. Passing the root node
+ * sets `ERROR_INVALID_ARGS` since the root cannot have siblings.
+ *
+ * @param tree The tree. Must not be NULL.
+ * @param node Node after which the sibling is inserted. Must not be NULL
+ *             and must belong to the tree. Must not be the root.
+ * @param item Data to store in the new node. Must not be NULL.
+ * @param err  Optional error output. Populated on failure.
+ * @return Pointer to the newly created node, or NULL on failure.
+ * @ingroup tree_modifiers
+ */
+tree_node_t* tree_append_sibling(tree_t* tree, tree_node_t* node, const void* item, error_t* err);
+
+/**
+ * @brief Removes the subtree rooted at the given node.
+ *
+ * Deletes `node` and all its descendants and updates the tree structure
+ * accordingly. If `node` is NULL, the root is erased and the tree
+ * becomes empty.
+ *
+ * @param tree The tree. Must not be NULL.
+ * @param node Root of the subtree to remove, or NULL to erase the root.
+ * @param err  Optional error output. Populated on failure.
+ *
+ * @note Complexity: O(d) where d is the size of the subtree being removed.
+ * @warning After this call, `node` and all nodes in its subtree are freed
+ *          and must not be dereferenced.
+ * @ingroup tree_modifiers
+ */
+void tree_erase(tree_t* tree, tree_node_t* node, error_t* err);
+
+/// @} // tree_modifiers
+/// @} // tree
 
 #endif // H_CONTAINERS

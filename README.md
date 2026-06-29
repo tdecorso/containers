@@ -17,8 +17,8 @@ This is primarily an instructional project. The goal is to produce clean, readab
 | Queue | `list_t` | O(1) | O(1) | O(1) |
 | Stack | `array_t` | O(1)† | O(1) | O(1) |
 | Hash map | Bucket + `list_t` | O(1)† | O(1)† | O(1)† |
-
-† Amortised.
+| N-ary tree | Heap-allocated nodes | O(1) | O(d)‡  | O(n) |
+† Amortised. ‡ O(d) where d is the depth of the subtree being removed. 
 
 ## Usage
 
@@ -140,6 +140,40 @@ printf("%.2f\n", out);   /* prints 3.14 */
 hashmap_destroy(map);
 ```
 
+### N-ary trees
+```c
+tree_t* tree = tree_create(sizeof(int), NULL);
+
+/*        1
+ *       / \
+ *      2   3
+ *     / \
+ *    4   5
+ */
+int v;
+v = 1; tree_node_t* root = tree_append_child(tree, NULL,  &v, NULL);
+v = 2; tree_node_t* c1   = tree_append_child(tree, root,  &v, NULL);
+v = 3;              tree_append_child(tree, root,  &v, NULL);
+v = 4;              tree_append_child(tree, c1,    &v, NULL);
+v = 5;              tree_append_child(tree, c1,    &v, NULL);
+
+/* depth-first pre-order traversal */
+tree_node_t* stk[64];
+int top = 0;
+stk[top++] = root;
+while (top > 0) {
+    tree_node_t* n = stk[--top];
+    printf("%d\n", *(int*)tree_node_data(n, NULL));
+    tree_node_t* children[64];
+    int nchildren = 0;
+    tree_node_t* ch = tree_first_child(n, NULL);
+    while (ch) { children[nchildren++] = ch; ch = tree_next_sibling(ch, NULL); }
+    for (int i = nchildren - 1; i >= 0; i--) stk[top++] = children[i];
+}
+
+tree_destroy(tree);
+```
+
 > **Note:** Struct keys with padding bytes must be zero-initialised with
 > `memset` before use, or hashing will produce inconsistent results across
 > equal structs.
@@ -168,6 +202,7 @@ After building, run any test binary directly from the build directory.
 ./test_queue
 ./test_stack
 ./test_hashmap
+./test_tree
 ```
 
 To check for memory leaks with Valgrind:
@@ -190,6 +225,8 @@ Then open `docs/html/index.html` in your browser.
 
 - **Not thread-safe.** External synchronisation is required for concurrent access to any container.
 - **No iterators for arrays.** Use index-based access via `array_at`, `array_front`, and `array_back`.
+- **Tree traversal is manual.** No built-in traversal functions are provided; use `tree_first_child`, `tree_next_sibling`, 
+-                               and a caller-managed stack or queue.
 - **Early development.** Interfaces may evolve as additional containers are introduced.
 
 ## License

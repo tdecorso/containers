@@ -70,12 +70,12 @@ $(function() {
 </div>
 
 <div><div class="header">
-  <div class="headertitle"><div class="title"><a class="el" href="containers_8h.html" title="Generic container library: dynamic arrays, linked lists, queues, stacks, and hash maps.">containers.h</a> — A generic data structures library in C </div></div>
+  <div class="headertitle"><div class="title"><a class="el" href="containers_8h.html" title="Generic container library: dynamic arrays, linked lists, queues, stacks, hash maps,...">containers.h</a> — A generic data structures library in C </div></div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><h1><a class="anchor" id="intro"></a>
 Introduction</h1>
-<p><b><a class="el" href="containers_8h.html" title="Generic container library: dynamic arrays, linked lists, queues, stacks, and hash maps.">containers.h</a></b> is a type-agnostic data structures library written in C99. It provides the most common container types through a uniform API: every container operates on <code>void*</code> with caller-supplied element sizes, reports errors through an optional <code><a class="el" href="structerror__t.html" title="Carries error information out of a failing API call.">error_t</a></code> output parameter, and copies data by value so the caller retains ownership of its memory.</p>
+<p><b><a class="el" href="containers_8h.html" title="Generic container library: dynamic arrays, linked lists, queues, stacks, hash maps,...">containers.h</a></b> is a type-agnostic data structures library written in C99. It provides the most common container types through a uniform API: every container operates on <code>void*</code> with caller-supplied element sizes, reports errors through an optional <code><a class="el" href="structerror__t.html" title="Carries error information out of a failing API call.">error_t</a></code> output parameter, and copies data by value so the caller retains ownership of its memory.</p>
 <p>This is primarily an instructional project. The goal is to produce clean, readable, well-documented C code rather than a production-grade, performance-optimised library.</p>
 <h1><a class="anchor" id="containers"></a>
 Containers</h1>
@@ -91,9 +91,11 @@ Containers</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">Stack   </td><td class="markdownTableBodyNone"><a class="el" href="group__stack.html">Stacks</a>   </td><td class="markdownTableBodyNone"><code><a class="el" href="structarray__t.html" title="Generic dynamic array.">array_t</a></code>   </td><td class="markdownTableBodyNone">O(1)†   </td><td class="markdownTableBodyNone">O(1)   </td><td class="markdownTableBodyNone">O(1)    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">Hash map   </td><td class="markdownTableBodyNone"><a class="el" href="group__map.html">Hash maps</a>   </td><td class="markdownTableBodyNone">Bucket + <code><a class="el" href="structlist__t.html" title="Doubly-linked list.">list_t</a></code>   </td><td class="markdownTableBodyNone">O(1)†   </td><td class="markdownTableBodyNone">O(1)†   </td><td class="markdownTableBodyNone">O(1)†   </td></tr>
+<td class="markdownTableBodyNone">Hash map   </td><td class="markdownTableBodyNone"><a class="el" href="group__map.html">Hash maps</a>   </td><td class="markdownTableBodyNone">Bucket + <code><a class="el" href="structlist__t.html" title="Doubly-linked list.">list_t</a></code>   </td><td class="markdownTableBodyNone">O(1)†   </td><td class="markdownTableBodyNone">O(1)†   </td><td class="markdownTableBodyNone">O(1)†    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">N-ary tree   </td><td class="markdownTableBodyNone"><a class="el" href="group__tree.html">Trees</a>   </td><td class="markdownTableBodyNone">Heap-allocated nodes   </td><td class="markdownTableBodyNone">O(1)   </td><td class="markdownTableBodyNone">O(d)‡   </td><td class="markdownTableBodyNone">O(n)   </td></tr>
 </table>
-<p>† Amortised.</p>
+<p>† Amortised. ‡ O(d) where d is the depth of the subtree being removed.</p>
 <h1><a class="anchor" id="building"></a>
 Building</h1>
 <p>Requirements: CMake 3.31+, a C99-compatible compiler.</p>
@@ -110,8 +112,9 @@ Running the tests</h1>
 <div class="line">./test_queue</div>
 <div class="line">./test_stack</div>
 <div class="line">./test_hashmap</div>
+<div class="line">./test_tree</div>
 </div><!-- fragment --><p>To check for memory leaks with Valgrind:</p>
-<div class="fragment"><div class="line">valgrind --leak-check=full --show-leak-kinds=all ./test_hashmap</div>
+<div class="fragment"><div class="line">valgrind --leak-check=full --show-leak-kinds=all ./test_tree</div>
 </div><!-- fragment --><h1><a class="anchor" id="error_handling"></a>
 Error handling</h1>
 <p>Every fallible function accepts a trailing <code>error_t* err</code> parameter. Passing <code>NULL</code> is always safe — errors are silently ignored. On failure the function populates <code>err-&gt;code</code> with one of the <a class="el" href="containers_8h.html#a09c25ad25f326a930ae42ace60b70232">error_e</a> values and <code>err-&gt;msg</code> with a human-readable description.</p>
@@ -121,7 +124,7 @@ Error handling</h1>
 <div class="line">    fprintf(stderr, <span class="stringliteral">&quot;error %d: %s\n&quot;</span>, err.<a class="code hl_variable" href="structerror__t.html#ac8a0b7b6f854e572da0df6ba77565ff3">code</a>, err.<a class="code hl_variable" href="structerror__t.html#a29982a1d33c55d7c436f8e4b93c023d6">msg</a>);</div>
 <div class="line">    <span class="keywordflow">return</span> 1;</div>
 <div class="line">}</div>
-<div class="ttc" id="agroup__array__allocation_html_gafb3a66eb9e9fe75d61f73f254b36d457"><div class="ttname"><a href="group__array__allocation.html#gafb3a66eb9e9fe75d61f73f254b36d457">array_create</a></div><div class="ttdeci">array_t * array_create(size_t elem_size, size_t cap, error_t *err)</div><div class="ttdoc">Creates a new heap-allocated dynamic array.</div><div class="ttdef"><b>Definition</b> array.c:16</div></div>
+<div class="ttc" id="agroup__array__allocation_html_gafb3a66eb9e9fe75d61f73f254b36d457"><div class="ttname"><a href="group__array__allocation.html#gafb3a66eb9e9fe75d61f73f254b36d457">array_create</a></div><div class="ttdeci">array_t * array_create(size_t elem_size, size_t cap, error_t *err)</div><div class="ttdoc">Creates a new heap-allocated dynamic array.</div></div>
 <div class="ttc" id="astructarray__t_html"><div class="ttname"><a href="structarray__t.html">array_t</a></div><div class="ttdoc">Generic dynamic array.</div><div class="ttdef"><b>Definition</b> containers.h:56</div></div>
 <div class="ttc" id="astructerror__t_html"><div class="ttname"><a href="structerror__t.html">error_t</a></div><div class="ttdoc">Carries error information out of a failing API call.</div><div class="ttdef"><b>Definition</b> containers.h:41</div></div>
 <div class="ttc" id="astructerror__t_html_a29982a1d33c55d7c436f8e4b93c023d6"><div class="ttname"><a href="structerror__t.html#a29982a1d33c55d7c436f8e4b93c023d6">error_t::msg</a></div><div class="ttdeci">char msg[256]</div><div class="ttdoc">Human-readable description of the failure.</div><div class="ttdef"><b>Definition</b> containers.h:43</div></div>
@@ -138,9 +141,44 @@ Working with generic containers</h1>
 <div class="line">vec2_t* q = (vec2_t*)<a class="code hl_function" href="group__array__access.html#ga9f83bb8c28cc6bca24de16d3d98bdea1">array_front</a>(points, NULL);</div>
 <div class="line">printf(<span class="stringliteral">&quot;%.1f %.1f\n&quot;</span>, q-&gt;x, q-&gt;y);</div>
 <div class="line"><a class="code hl_function" href="group__array__allocation.html#gab43549424b9a1a7e6c0abccb4a93ff31">array_destroy</a>(points);</div>
-<div class="ttc" id="agroup__array__access_html_ga9f83bb8c28cc6bca24de16d3d98bdea1"><div class="ttname"><a href="group__array__access.html#ga9f83bb8c28cc6bca24de16d3d98bdea1">array_front</a></div><div class="ttdeci">void * array_front(array_t *arr, error_t *err)</div><div class="ttdoc">Returns a pointer to the first element.</div><div class="ttdef"><b>Definition</b> array.c:76</div></div>
-<div class="ttc" id="agroup__array__allocation_html_gab43549424b9a1a7e6c0abccb4a93ff31"><div class="ttname"><a href="group__array__allocation.html#gab43549424b9a1a7e6c0abccb4a93ff31">array_destroy</a></div><div class="ttdeci">void array_destroy(array_t *arr)</div><div class="ttdoc">Destroys the array and frees all associated memory.</div><div class="ttdef"><b>Definition</b> array.c:47</div></div>
-<div class="ttc" id="agroup__array__modifiers_html_ga81fafea435225ae19cd67b175e9c225e"><div class="ttname"><a href="group__array__modifiers.html#ga81fafea435225ae19cd67b175e9c225e">array_push_back</a></div><div class="ttdeci">void array_push_back(array_t *arr, const void *item, error_t *err)</div><div class="ttdoc">Appends an element to the end of the array.</div><div class="ttdef"><b>Definition</b> array.c:187</div></div>
+<div class="ttc" id="agroup__array__access_html_ga9f83bb8c28cc6bca24de16d3d98bdea1"><div class="ttname"><a href="group__array__access.html#ga9f83bb8c28cc6bca24de16d3d98bdea1">array_front</a></div><div class="ttdeci">void * array_front(array_t *arr, error_t *err)</div><div class="ttdoc">Returns a pointer to the first element.</div></div>
+<div class="ttc" id="agroup__array__allocation_html_gab43549424b9a1a7e6c0abccb4a93ff31"><div class="ttname"><a href="group__array__allocation.html#gab43549424b9a1a7e6c0abccb4a93ff31">array_destroy</a></div><div class="ttdeci">void array_destroy(array_t *arr)</div><div class="ttdoc">Destroys the array and frees all associated memory.</div></div>
+<div class="ttc" id="agroup__array__modifiers_html_ga81fafea435225ae19cd67b175e9c225e"><div class="ttname"><a href="group__array__modifiers.html#ga81fafea435225ae19cd67b175e9c225e">array_push_back</a></div><div class="ttdeci">void array_push_back(array_t *arr, const void *item, error_t *err)</div><div class="ttdoc">Appends an element to the end of the array.</div></div>
+</div><!-- fragment --><h1><a class="anchor" id="trees"></a>
+N-ary trees</h1>
+<p>Trees are built by appending children and siblings to existing nodes. The root is created by passing NULL as the parent to <code>tree_append_child</code>. Traversal is manual — use <code>tree_first_child</code> and <code>tree_next_sibling</code> with a caller-managed stack or queue:</p>
+<div class="fragment"><div class="line"><a class="code hl_struct" href="structtree__t.html">tree_t</a>* tree = <a class="code hl_function" href="group__tree__allocation.html#gac072e7c3ee2a01f5ddfb9c81cae672c9">tree_create</a>(<span class="keyword">sizeof</span>(<span class="keywordtype">int</span>), NULL);</div>
+<div class="line"> </div>
+<div class="line"><span class="keywordtype">int</span> v;</div>
+<div class="line">v = 1; <a class="code hl_typedef" href="group__tree.html#ga2408a83ad1c7155197f3ab27403ebd20">tree_node_t</a>* root = <a class="code hl_function" href="group__tree__modifiers.html#gab7d6a6334f959bfe0bcdb2bf79f347a9">tree_append_child</a>(tree, NULL, &amp;v, NULL);</div>
+<div class="line">v = 2; <a class="code hl_typedef" href="group__tree.html#ga2408a83ad1c7155197f3ab27403ebd20">tree_node_t</a>* c1   = <a class="code hl_function" href="group__tree__modifiers.html#gab7d6a6334f959bfe0bcdb2bf79f347a9">tree_append_child</a>(tree, root, &amp;v, NULL);</div>
+<div class="line">v = 3;              <a class="code hl_function" href="group__tree__modifiers.html#gab7d6a6334f959bfe0bcdb2bf79f347a9">tree_append_child</a>(tree, root, &amp;v, NULL);</div>
+<div class="line">v = 4;              <a class="code hl_function" href="group__tree__modifiers.html#gab7d6a6334f959bfe0bcdb2bf79f347a9">tree_append_child</a>(tree, c1,   &amp;v, NULL);</div>
+<div class="line">v = 5;              <a class="code hl_function" href="group__tree__modifiers.html#gab7d6a6334f959bfe0bcdb2bf79f347a9">tree_append_child</a>(tree, c1,   &amp;v, NULL);</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// depth-first pre-order traversal</span></div>
+<div class="line"><a class="code hl_typedef" href="group__tree.html#ga2408a83ad1c7155197f3ab27403ebd20">tree_node_t</a>* stk[64];</div>
+<div class="line"><span class="keywordtype">int</span> top = 0;</div>
+<div class="line">stk[top++] = root;</div>
+<div class="line"><span class="keywordflow">while</span> (top &gt; 0) {</div>
+<div class="line">    <a class="code hl_typedef" href="group__tree.html#ga2408a83ad1c7155197f3ab27403ebd20">tree_node_t</a>* n = stk[--top];</div>
+<div class="line">    printf(<span class="stringliteral">&quot;%d\n&quot;</span>, *(<span class="keywordtype">int</span>*)<a class="code hl_function" href="group__tree__iteration.html#gac87b2538427aeeab756fec6d4f6dd31c">tree_node_data</a>(n, NULL));</div>
+<div class="line">    <a class="code hl_typedef" href="group__tree.html#ga2408a83ad1c7155197f3ab27403ebd20">tree_node_t</a>* children[64];</div>
+<div class="line">    <span class="keywordtype">int</span> nchildren = 0;</div>
+<div class="line">    <a class="code hl_typedef" href="group__tree.html#ga2408a83ad1c7155197f3ab27403ebd20">tree_node_t</a>* ch = <a class="code hl_function" href="group__tree__iteration.html#ga908aa815aa419597962ff5c67a35f8e1">tree_first_child</a>(n, NULL);</div>
+<div class="line">    <span class="keywordflow">while</span> (ch) { children[nchildren++] = ch; ch = <a class="code hl_function" href="group__tree__iteration.html#gaeaf6fd5ec8c9f9f2414a4a1b323f4472">tree_next_sibling</a>(ch, NULL); }</div>
+<div class="line">    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = nchildren - 1; i &gt;= 0; i--) stk[top++] = children[i];</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><a class="code hl_function" href="group__tree__allocation.html#ga8005bed8a0fa0877eda56c8232701fd4">tree_destroy</a>(tree);</div>
+<div class="ttc" id="agroup__tree__allocation_html_ga8005bed8a0fa0877eda56c8232701fd4"><div class="ttname"><a href="group__tree__allocation.html#ga8005bed8a0fa0877eda56c8232701fd4">tree_destroy</a></div><div class="ttdeci">void tree_destroy(tree_t *tree)</div><div class="ttdoc">Destroys the tree and frees all associated memory.</div></div>
+<div class="ttc" id="agroup__tree__allocation_html_gac072e7c3ee2a01f5ddfb9c81cae672c9"><div class="ttname"><a href="group__tree__allocation.html#gac072e7c3ee2a01f5ddfb9c81cae672c9">tree_create</a></div><div class="ttdeci">tree_t * tree_create(size_t elem_size, error_t *err)</div><div class="ttdoc">Creates a new empty n-ary tree.</div></div>
+<div class="ttc" id="agroup__tree__iteration_html_ga908aa815aa419597962ff5c67a35f8e1"><div class="ttname"><a href="group__tree__iteration.html#ga908aa815aa419597962ff5c67a35f8e1">tree_first_child</a></div><div class="ttdeci">tree_node_t * tree_first_child(tree_node_t *node, error_t *err)</div><div class="ttdoc">Returns the first child of a node.</div></div>
+<div class="ttc" id="agroup__tree__iteration_html_gac87b2538427aeeab756fec6d4f6dd31c"><div class="ttname"><a href="group__tree__iteration.html#gac87b2538427aeeab756fec6d4f6dd31c">tree_node_data</a></div><div class="ttdeci">void * tree_node_data(tree_node_t *node, error_t *err)</div><div class="ttdoc">Returns a pointer to the data stored in a node.</div></div>
+<div class="ttc" id="agroup__tree__iteration_html_gaeaf6fd5ec8c9f9f2414a4a1b323f4472"><div class="ttname"><a href="group__tree__iteration.html#gaeaf6fd5ec8c9f9f2414a4a1b323f4472">tree_next_sibling</a></div><div class="ttdeci">tree_node_t * tree_next_sibling(tree_node_t *node, error_t *err)</div><div class="ttdoc">Returns the next sibling of a node.</div></div>
+<div class="ttc" id="agroup__tree__modifiers_html_gab7d6a6334f959bfe0bcdb2bf79f347a9"><div class="ttname"><a href="group__tree__modifiers.html#gab7d6a6334f959bfe0bcdb2bf79f347a9">tree_append_child</a></div><div class="ttdeci">tree_node_t * tree_append_child(tree_t *tree, tree_node_t *parent, const void *item, error_t *err)</div><div class="ttdoc">Appends a new node as the last child of a parent.</div></div>
+<div class="ttc" id="agroup__tree_html_ga2408a83ad1c7155197f3ab27403ebd20"><div class="ttname"><a href="group__tree.html#ga2408a83ad1c7155197f3ab27403ebd20">tree_node_t</a></div><div class="ttdeci">struct tree_node tree_node_t</div><div class="ttdoc">Opaque n-ary tree node.</div><div class="ttdef"><b>Definition</b> containers.h:999</div></div>
+<div class="ttc" id="astructtree__t_html"><div class="ttname"><a href="structtree__t.html">tree_t</a></div><div class="ttdoc">Generic n-ary tree.</div><div class="ttdef"><b>Definition</b> containers.h:1010</div></div>
 </div><!-- fragment --><h1><a class="anchor" id="hash_maps"></a>
 Hash maps</h1>
 <p>Hash maps require a hash function and a comparator. Built-in pairs are provided for the most common key types:</p>
@@ -151,11 +189,11 @@ Hash maps</h1>
 <div class="line"><span class="comment">// string keys</span></div>
 <div class="line"><a class="code hl_struct" href="structhashmap__t.html">hashmap_t</a>* names = <a class="code hl_function" href="group__map__allocation.html#ga4ff98f733847e14d681845ba5648067d">hashmap_create</a>(</div>
 <div class="line">    32, <span class="keyword">sizeof</span>(<span class="keywordtype">int</span>), 0, <a class="code hl_function" href="group__hash__functions.html#ga981834551ca725645a60b3acd3cd500b">hash_string</a>, <a class="code hl_function" href="group__hash__functions.html#gad7b03c2adbb4e60b0d9c2fa94467fec1">cmp_string</a>, NULL);</div>
-<div class="ttc" id="agroup__hash__functions_html_ga5be747a799acf95c061b6ecf4ed96fb6"><div class="ttname"><a href="group__hash__functions.html#ga5be747a799acf95c061b6ecf4ed96fb6">cmp_bytes</a></div><div class="ttdeci">int cmp_bytes(const void *a, const void *b, size_t key_size)</div><div class="ttdoc">Byte-level equality comparator using memcmp.</div><div class="ttdef"><b>Definition</b> hash_functions.c:47</div></div>
-<div class="ttc" id="agroup__hash__functions_html_ga981834551ca725645a60b3acd3cd500b"><div class="ttname"><a href="group__hash__functions.html#ga981834551ca725645a60b3acd3cd500b">hash_string</a></div><div class="ttdeci">size_t hash_string(const void *key, size_t key_size)</div><div class="ttdoc">FNV-1a hash over a null-terminated C string.</div><div class="ttdef"><b>Definition</b> hash_functions.c:17</div></div>
-<div class="ttc" id="agroup__hash__functions_html_gabb53e7cd5a0f30a3f79b9096941f30d6"><div class="ttname"><a href="group__hash__functions.html#gabb53e7cd5a0f30a3f79b9096941f30d6">hash_int32</a></div><div class="ttdeci">size_t hash_int32(const void *key, size_t key_size)</div><div class="ttdoc">Murmur-inspired hash for 32-bit integer keys.</div><div class="ttdef"><b>Definition</b> hash_functions.c:27</div></div>
-<div class="ttc" id="agroup__hash__functions_html_gad7b03c2adbb4e60b0d9c2fa94467fec1"><div class="ttname"><a href="group__hash__functions.html#gad7b03c2adbb4e60b0d9c2fa94467fec1">cmp_string</a></div><div class="ttdeci">int cmp_string(const void *a, const void *b, size_t key_size)</div><div class="ttdoc">String equality comparator using strncmp.</div><div class="ttdef"><b>Definition</b> hash_functions.c:51</div></div>
-<div class="ttc" id="agroup__map__allocation_html_ga4ff98f733847e14d681845ba5648067d"><div class="ttname"><a href="group__map__allocation.html#ga4ff98f733847e14d681845ba5648067d">hashmap_create</a></div><div class="ttdeci">hashmap_t * hashmap_create(size_t key_size, size_t value_size, size_t bucket_count, hash_fn_t hash, cmp_fn_t cmp, error_t *err)</div><div class="ttdoc">Creates a new empty hash map.</div><div class="ttdef"><b>Definition</b> hashmap.c:24</div></div>
+<div class="ttc" id="agroup__hash__functions_html_ga5be747a799acf95c061b6ecf4ed96fb6"><div class="ttname"><a href="group__hash__functions.html#ga5be747a799acf95c061b6ecf4ed96fb6">cmp_bytes</a></div><div class="ttdeci">int cmp_bytes(const void *a, const void *b, size_t key_size)</div><div class="ttdoc">Byte-level equality comparator using memcmp.</div></div>
+<div class="ttc" id="agroup__hash__functions_html_ga981834551ca725645a60b3acd3cd500b"><div class="ttname"><a href="group__hash__functions.html#ga981834551ca725645a60b3acd3cd500b">hash_string</a></div><div class="ttdeci">size_t hash_string(const void *key, size_t key_size)</div><div class="ttdoc">FNV-1a hash over a null-terminated C string.</div></div>
+<div class="ttc" id="agroup__hash__functions_html_gabb53e7cd5a0f30a3f79b9096941f30d6"><div class="ttname"><a href="group__hash__functions.html#gabb53e7cd5a0f30a3f79b9096941f30d6">hash_int32</a></div><div class="ttdeci">size_t hash_int32(const void *key, size_t key_size)</div><div class="ttdoc">Murmur-inspired hash for 32-bit integer keys.</div></div>
+<div class="ttc" id="agroup__hash__functions_html_gad7b03c2adbb4e60b0d9c2fa94467fec1"><div class="ttname"><a href="group__hash__functions.html#gad7b03c2adbb4e60b0d9c2fa94467fec1">cmp_string</a></div><div class="ttdeci">int cmp_string(const void *a, const void *b, size_t key_size)</div><div class="ttdoc">String equality comparator using strncmp.</div></div>
+<div class="ttc" id="agroup__map__allocation_html_ga4ff98f733847e14d681845ba5648067d"><div class="ttname"><a href="group__map__allocation.html#ga4ff98f733847e14d681845ba5648067d">hashmap_create</a></div><div class="ttdeci">hashmap_t * hashmap_create(size_t key_size, size_t value_size, size_t bucket_count, hash_fn_t hash, cmp_fn_t cmp, error_t *err)</div><div class="ttdoc">Creates a new empty hash map.</div></div>
 <div class="ttc" id="astructhashmap__t_html"><div class="ttname"><a href="structhashmap__t.html">hashmap_t</a></div><div class="ttdoc">Hash map implementing a generic key-value store.</div><div class="ttdef"><b>Definition</b> containers.h:789</div></div>
 </div><!-- fragment --><p>See <a class="el" href="group__hash__functions.html">Built-in hash and comparator functions</a> for the full list of built-in hash and comparator functions, and guidance on writing your own.</p>
 <h1><a class="anchor" id="notes"></a>
@@ -163,6 +201,7 @@ Notes and limitations</h1>
 <ul>
 <li><b>Not thread-safe.</b> External synchronisation is required for concurrent access to any container.</li>
 <li><b>No iterators for arrays.</b> Use index-based access via <code>array_at</code>, <code>array_front</code>, and <code>array_back</code>.</li>
+<li><b>Tree traversal is manual.</b> No built-in traversal functions are provided; use <code>tree_first_child</code>, <code>tree_next_sibling</code>, and a caller-managed stack or queue.</li>
 <li><b>Struct keys with padding</b> must be zero-initialised with <code>memset</code> before use as hash map keys, or hashing will produce inconsistent results across equal structs.</li>
 <li>This project is in early development. Interfaces may evolve as additional containers are introduced.</li>
 </ul>

@@ -15,15 +15,16 @@
  *
  * @section containers Containers
  *
- * | Container              | Header group  | Backing structure    | Push  | Pop   | Access |
- * |------------------------|---------------|----------------------|-------|-------|--------|
- * | Dynamic array          | @ref array    | Contiguous buffer    | O(1)† | O(1)  | O(1)   |
- * | Doubly-linked list     | @ref list     | Heap-allocated nodes | O(1)  | O(1)  | O(n)   |
- * | Queue                  | @ref queue    | `list_t`             | O(1)  | O(1)  | O(1)   |
- * | Stack                  | @ref stack    | `array_t`            | O(1)† | O(1)  | O(1)   |
- * | Hash map               | @ref map      | Bucket + `list_t`    | O(1)† | O(1)† | O(1)†  |
+ * | Container          | Header group  | Backing structure    | Push  | Pop    | Access |
+ * |--------------------|---------------|----------------------|-------|--------|--------|
+ * | Dynamic array      | @ref array    | Contiguous buffer    | O(1)† | O(1)   | O(1)   |
+ * | Doubly-linked list | @ref list     | Heap-allocated nodes | O(1)  | O(1)   | O(n)   |
+ * | Queue              | @ref queue    | `list_t`             | O(1)  | O(1)   | O(1)   |
+ * | Stack              | @ref stack    | `array_t`            | O(1)† | O(1)   | O(1)   |
+ * | Hash map           | @ref map      | Bucket + `list_t`    | O(1)† | O(1)†  | O(1)†  |
+ * | N-ary tree         | @ref tree     | Heap-allocated nodes | O(1)  | O(d)‡  | O(n)   |
  *
- * † Amortised.
+ * † Amortised. ‡ O(d) where d is the depth of the subtree being removed.
  *
  * @section building Building
  *
@@ -52,12 +53,13 @@
  * ./test_queue
  * ./test_stack
  * ./test_hashmap
+ * ./test_tree
  * @endcode
  *
  * To check for memory leaks with Valgrind:
  *
  * @code{.sh}
- * valgrind --leak-check=full --show-leak-kinds=all ./test_hashmap
+ * valgrind --leak-check=full --show-leak-kinds=all ./test_tree
  * @endcode
  *
  * @section error_handling Error handling
@@ -93,6 +95,40 @@
  * array_destroy(points);
  * @endcode
  *
+ * @section trees N-ary trees
+ *
+ * Trees are built by appending children and siblings to existing nodes.
+ * The root is created by passing NULL as the parent to `tree_append_child`.
+ * Traversal is manual — use `tree_first_child` and `tree_next_sibling`
+ * with a caller-managed stack or queue:
+ *
+ * @code
+ * tree_t* tree = tree_create(sizeof(int), NULL);
+ *
+ * int v;
+ * v = 1; tree_node_t* root = tree_append_child(tree, NULL, &v, NULL);
+ * v = 2; tree_node_t* c1   = tree_append_child(tree, root, &v, NULL);
+ * v = 3;              tree_append_child(tree, root, &v, NULL);
+ * v = 4;              tree_append_child(tree, c1,   &v, NULL);
+ * v = 5;              tree_append_child(tree, c1,   &v, NULL);
+ *
+ * // depth-first pre-order traversal
+ * tree_node_t* stk[64];
+ * int top = 0;
+ * stk[top++] = root;
+ * while (top > 0) {
+ *     tree_node_t* n = stk[--top];
+ *     printf("%d\n", *(int*)tree_node_data(n, NULL));
+ *     tree_node_t* children[64];
+ *     int nchildren = 0;
+ *     tree_node_t* ch = tree_first_child(n, NULL);
+ *     while (ch) { children[nchildren++] = ch; ch = tree_next_sibling(ch, NULL); }
+ *     for (int i = nchildren - 1; i >= 0; i--) stk[top++] = children[i];
+ * }
+ *
+ * tree_destroy(tree);
+ * @endcode
+ *
  * @section hash_maps Hash maps
  *
  * Hash maps require a hash function and a comparator. Built-in pairs are
@@ -117,6 +153,9 @@
  *   concurrent access to any container.
  * - **No iterators for arrays.** Use index-based access via `array_at`,
  *   `array_front`, and `array_back`.
+ * - **Tree traversal is manual.** No built-in traversal functions are
+ *   provided; use `tree_first_child`, `tree_next_sibling`, and a
+ *   caller-managed stack or queue.
  * - **Struct keys with padding** must be zero-initialised with `memset`
  *   before use as hash map keys, or hashing will produce inconsistent
  *   results across equal structs.
@@ -126,4 +165,4 @@
  * @section license License
  *
  * Released for educational purposes.
- *//
+ */

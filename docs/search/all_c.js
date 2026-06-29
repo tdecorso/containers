@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['notes_20and_20limitations_0',['Notes and limitations',['../index.html#notes',1,'']]]
+  ['n_20ary_20trees_0',['N-ary trees',['../index.html#trees',1,'']]],
+  ['notes_20and_20limitations_1',['Notes and limitations',['../index.html#notes',1,'']]]
 ];
