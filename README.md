@@ -139,7 +139,9 @@ printf("%.2f\n", out);   /* prints 3.14 */
 
 hashmap_destroy(map);
 ```
-
+> **Note:** Struct keys with padding bytes must be zero-initialised with
+> `memset` before use, or hashing will produce inconsistent results across
+> equal structs.
 ### N-ary trees
 ```c
 tree_t* tree = tree_create(sizeof(int), NULL);
@@ -173,11 +175,6 @@ while (top > 0) {
 
 tree_destroy(tree);
 ```
-
-> **Note:** Struct keys with padding bytes must be zero-initialised with
-> `memset` before use, or hashing will produce inconsistent results across
-> equal structs.
-
 ## Building
 
 Requirements: CMake 3.31+, a C99-compatible compiler.
