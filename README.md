@@ -230,7 +230,10 @@ valgrind --leak-check=full --show-leak-kinds=all ./test_hashmap
 
 ## Documentation
 
-Documentation is generated with [Doxygen](https://www.doxygen.nl):
+API documentation is generated with [Doxygen](https://www.doxygen.nl) and published at
+**[tdecorso.github.io/containers](https://tdecorso.github.io/containers/)**.
+
+To build it locally:
 
 ```bash
 doxygen Doxyfile
@@ -238,13 +241,13 @@ doxygen Doxyfile
 
 Then open `docs/html/index.html` in your browser.
 
+## License
+
+Released under the [MIT License](LICENSE). Copyright © 2026 tdecorso.
+
 ## Notes and limitations
 
 - **Not thread-safe.** External synchronisation is required for concurrent access to any container.
 - **No iterators for arrays.** Use index-based access via `array_at`, `array_front`, and `array_back`.
 - **No cycle detection in `tree_move`.** Moving a node to be a descendant of itself is undefined behaviour; the caller is responsible for preventing it.
 - **Early development.** Interfaces may evolve as additional containers are introduced.
-
-## License
-
-Released for educational purposes.eleased for educational purposes.
